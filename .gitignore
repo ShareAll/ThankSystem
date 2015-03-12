@@ -1,0 +1,14 @@
+build
+dist
+generated
+target
+.classpath
+.project
+*.class
+.settings
+*.log
+*java.BASE.*
+*java.LOCAL.*
+*java.REMOTE.*
+*java.BACKUP.*
+*.orig

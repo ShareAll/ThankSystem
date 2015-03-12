@@ -1,0 +1,75 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="ThankWeb" version="2.5">
+	<display-name>ThankWeb</display-name>
+	<!-- Auth Filter -->
+	<filter>
+		<filter-name>AuthFilter</filter-name>
+		<filter-class>com.thank.jersey.plugin.AuthFilter</filter-class>
+		<init-param>
+			<param-name>loginPage</param-name>
+			<param-value>welcome.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>excludedUrls</param-name>
+			<param-value>signup.jsp</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern> <!-- url from where you implement the filtering -->
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
+			<param-value>com.sun.jersey.api.core.PackagesResourceConfig
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>com.fenwang.jersey.plugin.WFCorsFilter</param-value>
+		</init-param>
+		<!-- resource package lists -->
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>
+				com.wordnik.swagger.jaxrs.json,
+				com.wordnik.swagger.jersey.listing,
+				com.thank.jersey.plugin,
+				com.thank.rest.resources
+			</param-value>
+		</init-param>
+
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Swagger Servlet -->
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Jersey2Config</servlet-name>
+		<servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
+		<init-param>
+			<param-name>api.version</param-name>
+			<param-value>1.0.1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>swagger.api.basepath</param-name>
+			<param-value>http://localhost:8080/ThankWeb/rest</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<!-- Security Settings <security-constraint> <web-resource-collection> <url-pattern>/rest/user/*</url-pattern> 
+		</web-resource-collection> <auth-constraint> <role-name>user</role-name> 
+		</auth-constraint> </security-constraint> <login-config> <auth-method>BASIC</auth-method> 
+		<realm-name>default-realm</realm-name> </login-config> -->
+
+</web-app>
