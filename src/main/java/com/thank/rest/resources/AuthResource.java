@@ -15,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.rest.shared.model.WFRestException;
+import com.thank.rest.shared.model.WFRestRedirectModel;
 import com.thank.user.dao.UserDao;
 import com.thank.user.model.UserInfo;
 import com.wordnik.swagger.annotations.Api;
@@ -40,8 +42,8 @@ public class AuthResource {
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 404, message = "User not found") })
 	public UserTo getCurrentUser() {
-		ResourceUtil.authenticate(request);
-		UserInfo ret=ResourceUtil.getCurUser(request);
+		UserContextUtil.authenticate(request);
+		UserInfo ret=UserContextUtil.getCurUser(request);
 		return new UserTo(ret);	
 	}
 	
@@ -51,7 +53,7 @@ public class AuthResource {
 	notes = "Logout user"
 	)
 	public void logout() throws IOException {	
-		ResourceUtil.logout(request);
+		UserContextUtil.logout(request);
 		String contextPath=request.getContextPath();
 		response.sendRedirect(contextPath+"/welcome.jsp");
 	}
@@ -59,45 +61,53 @@ public class AuthResource {
 	@POST
 	@Path("login" )
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	//@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Login user",
     	notes = "Login user",
-    	response = UserTo.class
+    	response = WFRestRedirectModel.class
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 404, message = "User not found Or Password is wrong") })
-	public void login(Form loginForm) throws IOException {	
+	public  WFRestRedirectModel login(Form loginForm) throws IOException {	
 		UserInfo ret=null;
-		String userName,password, forwardUrl;
+		String userName,password, forwardUrl,format;
 		userName=loginForm.getFirst("userName");
 		password=loginForm.getFirst("password");
 		forwardUrl=loginForm.getFirst("forwardUrl");
-		System.out.println("userName="+userName+" forwardUrl="+forwardUrl);
+		format=loginForm.getFirst("format");
+		
 		String contextPath=request.getContextPath();
 		try {	
 			ret=dao.login(userName,password);
 		} catch(Exception e) {
 			ret=null;
 		}
-		if(ret==null) {	
-			
-			response.sendRedirect(contextPath+"/welcome.jsp");
-			HttpSession session = request.getSession(false);
-			session.setAttribute("lastLoginError", "User name and password combination is NOT valid");
-			return;
-		} else {
-			ResourceUtil.login(request, ret);
-			if(forwardUrl!=null && forwardUrl.length()>0) {	
-				response.sendRedirect(forwardUrl);
+		if(ret==null) {
+			WFRestRedirectModel loc=new WFRestRedirectModel(contextPath+"/welcome.jsp","User name and password combination is NOT valid");	
+			if(format!=null && "json".equals(format)) {
+				throw new WFRestException(404,loc.lastError);
 			} else {
-				response.sendRedirect(contextPath+"/index.jsp");
+				response.sendRedirect(loc.location);
+				HttpSession session = request.getSession(false);
+				session.setAttribute("lastLoginError", loc.lastError);
+				return loc;				
 			}
+		} else {
+			UserContextUtil.saveInSession(request, ret);
+			WFRestRedirectModel loc=new WFRestRedirectModel();
+			String url=(forwardUrl!=null && forwardUrl.length()>0)?forwardUrl:contextPath+"/index.jsp";
+			if(format!=null && "json".equals(format)) {
+				loc.location=url;
+			} else {
+				response.sendRedirect(url);
+			}
+			return loc;
 		}
 	}
 	@POST
 	@Path("signup" )
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	//@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "SignUp user",
     	notes = "SignUp user"
     	)
@@ -119,7 +129,7 @@ public class AuthResource {
 			ret.setPassword(password);
 			dao.save(ret);
 			ret=dao.getByName(ret.getName());
-			ResourceUtil.login(request, ret);
+			UserContextUtil.saveInSession(request, ret);
 			
 		} catch(Exception e) {
 			ret=null;
@@ -130,7 +140,7 @@ public class AuthResource {
 			session.setAttribute("lastLoginError", "User name and password combination is NOT valid");
 			return;
 		} else {
-			ResourceUtil.login(request, ret);
+			UserContextUtil.saveInSession(request, ret);
 			if(forwardUrl!=null && forwardUrl.length()>0) {	
 				response.sendRedirect(forwardUrl);
 			} else {

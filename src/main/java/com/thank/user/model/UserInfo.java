@@ -2,10 +2,15 @@ package com.thank.user.model;
 
 import java.io.Serializable;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
+
+import com.thank.jersey.plugin.GsonUtil;
+import com.thank.rest.resources.UserContextUtil;
 @Entity("userInfo")
 public class UserInfo implements Serializable{
 	@Id ObjectId id;
@@ -77,8 +82,35 @@ public class UserInfo implements Serializable{
 			return false;
 		return true;
 	}
+	
 
-
+	private static String jsonfy(UserInfo user, int level) {
+		UserInfo info=new UserInfo(user);
+		info.setPassword(null);
+		if(level==0) {
+			//just userName
+			info.setEmailAddress(null);
+		} 
+		return GsonUtil.getInstance().toJson(info);
+	}
+	public static String getUserName(HttpServletRequest request) {
+		UserInfo ret=UserContextUtil.getCurUser(request);
+		if(ret==null) return "";
+		else return ret.getName();
+		
+	}
+	public static String getUserContextInScript(HttpServletRequest request) {
+		UserInfo ret=UserContextUtil.getCurUser(request);
+		if(ret==null) {
+			return "";
+		} else {
+			String json=jsonfy((UserInfo)ret,1);
+			StringBuilder sb=new StringBuilder();
+			sb.append("<script>window.userContext="+json+"</script>");
+			return sb.toString();
+		} 
+		
+	}
 	
 
 	

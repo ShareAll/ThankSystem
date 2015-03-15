@@ -28,7 +28,6 @@ public class GsonJerseyProvider implements MessageBodyWriter<Object>,
 	@Override
 	public boolean isReadable(Class<?> type, Type genericType,
 			java.lang.annotation.Annotation[] annotations, MediaType mediaType) {
-		System.out.println("Query for type....");
 		return true;
 	}
 
