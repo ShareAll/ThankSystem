@@ -17,7 +17,7 @@ function MainCtrl($scope,authService) {
     authService.getContext().then(function SUCCESS(resp){
         $scope.auth=resp.data;
     },function FAIL(resp) {
-        window.location.href="../index.html";
+        window.location.href="index.html";
     });
     
    

@@ -1,0 +1,10 @@
+{
+  "app": {
+    "env": "development",
+    "apiBase": "/ThankWeb/rest"
+    },
+  "dist": {
+    "env": "dist",
+    "apiBase": "/ThankWeb/rest"
+  }
+}

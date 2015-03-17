@@ -9,6 +9,9 @@
 
 module.exports = function (grunt) {
 
+  //load env settings:
+  var envConfig = grunt.file.readJSON('env_config.json');
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -32,9 +35,8 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
-	
-	env: grunt.file.readJSON('env.json'),
-    // Watches files for changes and runs tasks based on the changed files
+	 
+	  // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
         files: ['bower.json'],
@@ -80,11 +82,12 @@ module.exports = function (grunt) {
       },
       proxies: [{
                 context: '/ThankWeb',
-                host: 'localhost',
-				port: 8080,
-				https: false,
-				xforward: false,
-        changeOrigin: true
+                host: 'localhost',       
+        				port: 8080,
+        				https: false,
+        				xforward: false,
+                changeOrigin: true
+                
       }],
       livereload: {
         options: {
@@ -224,7 +227,7 @@ module.exports = function (grunt) {
       dist: {
         src: [
           '<%= yeoman.dist %>/styles/{,*/}*.css',
-          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          //'<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
         ]
       }
@@ -234,7 +237,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: ['<%= yeoman.app %>/index.html','<%= yeoman.app %>/views/{,*/}*.html'],
       options: {
         dest: '<%= yeoman.dist %>'
       }
@@ -243,7 +246,7 @@ module.exports = function (grunt) {
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
-	  js:['.tmp/<%= yeoman.app %>/scripts/reference.js'],
+	    js:['.tmp/<%= yeoman.app %>/scripts/reference.js'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images'],
@@ -262,9 +265,16 @@ module.exports = function (grunt) {
     cssmin: {
        dist: {
          files: {
+           '<%= yeoman.dist %>/styles/welcome.css':[
+              '.tmp/styles/openAnimate.css',
+              '<%= yeoman.app %>/styles/welcome.css'
+           ],
            '<%= yeoman.dist %>/styles/main.css': [
-             '.tmp/styles/{,*/}*.css',
-             '<%= yeoman.app %>/styles/{,*/}*.css'
+             //'.tmp/styles/{,*/}*.css',
+             '.tmp/styles/openAnimate.css',
+             '.tmp/styles/main.css'
+
+             //'<%= yeoman.app %>/styles/{,*/}*.css'
            ]
          }
        }
@@ -343,7 +353,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'images/{,*/}*.{webp}',
+            'images/{,*/}*.*',
             'fonts/{,*/}*.*'
           ]
         }, {
@@ -365,6 +375,12 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'bower_components/bootstrap/dist',
           src: 'fonts/*',
+          dest: '<%= yeoman.dist %>'
+        },{
+          expand: true,
+          dot: true,
+          cwd: 'bower_components/font-awesome',
+          src: ['fonts/*.*'],
           dest: '<%= yeoman.dist %>'
         }]
       },
@@ -409,6 +425,31 @@ module.exports = function (grunt) {
     },
 
     replace: {
+      app: {
+          options: {
+              patterns: [{
+                  json: envConfig['app']
+              }]
+          },
+          files: [{
+              src: '<%= yeoman.app %>/index.html', dest: '.tmp/index.html'
+          },{
+              src: '<%= yeoman.app %>/welcome.html', dest: '.tmp/welcome.html'
+          }]
+      },
+      dist: {
+            options: {
+              patterns: [{
+                  json: envConfig['dist']
+              }]
+            },
+            files: [{
+              src: '<%= yeoman.app %>/index.html', dest: '<%= yeoman.dist %>/index.html'
+            },{
+              src: '<%= yeoman.app %>/welcome.html', dest: '<%= yeoman.dist %>/welcome.html'
+            }]
+      }
+      /*,
       test: {
         src: '<%= yeoman.app %>/../test/test-main.js',
         overwrite: true,
@@ -418,7 +459,7 @@ module.exports = function (grunt) {
             return require('fs').readFileSync(grunt.template.process('<%= yeoman.app %>') + '/scripts/main.js').toString().match(/paths: {[^}]+}/);
           }
         }]
-      }
+      }*/
     },
 
     // r.js compile config
@@ -450,14 +491,14 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'wiredep',
-	  
-	  'concurrent:server',
+      'wiredep', 
+	    'concurrent:server',
       'autoprefixer',
-		'concat',        
-	 'configureProxies:server',
-	 'connect:livereload',
-      'watch'
+		  'concat',        
+	   'configureProxies:server',
+	   'connect:livereload',
+     'replace:app',
+     'watch'
     ]);
   });
 
@@ -469,7 +510,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'bower:app',
-    'replace:test',
+  //  'replace:test',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -480,13 +521,14 @@ module.exports = function (grunt) {
     'clean:dist',
     'wiredep',
     'bower:app',
-    'replace:test',
+//    'replace:test',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'replace:dist',
     'cdnify',
     'cssmin',
     // Below task commented out as r.js (via grunt-contrib-requirejs) will take care of this
@@ -495,6 +537,7 @@ module.exports = function (grunt) {
     'usemin',
     'requirejs:dist',
     'htmlmin'
+
   ]);
 
   grunt.registerTask('default', [

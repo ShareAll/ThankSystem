@@ -1,5 +1,5 @@
 /*jshint unused: vars */
-define(['angular', 'controllers/main','controllers/login', 'controllers/about','controllers/grid','controllers/canvas','controllers/photo','controllers/datatable',
+define(['angular', 'controllers/main','controllers/login','controllers/about','controllers/grid','controllers/canvas','controllers/photo','controllers/datatable',
   'services/auth',
   'components/wffix/wffix',
   'components/wfresourcegrid/wfresourcegrid','components/wfd3tree/wfd3tree',
@@ -12,7 +12,8 @@ define(['angular', 'controllers/main','controllers/login', 'controllers/about','
   'angular-google-maps',
   'bootstrap',
   'angular-facebook',
-  'jssor-slider','components/wfslide/wfslide'
+  'jssor-slider','components/wfslide/wfslide',
+  'controllers/index'
   ]/*deps*/, 
 function (angular, MainCtrl, AboutCtrl,Grid2Ctrl,wfresourcegrid,wfd3tree)/*invoke*/ {
   'use strict';
@@ -45,9 +46,11 @@ function (angular, MainCtrl, AboutCtrl,Grid2Ctrl,wfresourcegrid,wfd3tree)/*invok
     'ngAnimate',
     'ngTouch',
     'facebook',
-    'wfslide'  
+    'wfslide',
+    'wftoolsApp.controllers.IndexCtrl'
   ])
-    .constant('apiBase','ThankWeb/rest')
+    .constant('apiBase',window.THANKWEB_ENV['apiBase'])
+    //.constant('apiBase','http://localhost:8080/ThankWeb/rest')
     .config(function ($routeProvider) {
       $routeProvider
         .when('/', {

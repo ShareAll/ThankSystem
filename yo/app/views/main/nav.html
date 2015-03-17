@@ -20,7 +20,7 @@
                 <li><div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false"></div>
                 </li>
               </ul>
-              <ul ng-Controller="LoginCtrl" class="nav navbar-nav" style="float:right;margin-right:30px">
+              <ul ng-Controller="loginCtrl" class="nav navbar-nav" style="float:right;margin-right:30px">
                   <li ng-mouseover="login.display=true;login.leaving=false" ng-mouseleave="hideLoginForm()">  
                         <a class="ng-cloak" ng-show="!auth.curUser">Login</a>
                         <a class="ng-cloak" ng-show="auth.curUser">{{auth.curUser}}</a>

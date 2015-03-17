@@ -20,24 +20,28 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/welcome.css">
     
-    <link rel="stylesheet" href="styles/animation.css">
-    <link rel="stylesheet" href="styles/openAnimate.css">
-    <link rel="stylesheet" href="styles/sb-admin.css">
     <!-- endbuild 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
 -->
   </head>
   <body ng-app="wftoolsApp">
+    <script>
+        window.THANKWEB_ENV = {
+            env: '@@env',
+            apiBase: '@@apiBase'
+        };
+    </script>   
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
     <div id="wrapper" ng-controller="MainCtrl">
-        <div ng-include="'views/welcome/nav.html'"></div>
-        <div ng-include="'views/welcome/home.html'"></div>
-   
+        <div ng-if="auth" ng-include="'views/welcome/nav.html'"></div>
+        <div ng-if="auth" ng-include="'views/welcome/home.html'"></div>
+    </div>
     
     <!--Footer-->
     <footer>
