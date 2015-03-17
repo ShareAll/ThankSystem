@@ -1,0 +1,16 @@
+<div>
+	<input type="text" ng-model="nodeCount" placeholder="Node Count"/>
+	<button ng-click="initNode()">Init Node</button>
+	<input type="text" ng-model="edgeCount" placeholder="Edge Count"/>
+	<button ng-click="initEdge()">Init Edge</button>
+	<button ng-click="addNewNode()">Add New</button>
+	<input type="text" ng-model="newEdge" placeholder="from - to"/>
+	<button ng-click="addEdge(newEdge)">Add Edge</button>
+	<button ng-click="drawTsp()">Draw Tsp</button>
+	<button ng-click="findMst()">Find MSG</button>
+	<span>{{pathCost}}</span>
+	<input type="text" ng-model="path" placeholder="seperated in comma"/>
+	<button ng-click="pathSum()">PathSum</button>
+<wfcanvas-Directive ng-click="addNewNode1()" wf-Data="wfCanvas_data" wf-Context="wfCanvas_context">
+</wfcanvas-Directive>
+</div>

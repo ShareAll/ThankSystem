@@ -1,0 +1,40 @@
+<!--NAV Menu-->
+<div class="container navbar-fixed-top" style="margin-top:20px">
+      <nav class="navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Thank You</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="#section_home" class="page-scroll">Home</a></li>
+                <li><a href="#section_photos" class="page-scroll">Photos</a></li>
+                <li><a href="#section_marketing" class="page-scroll">Marketing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false"></div>
+                </li>
+              </ul>
+              <ul ng-Controller="LoginCtrl" class="nav navbar-nav" style="float:right;margin-right:30px">
+                  <li ng-mouseover="login.display=true;login.leaving=false" ng-mouseleave="hideLoginForm()">  
+                        <a class="ng-cloak" ng-show="!auth.curUser">Login</a>
+                        <a class="ng-cloak" ng-show="auth.curUser">{{auth.curUser}}</a>
+                       
+                        <div ng-show="!auth.curUser && login.display" ng-include="'views/forms/signIn.html'" class="ng-cloak container"  style="position:absolute;left: -200px;background: white;padding-bottom: 40px;width: 400px;border-style: solid solid solid solid;">
+
+                        </div>
+                  </li>
+
+              </ul>
+          </div>
+        </div>
+      </nav>
+
+    </div>
+
+<!--NAV Menu End-->

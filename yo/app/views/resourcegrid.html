@@ -1,0 +1,13 @@
+<!--<div ng-controller="wfResourcegridCtrl">
+	<button ng-click="loadData()">load</button>
+	<wf-Resourcegrid-Directive></wf-Resourcegrid-Directive>
+</div>
+
+-->
+  <div layout="row" layout-fill ng-controller="wfResourcegridCtrl">
+    <wf-Resourcegrid-Nav-Directive></wf-Resourcegrid-Nav-Directive>
+    <md-content flex class="md-padding">
+      <wf-Resourcegrid-Toolbar-Directive></wf-Resourcegrid-Toolbar-Directive>
+      <wf-Resourcegrid-Directive wf-data="wfresourcegrid.data" wf-context="wfresourcegrid.context"></wf-Resourcegrid-Directive>
+    </md-content>
+  </div>

@@ -1,0 +1,32 @@
+.tooltipster-shadow {
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 0px 0px 14px rgba(0,0,0,0.3);
+	color: #2c2c2c;
+}
+.tooltipster-shadow .tooltipster-content {
+	font-family: 'Arial', sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+	padding: 8px 10px;
+}
+.tooltipster-shadow {
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 0px 0px 14px rgba(0,0,0,0.3);
+	color: #2c2c2c;
+}
+.tooltipster-shadow .tooltipster-content {
+	font-family: 'Arial', sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+	padding: 8px 10px;
+}
+.highlight {
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+	border: 2px solid #0A7EbE;
+	outline: 10px auto #0A7EbE;
+	background-color: white;
+}
+.angular-google-map-container { height: 400px; }
