@@ -12,3 +12,6 @@ target
 *java.REMOTE.*
 *java.BACKUP.*
 *.orig
+yo/.sass-cache
+yo/.tmp
+yo/app/.buildignore

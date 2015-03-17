@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Strings;
-import com.thank.rest.resources.ResourceUtil;
+import com.thank.rest.resources.UserContextUtil;
 import com.thank.user.model.UserInfo;
 
 public class AuthFilter implements Filter {
@@ -45,7 +45,7 @@ public class AuthFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain fc) throws IOException, ServletException {		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;  
-		UserInfo user=ResourceUtil.getCurUser(req);
+		UserInfo user=UserContextUtil.getCurUser(req);
 		if(user==null) {
 			boolean excluded=false;
 			for(String excludeUrl:excludedUrls) {
