@@ -1,28 +1,41 @@
 package com.thank.jersey.plugin;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import java.io.IOException;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerResponse;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class WFCorsFilter implements ContainerResponseFilter {
+public class WFCorsFilter implements Filter {
+	public WFCorsFilter() {
+		
+	}
+		
+	public void init(FilterConfig fConfig) throws ServletException {
+		
+	}
 
-	@Override
-	public ContainerResponse filter(ContainerRequest req, ContainerResponse resp) {
-		ResponseBuilder respBuilder = Response.fromResponse(resp.getResponse());
-		respBuilder.header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST, OPTIONS");
- 
-        String reqHead = req.getHeaderValue("Access-Control-Request-Headers");
- 
-        if(null != reqHead && !reqHead.equals("")){
-        	respBuilder.header("Access-Control-Allow-Headers", reqHead);
-        }
- 
-        resp.setResponse(respBuilder.build());
-        return resp;
+	public void destroy() {
+		
+	}
+
+	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
+		HttpServletResponse resp=(HttpServletResponse)response;
+		resp.addHeader("Access-Control-Allow-Origin", "*");
+		resp.addHeader("Access-Control-Allow-Methods", "GET,PUT,POST, OPTIONS");
+		HttpServletRequest req=(HttpServletRequest)request;
+		String reqHead = req.getHeader("Access-Control-Request-Headers");
+
+		if(null != reqHead && !reqHead.equals("")){
+			resp.addHeader("Access-Control-Allow-Headers", reqHead);
+			
+		}
+		chain.doFilter(request, response);
 	}
 
 }

@@ -21,7 +21,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern> <!-- url from where you implement the filtering -->
 	</filter-mapping>
-
+	<filter>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>com.thank.jersey.plugin.WFCorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -30,10 +37,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<param-value>com.sun.jersey.api.core.PackagesResourceConfig
 			</param-value>
 		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>com.fenwang.jersey.plugin.WFCorsFilter</param-value>
-		</init-param>
+
 		<!-- resource package lists -->
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
