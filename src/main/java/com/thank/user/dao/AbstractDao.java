@@ -8,10 +8,14 @@ import java.util.Properties;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.mapping.Mapper;
+import org.mongodb.morphia.query.Query;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+
+import org.bson.types.ObjectId;
 
 public abstract class AbstractDao<T> {
 	
@@ -70,6 +74,14 @@ public abstract class AbstractDao<T> {
 		return key.getId();
 	}
 	
+	protected  Query<T> getUpdateQuery(ObjectId id){
+		return ds.createQuery(this.cls).field(Mapper.ID_KEY).equal(id);
+	}
+	
+	protected Datastore getDateStore(){
+		return ds;
+	}
+	
 	public T getSingleByAttr(String attrName,Object attrVal) {
 		return ds.find(this.cls).field(attrName).equal(attrVal).get();
 	}
@@ -79,37 +91,37 @@ public abstract class AbstractDao<T> {
 	}
 	
 	
-	public void update(String attrName,Object attrVal) {
+	public void update(ObjectId id, String attrName,Object attrVal) {
 
 		if (attrVal == null){
-			ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+			ds.update(getUpdateQuery(id),
 					ds.createUpdateOperations(this.cls).unset(attrName));
 		}
-		ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).set(attrName, attrVal));
 	}
 	
 	//TODO Later : will check if it is Collection then..
-	public void updateArray(String attrName,Object attrVal) {
+	public void updateArray(ObjectId id, String attrName,Object attrVal) {
 
-		ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).add(attrName, attrVal));
 	}
 	
-	public void updateRemoveFirst(String attrName, Object attrVal) {
-		ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+	public void updateRemoveFirst(ObjectId id, String attrName, Object attrVal) {
+		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeFirst(attrName));
 	}
 	
-	public void updateRemoveLast(String attrName,Object attrVal) {
+	public void updateRemoveLast(ObjectId id, String attrName,Object attrVal) {
 
-		ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeLast(attrName));
 	}
 	
-	public void updateRemoveAll(String attrName,Object attrVal) {
+	public void updateRemoveAll(ObjectId id, String attrName,Object attrVal) {
 
-		ds.update(ds.createQuery(this.cls).field(attrName).equal(attrVal),
+		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeAll(attrName, attrVal));
 	}
 	
