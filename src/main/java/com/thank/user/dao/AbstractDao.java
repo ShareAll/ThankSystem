@@ -102,10 +102,10 @@ public abstract class AbstractDao<T> {
 	}
 	
 	//TODO Later : will check if it is Collection then..
-	public void updateArray(ObjectId id, String attrName,Object attrVal) {
+	public void updateArray(ObjectId id, String attrName,Object attrVal, boolean allowDup) {
 
 		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).add(attrName, attrVal));
+		ds.createUpdateOperations(this.cls).add(attrName, attrVal, allowDup));
 	}
 	
 	public void updateRemoveFirst(ObjectId id, String attrName, Object attrVal) {
@@ -113,7 +113,7 @@ public abstract class AbstractDao<T> {
 		ds.createUpdateOperations(this.cls).removeFirst(attrName));
 	}
 	
-	public void updateRemoveLast(ObjectId id, String attrName,Object attrVal) {
+	public void updateRemoveLast(ObjectId id, String attrName, Object attrVal) {
 
 		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeLast(attrName));
