@@ -9,12 +9,12 @@ public class UserDao extends AbstractDao<UserInfo>{
 		super(client, dbName, cls);
 	}
 	
-	public UserInfo getByName(String userName) {
-		return this.getSingleByAttr("name", userName);
+	public UserInfo getByEmaiAddress(String emailAddress) {
+		return this.getSingleByAttr("emailAddress", emailAddress);
 	}
-	public UserInfo login(String userName,String password) {
-		UserInfo user=this.getSingleByAttr("name", userName);
-		if(user==null) throw new LoginException("User "+userName+" does NOT exist");
+	public UserInfo login(String emailAddress,String password) {
+		UserInfo user=this.getSingleByAttr("emailAddress", emailAddress);
+		if(user==null) throw new LoginException("User "+emailAddress+" does NOT exist");
 		if(!user.getPassword().equals(password)) throw new LoginException("Password is wrong");
 		return user;
 	}

@@ -267,11 +267,13 @@ module.exports = function (grunt) {
          files: {
            '<%= yeoman.dist %>/styles/welcome.css':[
               '.tmp/styles/openAnimate.css',
+              '.tmp/styles/animation.css',
               '<%= yeoman.app %>/styles/welcome.css'
            ],
            '<%= yeoman.dist %>/styles/main.css': [
              //'.tmp/styles/{,*/}*.css',
              '.tmp/styles/openAnimate.css',
+             '.tmp/styles/animation.css',
              '.tmp/styles/main.css'
 
              //'<%= yeoman.app %>/styles/{,*/}*.css'

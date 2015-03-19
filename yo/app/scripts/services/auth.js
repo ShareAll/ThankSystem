@@ -15,7 +15,7 @@ function AuthService($http,$q,apiBase) {
 	}
 	function login(loginModel) {
 		return $http.post(apiBase+'/auth2/login',{
-			name:loginModel.userName,
+			emailAddress:loginModel.emailAddress,
 			password:loginModel.password
 		});
 		/*return $http({

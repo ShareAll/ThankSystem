@@ -70,12 +70,12 @@ public class AuthV2Resource {
 		UserInfo ret=null;
 		String authErrorMsg="User not found Or Password is wrong";
 		if(request==null) throw new WFRestException(404,authErrorMsg);
-		String userName=user.getName();
+		String emailAddress=user.getEmailAddress();
 		String password=user.getPassword();
 		
-		if(userName==null || password==null) throw new WFRestException(404,authErrorMsg);
+		if(emailAddress==null || password==null) throw new WFRestException(404,authErrorMsg);
 		try {
-			ret=dao.login(userName,password);
+			ret=dao.login(emailAddress,password);
 			UserContextUtil.saveInSession(request, ret);
 			return ret;
 		} catch(Exception e) {
@@ -90,15 +90,15 @@ public class AuthV2Resource {
     	notes = "SignUp user"
     	)
 	@ApiResponses(value = { 
-		    @ApiResponse(code = 401, message = "UserName already exist") })
+		    @ApiResponse(code = 401, message = "The email address allready registered") })
 	public void signUp(UserInfo request) throws IOException {	
 		UserInfo ret=null;
 		String userName,password, emailAddress,forwardUrl;
 		userName=request.getName();
 		password=request.getPassword();
 		emailAddress=request.getEmailAddress();
-		if(dao.getByName(userName)!=null)  {
-			throw new WFRestException(401,"UserName already exist");
+		if(dao.getByEmaiAddress(emailAddress)!=null)  {
+			throw new WFRestException(401,"The email address allready registered");
 		} else {
 			try {
 				ret=new UserInfo();

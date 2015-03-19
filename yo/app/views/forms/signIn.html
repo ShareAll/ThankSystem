@@ -1,18 +1,22 @@
 <form class="form-signin" name="loginForm" novalidate>
   <h2 class="form-signin-heading" ng-hide="login.isSignUp">Please sign in</h2>
   <h2 class="form-signin-heading" ng-hide="!login.isSignUp">Please sign up</h2>
-  <label for="inputName" class="sr-only">Name</label>
-  <input name="userName" style="width:350px;margin-bottom:20px" type="text" ng-model="login.userName" class="form-control" placeholder="User Name" required="" autofocus="">
-  <span style="color:red" ng-show="loginForm.userName.$dirty && loginForm.userName.$invalid">
-    <span ng-show="loginForm.userName.$error.required">Username is required.</span>
+  
+  
+
+  <label for="inputName" class="sr-only">Email</label>
+  <input name="emailAddress" style="width:350px;margin-bottom:20px" type="text" ng-model="login.emailAddress" class="form-control flip-in" placeholder="Email Address" required="" autofocus="">
+  <span style="color:red" ng-show="loginForm.emailAddress.$dirty && loginForm.emailAddress.$invalid">
+    <span ng-show="loginForm.emailAddress.$error.required">Email Address is required.</span>
   </span>
 
-  <label ng-hide="!isSignUp" for="inputName" class="sr-only">Email</label>
-  <input ng-hide="!isSignUp" style="width:350px;margin-bottom:20px" type="text" ng-model="login.emailAddress" class="form-control flip-in" placeholder="Email Address" required="" autofocus="">
   <label for="inputPassword" class="sr-only">Password</label>
   <input style="width:350px;margin-bottom:20px" type="password" ng-model="login.password"  class="form-control" placeholder="Password" required="">
   <label ng-hide="!isSignUp" for="inputName" class="sr-only">Repeat Password</label>
   <input ng-hide="!isSignUp" style="width:350px" type="password" ng-model="login.repeatPassword"  ng-if="isSignUp" class="form-control flip-in" placeholder="Repeat Password" required="" autofocus="">
+
+<label ng-hide="!isSignUp" for="inputName" class="sr-only">Alias</label>
+  <input ng-hide="!isSignUp" name="userName" style="width:350px;margin-bottom:20px" type="text" ng-model="login.userName" class="form-control flip-in" placeholder="User Alias Name" required="" autofocus="">
 
   <div class="checkbox">
     <label>

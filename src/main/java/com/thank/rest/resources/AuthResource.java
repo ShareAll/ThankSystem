@@ -128,7 +128,7 @@ public class AuthResource {
 			ret.setEmailAddress(emailAddress);
 			ret.setPassword(password);
 			dao.save(ret);
-			ret=dao.getByName(ret.getName());
+			ret=dao.getByEmaiAddress(emailAddress);
 			UserContextUtil.saveInSession(request, ret);
 			
 		} catch(Exception e) {

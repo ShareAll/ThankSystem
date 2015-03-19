@@ -22,7 +22,7 @@ import org.bson.types.ObjectId;
 
 public abstract class AbstractDao<T> {
 	
-	private final static String PROPERTY_FILE = "com/thank/resources/db.properties";
+	private final static String PROPERTY_FILE = "db.properties";
 	private final static String MOMGO_HOST_NAME = "mongo-host-name";
 	private final static String MONGO_PORT = "mongo-port";
 	private final static String MONGO_DB = "mongo-db";
@@ -162,7 +162,9 @@ public abstract class AbstractDao<T> {
 
              inputStream = AbstractDao.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
             if (inputStream == null) {
-                throw new FileNotFoundException("not loaded!");
+            	System.err.println("Fail to load "+PROPERTY_FILE);
+            	System.exit(-1);
+                
             }
             properties.load(inputStream);
         } catch (Exception ex) {
