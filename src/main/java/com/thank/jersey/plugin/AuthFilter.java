@@ -55,7 +55,7 @@ public class AuthFilter implements Filter {
 				}
 			}
 			if(!excluded) {
-				res.sendRedirect(contextPath + loginPage);
+				res.sendRedirect(contextPath +"/"+ loginPage);
 			} else {
 				fc.doFilter(request, response);
 			}
