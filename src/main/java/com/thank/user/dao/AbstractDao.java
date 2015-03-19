@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.mongodb.morphia.Datastore;
@@ -11,6 +12,7 @@ import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.mapping.Mapper;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -79,6 +81,7 @@ public abstract class AbstractDao<T> {
 		return ds.createQuery(this.cls).field(Mapper.ID_KEY).equal(id);
 	}
 	
+
 	protected Datastore getDateStore(){
 		return ds;
 	}
@@ -100,6 +103,29 @@ public abstract class AbstractDao<T> {
 		}
 		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).set(attrName, attrVal));
+	}
+	
+	public void update(ObjectId id, Map<String,Object> data) {
+		 if (data == null || data.size() == 0){
+			 return;
+		 }
+		 UpdateOperations<T> ops = null;
+		 for (Map.Entry<String, Object> var : data.entrySet()){
+			 if (ops == null){
+				 if (var.getValue()!=null){
+					 ops = ds.createUpdateOperations(this.cls).set(var.getKey(), var.getValue());
+				 }else{
+					 ops = ds.createUpdateOperations(this.cls).unset(var.getKey());
+				 }
+				 continue;
+			 }
+			 if (var.getValue()!=null){
+				 ops = ops.set(var.getKey(), var.getValue());
+			 }else{
+				 ops = ops.unset(var.getKey());
+			 }
+		 }
+		ds.update(getUpdateQuery(id), ops);
 	}
 	
 	//TODO Later : will check if it is Collection then..
