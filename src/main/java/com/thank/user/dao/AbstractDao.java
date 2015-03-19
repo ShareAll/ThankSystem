@@ -3,6 +3,7 @@ package com.thank.user.dao;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.mongodb.morphia.Datastore;
@@ -108,21 +109,21 @@ public abstract class AbstractDao<T> {
 		ds.createUpdateOperations(this.cls).add(attrName, attrVal, allowDup));
 	}
 	
-	public void updateRemoveFirst(ObjectId id, String attrName, Object attrVal) {
+	public void updateRemoveFirst(ObjectId id, String attrName) {
 		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeFirst(attrName));
 	}
 	
-	public void updateRemoveLast(ObjectId id, String attrName, Object attrVal) {
+	public void updateRemoveLast(ObjectId id, String attrName) {
 
 		ds.update(getUpdateQuery(id),
 		ds.createUpdateOperations(this.cls).removeLast(attrName));
 	}
 	
-	public void updateRemoveAll(ObjectId id, String attrName,Object attrVal) {
+	public void updateRemoveAll(ObjectId id, String attrName, List<Object> attVals) {
 
 		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).removeAll(attrName, attrVal));
+		ds.createUpdateOperations(this.cls).removeAll(attrName, attVals));
 	}
 	
 	
