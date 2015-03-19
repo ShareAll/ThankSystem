@@ -53,14 +53,14 @@ function LoginCtrl($scope,$timeout,$location,authService) {
 
 
     $scope.hideLoginForm=function() {
-      /*
-      $scope.loginForm.leaving=true;
+      
+      $scope.login.leaving=true;
       $timeout(function() {
-        if($scope.loginForm.leaving) {
-          $scope.loginForm.display=false;
+        if($scope.login.leaving) {
+          $scope.login.display=false;
         } 
       },500);
-      */
+      
     };
     
 

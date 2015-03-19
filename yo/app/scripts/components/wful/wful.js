@@ -3,72 +3,58 @@ define(['angular'],function(angular) {
 
 /****BEGIN DEFINITION*****/
 angular.module('wful',[])
-.directive('wfUl',['$timeout',WfUl]);
+.directive('wfUl',['$timeout','$window',WfUl]);
       
 
-function WfUl($timeout) {
-      var colSize=3;
+function WfUl($timeout,$window) {
+      var curData=[];
+      var colSize=2;
       var itemWidth=165;
       var itemHeight=131;
+      function setItemStyles(containerWidth) {
+            containerWidth=parseInt(containerWidth);
+            if(containerWidth<itemWidth*2) containerWidth=itemWidth*2;
+
+            colSize=Math.floor(containerWidth/itemWidth);
+            console.info(containerWidth+","+itemWidth+","+colSize);
+            $.each(curData,function(ind,val) {
+                  val.style=getStyle(ind);
+                  val.width=itemWidth;
+                  val.height=itemHeight;
+            });
+            console.dir(curData);
+      }
       function getStyle(index) {
             var x=(index%colSize)*100+"%";
             var y=(Math.floor(index/colSize))*100+"%";
             return "translate3d("+x+","+y+",0)";
             
       }
-      function getItemStyle(index) {
-            var x=(index%colSize)*100+"%";
-            var y=(Math.floor(index/colSize))*100+"%";
-            var translateStyle="translate3d("+x+","+y+",0)";
-            var ret="";
-            ret+="'transform':'"+translateStyle+"',";
-            ret+="'-webkit-transform':'"+translateStyle+"',";
-            ret+="'width':'"+itemWidth+"px',"
-            ret+="'height':'"+itemHeight+"px',"
-            
-            return "{"+ret+"}";
-      };
-      function setItemStyle(liElm,index) {
-           
-            var x=(index%colSize)*100+"%";
-            var y=(Math.floor(index/colSize))*100+"%";
-            var translateStyle="translate3d("+x+","+y+",0)";
-            
-            liElm.css("width",itemWidth+"px");
-            liElm.css("height",itemHeight+"px");
-            liElm.css("-webkit-transform",translateStyle);
-            liElm.css("transform",translateStyle);
-      };
-
-      function setContainerSize(ulElm,itemCount) {
-            var width=colSize*itemWidth+1;
-            var height=(Math.floor(itemCount/colSize)+1)*(itemHeight+1);
-            ulElm.css("width",width);
-            ulElm.css("height",height);
-      }
+  
+      
+      
+      var $w=angular.element($window);
       return {
             scope:{
                   wfData:'='
             },
             restrict:'C',
             link: function($scope,elm,attrs,ngRepeat) {
-                  //$scope.setItemStyle=setItemStyle;
+                  var elmWidth=$(elm).css("width");
+                  console.info(elmWidth);
+                  $w.bind("resize",function() {
+                        elmWidth=$(elm).css("width");
+                        setItemStyles(elmWidth);
+                        console.info(elmWidth);
+                  });
+                 // console.info($w.width());
+                  
                   $scope.$watchCollection("wfData",function(newVal,oldVal) {
                         //set new size
-                        setContainerSize(elm,newVal.length);
-
+                       // setContainerSize(elm,newVal.length);
+                        curData=newVal;
+                        setItemStyles(elmWidth);
                         
-                        //console.info(newVal.length+":"+angular.element("li",elm).length);
-                        $.each(newVal,function(ind,val) {
-                              val.style=getStyle(ind);
-                              val.width=itemWidth;
-                              val.height=itemHeight;
-                        })
-                       /* $.each(angular.element("li",elm),function(ind,liElm) {
-                              setItemStyle(angular.element(liElm),ind);
-                                    
-                        });                              
-                        */
                         console.info("data Change");
                         
                   });
