@@ -11,8 +11,8 @@ import javax.mail.Session;
 public class EmailSessionLocator {
 	private static final String DEFAULT_SMTP_SERVER = "smtp.gmail.com";
 	private static final String DEFAULT_SMTP_PORT = "587";
-	private static final String USERNAME = "pzou1974@gmail.com";
-	private static final String PASSWORD = "bill0512";
+	private static final String USERNAME = "jikarma2015@gmail.com";
+	private static final String PASSWORD = "thankyou2015";
 	private static final Properties defaultProp;
 	static {
 		defaultProp= System.getProperties();
