@@ -17,12 +17,15 @@ public class CardInfo implements Serializable{
 
 	@Id ObjectId id;
 	private static final long serialVersionUID = -5780908752081049002L;
+	private @Indexed Date creationDate;
 	private @Indexed String sendEmail;
 	private @Indexed String recipient;
 	private @Indexed String recipientEmail;
 	private @Indexed Date deliverDate;
 	private @Indexed String subject;
 	private @Indexed String content;
+	private @Indexed String cardId;
+
 	public CardInfo() {
 		
 	}
@@ -33,9 +36,9 @@ public class CardInfo implements Serializable{
 		this.deliverDate = card.deliverDate;
 		this.subject = card.subject;
 		this.content = card.content;
+		this.creationDate = card.creationDate;
+		this.cardId = card.cardId;
 	}
-	
-
 	
 
 	public ObjectId getId() {
@@ -81,12 +84,25 @@ public class CardInfo implements Serializable{
 		this.content = content;
 	}
 	
+	public Date getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+	
+
+	
+	
+
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((cardId == null) ? 0 : cardId.hashCode());
+		result = prime * result
+				+ ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result
 				+ ((deliverDate == null) ? 0 : deliverDate.hashCode());
 		result = prime * result
@@ -107,10 +123,15 @@ public class CardInfo implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		CardInfo other = (CardInfo) obj;
-		if (content == null) {
-			if (other.content != null)
+		if (cardId == null) {
+			if (other.cardId != null)
 				return false;
-		} else if (!content.equals(other.content))
+		} else if (!cardId.equals(other.cardId))
+			return false;
+		if (creationDate == null) {
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
 			return false;
 		if (deliverDate == null) {
 			if (other.deliverDate != null)
@@ -139,33 +160,46 @@ public class CardInfo implements Serializable{
 			return false;
 		return true;
 	}
-	private static String jsonfy(UserInfo user, int level) {
-		UserInfo info=new UserInfo(user);
-		info.setPassword(null);
-		if(level==0) {
-			//just userName
-			info.setEmailAddress(null);
-		} 
-		return GsonUtil.getInstance().toJson(info);
+	
+	
+	@Override
+	public String toString() {
+		return "CardInfo [id=" + id + ", creationDate=" + creationDate
+				+ ", sendEmail=" + sendEmail + ", recipient=" + recipient
+				+ ", recipientEmail=" + recipientEmail + ", deliverDate="
+				+ deliverDate + ", subject=" + subject + ", content=" + content
+				+ ", cardId=" + cardId + "]";
 	}
-	public static String getUserName(HttpServletRequest request) {
-		UserInfo ret=UserContextUtil.getCurUser(request);
-		if(ret==null) return "";
-		else return ret.getName();
-		
-	}
-	public static String getUserContextInScript(HttpServletRequest request) {
-		UserInfo ret=UserContextUtil.getCurUser(request);
-		if(ret==null) {
-			return "";
-		} else {
-			String json=jsonfy((UserInfo)ret,1);
-			StringBuilder sb=new StringBuilder();
-			sb.append("<script>window.userContext="+json+"</script>");
-			return sb.toString();
-		} 
-		
-	}
+	
+//	private static String jsonfy(UserInfo user, int level) {
+//		UserInfo info=new UserInfo(user);
+//		info.setPassword(null);
+//		if(level==0) {
+//			//just userName
+//			info.setEmailAddress(null);
+//		} 
+//		return GsonUtil.getInstance().toJson(info);
+//	}
+//	
+//	public static String getUserName(HttpServletRequest request) {
+//		UserInfo ret=UserContextUtil.getCurUser(request);
+//		if(ret==null) return "";
+//		else return ret.getName();
+//		
+//	}
+//	
+//	public static String getUserContextInScript(HttpServletRequest request) {
+//		UserInfo ret=UserContextUtil.getCurUser(request);
+//		if(ret==null) {
+//			return "";
+//		} else {
+//			String json=jsonfy((UserInfo)ret,1);
+//			StringBuilder sb=new StringBuilder();
+//			sb.append("<script>window.userContext="+json+"</script>");
+//			return sb.toString();
+//		} 
+//		
+//	}
 	
 
 	

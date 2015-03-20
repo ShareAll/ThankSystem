@@ -1,6 +1,5 @@
 package com.thank.user.dao;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -89,6 +88,11 @@ public abstract class AbstractDao<T> {
 
 	public T getById(String id) {
 		return ds.get(this.cls, id);
+	}
+	
+	public List<T> getAttList(String filter, Object filterVal){
+		//for example filter is 'xyz>=' filterVal 8.
+		return ds.find(this.cls).filter(filter, filterVal).asList();
 	}
 
 	protected Query<T> getUpdateQuery(ObjectId id) {
