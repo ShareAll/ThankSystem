@@ -13,15 +13,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.common.dao.UserDao;
+import com.thank.common.model.UserInfo;
+import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
-import com.thank.user.dao.UserDao;
-import com.thank.user.model.UserInfo;
-import com.thank.user.model.UserSummaryVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-
+/***
+ * Auth resource
+ * @author fenwang
+ *
+ */
 @Singleton
 @Path("/auth2" )
 @Api(value = "/auth2", description = "Auth api")
@@ -90,15 +94,15 @@ public class AuthV2Resource {
     	notes = "SignUp user"
     	)
 	@ApiResponses(value = { 
-		    @ApiResponse(code = 401, message = "The email address allready registered") })
+		    @ApiResponse(code = 401, message = "The email address already registered") })
 	public void signUp(UserInfo request) throws IOException {	
 		UserInfo ret=null;
-		String userName,password, emailAddress,forwardUrl;
+		String userName,password, emailAddress;
 		userName=request.getName();
 		password=request.getPassword();
 		emailAddress=request.getEmailAddress();
 		if(dao.getByEmaiAddress(emailAddress)!=null)  {
-			throw new WFRestException(401,"The email address allready registered");
+			throw new WFRestException(401,"The email address already registered");
 		} else {
 			try {
 				ret=new UserInfo();

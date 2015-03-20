@@ -1,12 +1,10 @@
-package com.thank.user.dao;
+package com.thank.common.dao;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
@@ -17,57 +15,50 @@ import org.mongodb.morphia.query.UpdateOperations;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.thank.config.MongoConfig;
+import com.thank.config.ThankConfig;
 
-import org.bson.types.ObjectId;
-
+/***
+ * Abstract Mongo DAO
+ * @author fenwang
+ *
+ * @param <T>
+ */
 public abstract class AbstractDao<T> {
-	
-	private final static String PROPERTY_FILE = "db.properties";
-	private final static String MOMGO_HOST_NAME = "mongo-host-name";
-	private final static String MONGO_PORT = "mongo-port";
-	private final static String MONGO_DB = "mongo-db";
-	private final static String MONGO_USER = "mongo-user";
-	private final static String MONGO_PWD = "mongo-pwd";
-	private final static String DEFAULT_MONGO_DB = "thankyou";
-	private static Properties properties;
-	static{
-		properties = loadProperties() ;
-	}
 	
 	protected Morphia morphia;
 	protected Datastore ds;
 	protected Class<T> cls;
+	protected MongoConfig config;
 	public AbstractDao(MongoClient client,String dbName,Class<T> cls) {
+		this.config=ThankConfig.instance().mongoConfig;
 		morphia=new Morphia();
 		this.cls=cls;
 		morphia.map(cls);
-		if (dbName == null){
-			dbName = (String)properties.getProperty(MONGO_DB , DEFAULT_MONGO_DB);
+		String databaseName=dbName;
+		if(databaseName==null) {
+			databaseName=config.getDbName();
 		}
 		if (client == null){
-			client = getMongoClient(null, null);
+			client = getMongoClient(null, databaseName);
 		}
-		this.ds=morphia.createDatastore(client, dbName);
+		this.ds=morphia.createDatastore(client, databaseName);
 	}
 	
 	  
-    public MongoClient getMongoClient(MongoClient mongoClient,Properties properties) {
-    	properties = properties == null? this.properties : properties;
-        try {
+    public MongoClient getMongoClient(MongoClient mongoClient,String dbName) {
+    	try {
             if (mongoClient == null){
-            	int port =Integer.valueOf((String)properties.get(MONGO_PORT));
-            	ServerAddress sd = new ServerAddress((String)properties.get(MOMGO_HOST_NAME), 
-                		port);
-            	if (properties.get(MONGO_USER)!= null){	
-            		MongoCredential credential= MongoCredential.createMongoCRCredential((String)properties.get(MONGO_USER),
-            			 (String)properties.get(MONGO_DB),  ((String)properties.get(MONGO_PWD)).toCharArray());
-               mongoClient = new MongoClient(sd, Arrays.asList(credential));
-            	}else{
+            	ServerAddress sd = new ServerAddress(config.getHostName(), config.getPort());
+            	if(config.getUserName()!=null) {
+                	MongoCredential credential= MongoCredential.createMongoCRCredential(config.getUserName(), dbName,  config.getPassword().toCharArray());
+                	mongoClient = new MongoClient(sd, Arrays.asList(credential));
+            	} else {
             		mongoClient = new MongoClient(sd);
             	}
             }
-        } catch (Exception uh) {
-            
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
         return mongoClient;
     }
@@ -153,31 +144,5 @@ public abstract class AbstractDao<T> {
 	}
 	
 	
-	
-    public static  Properties loadProperties()  {
-  	  
-        Properties properties =   new   Properties();
-        InputStream inputStream = null;
-        try {
-
-             inputStream = AbstractDao.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
-            if (inputStream == null) {
-            	System.err.println("Fail to load "+PROPERTY_FILE);
-            	System.exit(-1);
-                
-            }
-            properties.load(inputStream);
-        } catch (Exception ex) {
-            System.out.println("MongoResource: Error closing stream");
-        }finally{
-            if(inputStream != null){
-            	try{
-            inputStream.close();
-            	}catch(Exception ee){}
-            }
-        }
-
-        return properties;
-    }
 	
 }

@@ -14,7 +14,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
+/**
+ * Gson Util
+ * @author fenwang
+ *
+ */
 public class GsonUtil {
 	public static final String PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXX";
 

@@ -1,4 +1,4 @@
-package com.thank.user.model;
+package com.thank.common.model;
 
 import java.io.Serializable;
 
@@ -11,6 +11,11 @@ import org.mongodb.morphia.annotations.Indexed;
 
 import com.thank.jersey.plugin.GsonUtil;
 import com.thank.rest.resources.UserContextUtil;
+/***
+ * User model
+ * @author fenwang
+ *
+ */
 @Entity("userInfo")
 public class UserInfo implements Serializable{
 	@Id ObjectId id;

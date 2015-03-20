@@ -1,9 +1,10 @@
-package com.thank.user.dao;
+package com.thank.common.dao;
 
 import org.junit.Test;
 
-import com.thank.user.model.LoginException;
-import com.thank.user.model.UserInfo;
+import com.thank.common.dao.UserDao;
+import com.thank.common.model.LoginException;
+import com.thank.common.model.UserInfo;
 
 public class UserDaoTest {
 	@Test

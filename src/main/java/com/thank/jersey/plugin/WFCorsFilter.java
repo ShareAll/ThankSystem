@@ -10,7 +10,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/***
+ * Plain filter to attach cross domain header
+ * @author fenwang
+ *
+ */
 public class WFCorsFilter implements Filter {
 	public WFCorsFilter() {
 		

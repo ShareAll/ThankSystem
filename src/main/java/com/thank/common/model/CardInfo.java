@@ -1,4 +1,4 @@
-package com.thank.user.model;
+package com.thank.common.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,22 +17,24 @@ public class CardInfo implements Serializable{
 
 	@Id ObjectId id;
 	private static final long serialVersionUID = -5780908752081049002L;
-	private @Indexed String sendEmail;
+	private @Indexed String fromEmail;
 	private @Indexed String recipient;
 	private @Indexed String recipientEmail;
 	private @Indexed Date deliverDate;
 	private @Indexed String subject;
 	private @Indexed String content;
+	private @Indexed String templateName;
 	public CardInfo() {
 		
 	}
 	public CardInfo (CardInfo card) {
-		this.sendEmail = card.sendEmail;
+		this.fromEmail = card.fromEmail;
 		this.recipient = card.recipient;
 		this.recipientEmail = card.recipientEmail;
 		this.deliverDate = card.deliverDate;
 		this.subject = card.subject;
 		this.content = card.content;
+		this.templateName=card.templateName;
 	}
 	
 
@@ -44,11 +46,13 @@ public class CardInfo implements Serializable{
 	public void setId(ObjectId id) {
 		this.id = id;
 	}
-	public String getSendEmail() {
-		return sendEmail;
+	
+
+	public String getFromEmail() {
+		return fromEmail;
 	}
-	public void setSendEmail(String sendEmail) {
-		this.sendEmail = sendEmail;
+	public void setFromEmail(String fromEmail) {
+		this.fromEmail = fromEmail;
 	}
 	public String getRecipient() {
 		return recipient;
@@ -82,6 +86,14 @@ public class CardInfo implements Serializable{
 	}
 	
 	
+	public String getTemplateName() {
+		return templateName;
+	}
+	
+	
+
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,12 +102,15 @@ public class CardInfo implements Serializable{
 		result = prime * result
 				+ ((deliverDate == null) ? 0 : deliverDate.hashCode());
 		result = prime * result
+				+ ((fromEmail == null) ? 0 : fromEmail.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
 				+ ((recipient == null) ? 0 : recipient.hashCode());
 		result = prime * result
 				+ ((recipientEmail == null) ? 0 : recipientEmail.hashCode());
-		result = prime * result
-				+ ((sendEmail == null) ? 0 : sendEmail.hashCode());
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
+		result = prime * result
+				+ ((templateName == null) ? 0 : templateName.hashCode());
 		return result;
 	}
 	@Override
@@ -117,6 +132,16 @@ public class CardInfo implements Serializable{
 				return false;
 		} else if (!deliverDate.equals(other.deliverDate))
 			return false;
+		if (fromEmail == null) {
+			if (other.fromEmail != null)
+				return false;
+		} else if (!fromEmail.equals(other.fromEmail))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (recipient == null) {
 			if (other.recipient != null)
 				return false;
@@ -127,15 +152,15 @@ public class CardInfo implements Serializable{
 				return false;
 		} else if (!recipientEmail.equals(other.recipientEmail))
 			return false;
-		if (sendEmail == null) {
-			if (other.sendEmail != null)
-				return false;
-		} else if (!sendEmail.equals(other.sendEmail))
-			return false;
 		if (subject == null) {
 			if (other.subject != null)
 				return false;
 		} else if (!subject.equals(other.subject))
+			return false;
+		if (templateName == null) {
+			if (other.templateName != null)
+				return false;
+		} else if (!templateName.equals(other.templateName))
 			return false;
 		return true;
 	}
@@ -153,6 +178,9 @@ public class CardInfo implements Serializable{
 		if(ret==null) return "";
 		else return ret.getName();
 		
+	}
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 	public static String getUserContextInScript(HttpServletRequest request) {
 		UserInfo ret=UserContextUtil.getCurUser(request);

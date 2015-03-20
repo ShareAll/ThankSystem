@@ -6,7 +6,11 @@ import java.io.StringWriter;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
+/***
+ * Generic rest exception
+ * @author fenwang
+ *
+ */
 public class WFRestException extends WebApplicationException {
 	private static final long serialVersionUID = -8270279937591832474L;
 	private int respCode;

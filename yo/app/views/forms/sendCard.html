@@ -1,0 +1,42 @@
+<!-- Modal -->
+<div class="modal fade" id="dlgSendCard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Send Card with Template {{selectedApp.name}}</h4>
+      </div>
+
+      <div class="modal-body">
+          <form name="cardForm" novalidate>
+            <!-- Error Msg-->
+            <p ng-if="card.lastError" style="color:red">{{card.lastError}}</p>
+        <!-- recipientEmail -->
+           <label for="inputName" class="sr-only">Recipient Email</label>
+           <input name="recipientEmail" style="width:350px;margin-bottom:20px" type="text" ng-model="card.recipientEmail" class="form-control" placeholder="Recipient Email Address" required="" autofocus="">
+          <span style="color:red" ng-show="cardForm.recipientEmail.$dirty && cardForm.recipientEmail.$invalid">
+              <span ng-show="cardForm.recipientEmail.$error.required">Recipient Email Address is required.</span>
+          </span>
+ <!-- subject -->
+           <label for="inputName" class="sr-only">Subject</label>
+           <input name="subject" style="width:350px;margin-bottom:20px" type="text" ng-model="card.subject" class="form-control" placeholder="Subject" required="" autofocus="">
+          <span style="color:red" ng-show="cardForm.subject.$dirty && cardForm.subject.$invalid">
+              <span ng-show="cardForm.subject.$error.required">Subject is required.</span>
+          </span>
+<!-- content -->
+           <label for="inputName" class="sr-only">Content</label>
+           <textarea name="content" rows="8" style="width:350px;margin-bottom:20px" ng-model="card.content" class="form-control" placeholder="Content" required="" autofocus=""></textarea>
+           
+          <span style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
+              <span ng-show="cardForm.content.$error.required">Content is required.</span>
+          </span>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button ng-disabled="card.state==1" type="button" class="btn btn-primary" ng-click="sendCard()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>

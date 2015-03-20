@@ -3,11 +3,15 @@ package com.thank.rest.resources;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.thank.common.dao.UserDao;
+import com.thank.common.model.UserInfo;
 import com.thank.jersey.plugin.GsonUtil;
 import com.thank.rest.shared.model.WFRestException;
-import com.thank.user.dao.UserDao;
-import com.thank.user.model.UserInfo;
-
+/**
+ * Context util to wrap implementation of context mgmt
+ * @author fenwang
+ *
+ */
 public class UserContextUtil {
 	private static final String SESSION_CUR_USER="CUR_USER";
 	

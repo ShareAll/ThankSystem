@@ -1,5 +1,9 @@
-package com.thank.user.model;
-
+package com.thank.common.model;
+/***
+ * Model with subset information of user info with non private info
+ * @author fenwang
+ *
+ */
 public class UserSummaryVo {
 
 	public String name;

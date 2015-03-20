@@ -1,0 +1,37 @@
+<html>
+<head>
+<style>
+body {
+	background-image:url('http://media.salemwebnetwork.com/ecards/love-cards/you-are-loved-sparkle-550x320.jpg');
+	background-color:#cccccc
+}
+div#main_card_content h2 {
+	text-align: center;
+  	font-size: 50;
+  	font-weight:100;
+
+}
+div#main_card_content {
+    margin: 30px;
+    background-color: blue;
+    border: 1px solid black;
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+    color:white;
+}
+
+div#main_card_content p {
+    margin: 5%;
+    font-weight: bold;
+    font-size:35;
+   
+}
+</style>
+</head>
+<body>
+	<div id="main_card_content">
+		<h2>{{card.subject}}}</h2>
+		<p>{{card.content}}</p>
+	</div>
+</body>
+</html>

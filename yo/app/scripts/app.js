@@ -1,6 +1,6 @@
 /*jshint unused: vars */
 define(['angular', 'controllers/main','controllers/login','controllers/about','controllers/grid','controllers/canvas','controllers/photo','controllers/datatable',
-  'services/auth',
+  'services/auth','services/card',
   'components/wffix/wffix',
   'components/wfresourcegrid/wfresourcegrid','components/wfd3tree/wfd3tree',
   'components/wfloadmask/wfloadmask',
@@ -28,6 +28,7 @@ function (angular, MainCtrl, AboutCtrl,Grid2Ctrl,wfresourcegrid,wfd3tree)/*invok
       'wftoolsApp.controllers.canvasCtrl',
       'wftoolsApp.controllers.photoCtrl',
       'wftoolsApp.services.authService',
+      'wftoolsApp.services.cardService',
       'wfresourcegrid',
       'wfd3tree',
       'wfcanvas',

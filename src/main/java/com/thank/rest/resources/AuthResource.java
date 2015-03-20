@@ -15,15 +15,19 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.common.dao.UserDao;
+import com.thank.common.model.UserInfo;
 import com.thank.rest.shared.model.WFRestException;
 import com.thank.rest.shared.model.WFRestRedirectModel;
-import com.thank.user.dao.UserDao;
-import com.thank.user.model.UserInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-
+/***
+ * No longer use
+ * @author fenwang
+ *
+ */
 @Singleton
 @Path("/auth" )
 @Api(value = "/auth", description = "Auth api")

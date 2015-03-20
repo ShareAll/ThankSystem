@@ -9,9 +9,9 @@ angular.module('wful',[])
 function WfUl($timeout,$window) {
       var curData=[];
       var colSize=2;
-      var itemWidth=165;
-      var itemHeight=131;
-      function setItemStyles(containerWidth) {
+      var itemWidth=330;
+      var itemHeight=262;
+      function setItemStylesAndReturnHeight(containerWidth) {
             containerWidth=parseInt(containerWidth);
             if(containerWidth<itemWidth*2) containerWidth=itemWidth*2;
 
@@ -22,7 +22,11 @@ function WfUl($timeout,$window) {
                   val.width=itemWidth;
                   val.height=itemHeight;
             });
-            console.dir(curData);
+            var containerHeight=itemHeight*Math.floor(curData.length/colSize);
+            if(curData.length%colSize>0) {
+                  containerHeight+=itemHeight;
+            }
+            return containerHeight;
       }
       function getStyle(index) {
             var x=(index%colSize)*100+"%";
@@ -44,7 +48,10 @@ function WfUl($timeout,$window) {
                   console.info(elmWidth);
                   $w.bind("resize",function() {
                         elmWidth=$(elm).css("width");
-                        setItemStyles(elmWidth);
+                        var newHeight=setItemStylesAndReturnHeight(elmWidth);
+                        elm.css("height",newHeight);
+                        console.info("height="+newHeight);
+                        $scope.$apply();
                         console.info(elmWidth);
                   });
                  // console.info($w.width());
@@ -53,8 +60,9 @@ function WfUl($timeout,$window) {
                         //set new size
                        // setContainerSize(elm,newVal.length);
                         curData=newVal;
-                        setItemStyles(elmWidth);
-                        
+                        var newHeight=setItemStylesAndReturnHeight(elmWidth);
+                        elm.css("height",newHeight);                        
+                        console.info("height="+newHeight);
                         console.info("data Change");
                         
                   });

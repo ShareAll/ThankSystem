@@ -223,11 +223,16 @@ ul.alert-dropdown {
     color: #df8a13;
 }
 
+a.active {
+    font-size:18px;
+    font-weight:99;
+}
+
 /**Animation**/
 
 .wf-Ul { 
     list-style-type: none; padding: 0; position: relative;
-    border: 1px solid black; height: 220px; overflow-y: auto; overflow-x: hidden;
+    height: 220px; overflow-y: auto; overflow-x: hidden;
     width: 600px;
 }
 .wf-Ul li { 

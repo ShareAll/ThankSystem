@@ -13,9 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Strings;
+import com.thank.common.model.UserInfo;
 import com.thank.rest.resources.UserContextUtil;
-import com.thank.user.model.UserInfo;
-
+/***
+ * It is not use for now
+ * @author fenwang
+ *
+ */
 public class AuthFilter implements Filter {
 	
 	private String contextPath;

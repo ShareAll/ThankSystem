@@ -128,10 +128,13 @@
                             </div>
                             <div class="panel-body">
                                 <!--TODO-->
-                                <a ng-click="reOrder()">Reorder</a>
+                                <a style="margin-right:20px" ng-class="gallerySelection==0?'active':''" ng-click="reOrder(0)">Birthday</a>
+                                <a style="margin-right:20px" ng-class="gallerySelection==1?'active':''"ng-click="reOrder(1)">Save My Day</a>
+                                <a style="margin-right:20px" ng-class="gallerySelection==2?'active':''"ng-click="reOrder(2)">To My Love</a>
+
                                 <ul class="wf-Ul" wf-data="appList" style="width:100%">
-                                    <li ng-repeat="app in appList track by app.id" ng-style="{transform:app.style,width:app.width,height:app.height}" style="padding-left:12px;padding-top:10px">
-                                        <div><img ng-src="{{app.icon}}"></img></div>
+                                    <li ng-repeat="app in appList track by app.id" ng-style="{transform:app.style,width:app.width,height:app.height}" style="padding-left:12px;padding-top:10px" ng-click="openSendDlg(app)">
+                                        <div><img width="276" height="160" ng-src="{{app.icon}}"></img></div>
                                         <p style="magin-top:5px;padding:3px"><strong>{{app.name}}</strong></p>
                                     </li>
                                 </ul>
@@ -280,6 +283,11 @@
 
             </div>
             <!-- /.container-fluid -->
+    
 
-        </div>
-        <!-- /#page-wrapper -->
+<!-- dialogs-->
+
+    <div ng-include="'views/forms/sendCard.html'"></div>
+
+</div>
+<!-- /#page-wrapper -->

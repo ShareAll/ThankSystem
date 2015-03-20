@@ -13,9 +13,9 @@
   <label for="inputPassword" class="sr-only">Password</label>
   <input style="width:350px;margin-bottom:20px" type="password" ng-model="login.password"  class="form-control" placeholder="Password" required="">
   <label ng-hide="!isSignUp" for="inputName" class="sr-only">Repeat Password</label>
-  <input ng-hide="!isSignUp" style="width:350px" type="password" ng-model="login.repeatPassword"  ng-if="isSignUp" class="form-control flip-in" placeholder="Repeat Password" required="" autofocus="">
+  <input ng-hide="!isSignUp" style="width:350px;margin-bottom:20px" type="password" ng-model="login.repeatPassword"  ng-if="isSignUp" class="form-control flip-in" placeholder="Repeat Password" required="" autofocus="">
 
-<label ng-hide="!isSignUp" for="inputName" class="sr-only">Alias</label>
+  <label ng-hide="!isSignUp" for="inputName" class="sr-only">Alias</label>
   <input ng-hide="!isSignUp" name="userName" style="width:350px;margin-bottom:20px" type="text" ng-model="login.userName" class="form-control flip-in" placeholder="User Alias Name" required="" autofocus="">
 
   <div class="checkbox">
