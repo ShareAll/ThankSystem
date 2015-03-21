@@ -1,0 +1,13 @@
+/* Empty. Add your own CSS if you like */
+.blue {
+	background-color:"blue";
+}
+
+.box {
+	width:100%;
+}
+
+.box img {
+	display: block;
+    width:100%;
+}

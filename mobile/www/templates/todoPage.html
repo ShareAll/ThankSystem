@@ -1,0 +1,35 @@
+
+<ion-view view-title="Task {{selectedTodo.id}}">
+
+  <ion-content>
+
+  <div class="list card">
+  	<label class="item item-input item-floating-label">
+  		<span class="input-label">Receiver Email</span>
+  		
+  		<input type="email" placeholder="Receiver Email" ng-model="card.recipientEmail">
+	</label>
+	<label class="item item-input item-floating-label">
+		<span class="input-label">Content</span>
+		<textarea rows="8" 
+			placeholder="Content"
+			name="content" 
+			ng-model="card.content">
+		</textarea>
+	</label>
+	<ion-slide-box on-slide-changed="slideHasChanged($index)">
+	  <ion-slide>
+	    <div class="box"><img src="img/loved.jpg"></img></div>
+	  </ion-slide>
+	  <ion-slide>
+	    <div class="box yellow"><img src="img/nofear.jpg"></img></div>
+	  </ion-slide>
+	</ion-slide-box>
+	
+	<button class="button button-positive" style="width:100%;margin-top:10px" ng-click="send()">
+  		Send
+	</button>
+</div>	
+</ion-content>
+
+</ion-view>
