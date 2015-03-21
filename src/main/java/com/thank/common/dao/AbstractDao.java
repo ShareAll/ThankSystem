@@ -64,85 +64,92 @@ public abstract class AbstractDao<T> {
     }
 	
 	public Object save(T val) {
-		Key<T> key=this.ds.save(val);
+		Key<T> key = this.ds.save(val);
 		return key.getId();
 	}
-	
-	protected  Query<T> getUpdateQuery(ObjectId id){
-		return ds.createQuery(this.cls).field(Mapper.ID_KEY).equal(id);
-	}
-	
 
-	protected Datastore getDateStore(){
-		return ds;
-	}
-	
-	public T getSingleByAttr(String attrName,Object attrVal) {
+
+	public T getSingleByAttr(String attrName, Object attrVal) {
 		return ds.find(this.cls).field(attrName).equal(attrVal).get();
 	}
-	
+
 	public T getById(String id) {
 		return ds.get(this.cls, id);
 	}
 	
-	
-	public void update(ObjectId id, String attrName,Object attrVal) {
+	public List<T> getAttList(String filter, Object filterVal){
+		//for example filter is 'xyz>=' filterVal 8.
+		return ds.find(this.cls).filter(filter, filterVal).asList();
+	}
 
-		if (attrVal == null){
-			ds.update(getUpdateQuery(id),
-					ds.createUpdateOperations(this.cls).unset(attrName));
+	protected Query<T> getUpdateQuery(ObjectId id) {
+		return ds.createQuery(this.cls).field(Mapper.ID_KEY).equal(id);
+	}
+
+	protected Datastore getDateStore() {
+		return ds;
+	}
+	
+	public void update(ObjectId id, String attrName, Object attrVal) {
+
+		if (attrVal == null) {
+			ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
+					.unset(attrName));
 		}
 		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).set(attrName, attrVal));
+				ds.createUpdateOperations(this.cls).set(attrName, attrVal));
 	}
-	
-	public void update(ObjectId id, Map<String,Object> data) {
-		 if (data == null || data.size() == 0){
-			 return;
-		 }
-		 UpdateOperations<T> ops = null;
-		 for (Map.Entry<String, Object> var : data.entrySet()){
-			 if (ops == null){
-				 if (var.getValue()!=null){
-					 ops = ds.createUpdateOperations(this.cls).set(var.getKey(), var.getValue());
-				 }else{
-					 ops = ds.createUpdateOperations(this.cls).unset(var.getKey());
-				 }
-				 continue;
-			 }
-			 if (var.getValue()!=null){
-				 ops = ops.set(var.getKey(), var.getValue());
-			 }else{
-				 ops = ops.unset(var.getKey());
-			 }
-		 }
+
+	public void update(ObjectId id, Map<String, Object> data) {
+		if (data == null || data.size() == 0) {
+			return;
+		}
+		UpdateOperations<T> ops = null;
+		for (Map.Entry<String, Object> var : data.entrySet()) {
+			if (ops == null) {
+				if (var.getValue() != null) {
+					ops = ds.createUpdateOperations(this.cls).set(var.getKey(),
+							var.getValue());
+				} else {
+					ops = ds.createUpdateOperations(this.cls).unset(
+							var.getKey());
+				}
+				continue;
+			}
+			if (var.getValue() != null) {
+				ops = ops.set(var.getKey(), var.getValue());
+			} else {
+				ops = ops.unset(var.getKey());
+			}
+		}
 		ds.update(getUpdateQuery(id), ops);
 	}
-	
-	//TODO Later : will check if it is Collection then..
-	public void updateArray(ObjectId id, String attrName,Object attrVal, boolean allowDup) {
 
-		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).add(attrName, attrVal, allowDup));
+	// TODO Later : will check if it is Collection then..
+	public void updateArray(ObjectId id, String attrName, Object attrVal,
+			boolean allowDup) {
+
+		ds.update(
+				getUpdateQuery(id),
+				ds.createUpdateOperations(this.cls).add(attrName, attrVal,
+						allowDup));
 	}
-	
+
 	public void updateRemoveFirst(ObjectId id, String attrName) {
-		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).removeFirst(attrName));
+		ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
+				.removeFirst(attrName));
 	}
-	
+
 	public void updateRemoveLast(ObjectId id, String attrName) {
 
-		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).removeLast(attrName));
+		ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
+				.removeLast(attrName));
 	}
-	
-	public void updateRemoveAll(ObjectId id, String attrName, List<Object> attVals) {
 
-		ds.update(getUpdateQuery(id),
-		ds.createUpdateOperations(this.cls).removeAll(attrName, attVals));
+	public void updateRemoveAll(ObjectId id, String attrName,
+			List<Object> attVals) {
+
+		ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
+				.removeAll(attrName, attVals));
 	}
-	
-	
-	
 }

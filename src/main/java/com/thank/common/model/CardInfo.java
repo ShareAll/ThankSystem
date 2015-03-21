@@ -18,12 +18,15 @@ public class CardInfo implements Serializable{
 	@Id ObjectId id;
 	private static final long serialVersionUID = -5780908752081049002L;
 	private @Indexed String fromEmail;
+	private @Indexed Date creationDate;
 	private @Indexed String recipient;
 	private @Indexed String recipientEmail;
 	private @Indexed Date deliverDate;
 	private @Indexed String subject;
 	private @Indexed String content;
 	private @Indexed String templateName;
+	private @Indexed String cardId;
+
 	public CardInfo() {
 		
 	}
@@ -35,9 +38,9 @@ public class CardInfo implements Serializable{
 		this.subject = card.subject;
 		this.content = card.content;
 		this.templateName=card.templateName;
+		this.creationDate = card.creationDate;
+		this.cardId = card.cardId;
 	}
-	
-
 	
 
 	public ObjectId getId() {
@@ -48,57 +51,14 @@ public class CardInfo implements Serializable{
 	}
 	
 
-	public String getFromEmail() {
-		return fromEmail;
-	}
-	public void setFromEmail(String fromEmail) {
-		this.fromEmail = fromEmail;
-	}
-	public String getRecipient() {
-		return recipient;
-	}
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
-	public String getRecipientEmail() {
-		return recipientEmail;
-	}
-	public void setRecipientEmail(String recipientEmail) {
-		this.recipientEmail = recipientEmail;
-	}
-	public Date getDeliverDate() {
-		return deliverDate;
-	}
-	public void setDeliverDate(Date deliverDate) {
-		this.deliverDate = deliverDate;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	
-	public String getTemplateName() {
-		return templateName;
-	}
-	
-	
-
-	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((cardId == null) ? 0 : cardId.hashCode());
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result
+				+ ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result
 				+ ((deliverDate == null) ? 0 : deliverDate.hashCode());
 		result = prime * result
@@ -122,10 +82,20 @@ public class CardInfo implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		CardInfo other = (CardInfo) obj;
+		if (cardId == null) {
+			if (other.cardId != null)
+				return false;
+		} else if (!cardId.equals(other.cardId))
+			return false;
 		if (content == null) {
 			if (other.content != null)
 				return false;
 		} else if (!content.equals(other.content))
+			return false;
+		if (creationDate == null) {
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
 			return false;
 		if (deliverDate == null) {
 			if (other.deliverDate != null)
@@ -164,6 +134,61 @@ public class CardInfo implements Serializable{
 			return false;
 		return true;
 	}
+	public String getFromEmail() {
+		return fromEmail;
+	}
+	public void setFromEmail(String fromEmail) {
+		this.fromEmail = fromEmail;
+	}
+	public String getRecipient() {
+		return recipient;
+	}
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+	public String getRecipientEmail() {
+		return recipientEmail;
+	}
+	public void setRecipientEmail(String recipientEmail) {
+		this.recipientEmail = recipientEmail;
+	}
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public Date getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+	
+
+	
+	
+
+	
+	public String getTemplateName() {
+		return templateName;
+	}
+	
+	
+
 	private static String jsonfy(UserInfo user, int level) {
 		UserInfo info=new UserInfo(user);
 		info.setPassword(null);
@@ -192,7 +217,16 @@ public class CardInfo implements Serializable{
 			sb.append("<script>window.userContext="+json+"</script>");
 			return sb.toString();
 		} 
+	}
 		
+	
+	@Override
+	public String toString() {
+		return "CardInfo [id=" + id + ", creationDate=" + creationDate
+				+ ", recipient=" + recipient
+				+ ", recipientEmail=" + recipientEmail + ", deliverDate="
+				+ deliverDate + ", subject=" + subject + ", content=" + content
+				+ ", cardId=" + cardId + "]";
 	}
 	
 
