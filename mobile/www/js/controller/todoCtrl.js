@@ -4,6 +4,7 @@
 
 	function TodoCtrl($scope,$stateParams,todoService) {
 		  $scope.todoList = [];
+		  todoService.initReminder();
 		  todoService.list().then(function SUCCESS(resp) {
 		  	$scope.newTasks=resp.data.newTasks;
 		  	$scope.completeTasks=resp.data.completeTasks;

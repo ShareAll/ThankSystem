@@ -1,7 +1,10 @@
-angular.module('thank.services',[])
-	.factory('todoService',['$http','$timeout','$q','$location','apiBase',
+(function() {
 
-function TodoService($http,$timeout,$q,$location,apiBase) {
+
+angular.module('thank.services.todoService',[])
+	.factory('todoService',['$http','$timeout','$q','$location','apiBase','$cordovaLocalNotification','$ionicPlatform',TodoService]);
+
+function TodoService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotification,$ionicPlatform) {
 //mock data;
 	var newTasks=[
 			{'id':1,'img':'img/karma.png','title':'Send ThankYou Card 1','author':'KARMA','notes':'Send thankyou and receive karma','score':5},
@@ -14,12 +17,45 @@ function TodoService($http,$timeout,$q,$location,apiBase) {
 			{'id':5,'img':'img/karma.png','title':'Send ThankYou Card 5','author':'KARMA','notes':'Send thankyou and receive karma','score':5}
 	];
 	var totalScore=1000;
+	var isReminderInited=false;
 	return {
+		initReminder:initReminder,
 		getScore:getScore,
 		complete:complete,
 		list:list,
 		detail:detail
 	};
+	function initReminder() {
+		if(isReminderInited) return;
+		isReminderInited=true;
+        var alarmTime = new Date();
+        alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+        list().then(function(resp) {
+        	
+        	$ionicPlatform.ready(function() {
+        		if (!window.cordova || window.cordova.plugins.notification) {
+      				return;
+   				}
+				var now = new Date().getTime(),
+                _5_sec_from_now = new Date(now + 5 * 1000);
+	        	angular.forEach(resp.data.newTasks,function(val,ind){
+	        		cordova.plugins.notification.local.schedule({
+					    id: val.id,
+					    title: val.title,
+					    text: val.notes,
+					    at: _5_sec_from_now,
+					    every: "week",
+					    sound: null
+					    
+					});
+
+
+	        	});//angulalr forEach
+
+        	});//ionicPlatform Ready
+        }); //list
+    
+	}
 	function getScore() {
 		return totalScore;
 	}
@@ -54,13 +90,15 @@ function TodoService($http,$timeout,$q,$location,apiBase) {
 	function detail(id) {
 		return $q(function(resolve,reject) {
 			$timeout(function() {
-				var data={'title':'Send thank '+id,'id':id};
-				resolve({
-					data:data
-				})
-				resolve({
-					data:data
+				
+				angular.forEach(newTasks,function(val,index) {
+					if(val.id==id) {
+						resolve({
+							data:val
+						})
+					}
 				});
+				return resolve({data:{}});
 			},1000);
 		});
 
@@ -73,4 +111,6 @@ function TodoService($http,$timeout,$q,$location,apiBase) {
 } //End of TodoService
 
 
-]);
+
+
+})();

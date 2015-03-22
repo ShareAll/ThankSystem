@@ -46,20 +46,18 @@
 	<form name="cardForm" novalidate>
   	<label class="item item-input item-floating-label">
   		<span class="input-label" style="font-size:9px">Receiver Email</span>  		
-  		<input type="email" placeholder="Receiver Email" ng-model="card.recipientEmail">
-  		<span style="color:red" ng-show="cardForm.recipientEmail.$dirty && cardForm.recipientEmail.$invalid">
-    		<span ng-show="cardForm.recipientEmail.$error.required">Email Address is required.</span>
-  		</span>
-      
+  		<input type="email" name="recipientEmail" placeholder="Receiver Email" ng-model="card.recipientEmail">
+  		
 	</label>
 	<label class="item item-input item-floating-label">
 		<span class="input-label" style="font-size:9px">Content</span>
 		<textarea rows="8" 
 			placeholder="Content"
 			name="content" 
-			ng-model="card.content">
+			ng-model="card.content"
+			minlength=10>
 		</textarea>
-		<span style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
+		<span ng-cloak style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
     		<span ng-show="cardForm.content.$error.minlength">To short.....</span>
   		</span>
         
@@ -76,7 +74,7 @@
 	</ion-slide-box>
 	
 	<button class="button button-positive" style="width:100%;margin-top:10px" ng-click="send()">
-  		Send
+  		Send +{{selectedTodo.score}}
 	</button>
 </form>
 </div>	
