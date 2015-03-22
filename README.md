@@ -4,10 +4,11 @@ a. Must install ionic framework
 b. in mobile folder, run ionic serve
 
 2. Add plugins:
-     cordova plugin add de.appplant.cordova.plugin.local-notification
-     cordova plugin add org.apache.cordova.camera
-     cordova plugin add com.ionic.keyboard
-     cordova plugin add org.apache.cordova.console
+	cordova plugin add org.apache.cordova.device
+    cordova plugin add de.appplant.cordova.plugin.local-notification
+    cordova plugin add org.apache.cordova.camera
+    cordova plugin add com.ionic.keyboard
+    cordova plugin add org.apache.cordova.console
 
 
 3. How to deploy to iphone?
