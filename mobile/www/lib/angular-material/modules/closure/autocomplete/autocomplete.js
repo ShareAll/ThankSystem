@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.8.3
+ * v0.8.2
  */
 goog.provide('ng.material.components.autocomplete');
 goog.require('ng.material.components.icon');
@@ -40,8 +40,7 @@ goog.require('ng.material.core');
           input: $element[0].getElementsByTagName('input')[0]
         },
         promise = null,
-        cache = {},
-        noBlur = false;
+        cache = {};
 
     //-- public variables
     self.scope = $scope;
@@ -58,12 +57,6 @@ goog.require('ng.material.core');
     self.getCurrentDisplayValue = getCurrentDisplayValue;
     self.fetch = $mdUtil.debounce(fetchResults);
     self.messages = [];
-
-    //-- While the mouse is inside of the dropdown, we don't want to handle input blur
-    //-- This is to allow the user to scroll the list without causing it to hide
-    self.listEnter = function () { noBlur = true; };
-    self.listLeave = function () { noBlur = false; };
-    self.mouseUp   = function () { elements.input.focus(); };
 
     return init();
 
@@ -160,7 +153,7 @@ goog.require('ng.material.core');
     }
 
     function blur () {
-      if (!noBlur) self.hidden = true;
+      self.hidden = true;
     }
 
     function keydown (event) {
@@ -301,10 +294,7 @@ goog.require('ng.material.core');
               ng-if="$mdAutocompleteCtrl.loading"\
               md-mode="indeterminate"></md-progress-linear>\
         </md-autocomplete-wrap>\
-        <ul role="presentation"\
-            ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
-            ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
-            ng-mouseup="$mdAutocompleteCtrl.mouseUp()">\
+        <ul role="presentation">\
           <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
               ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
               ng-show="searchText && !$mdAutocompleteCtrl.hidden"\

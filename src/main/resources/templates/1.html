@@ -1,6 +1,6 @@
 <ion-view view-title="Task {{selectedTodo.id}}">
   <ion-content>
-<!--  <div class="card">
+  <div class="card">
   	<div class="item item-divider">
     	Send Email
   	</div>
@@ -39,33 +39,22 @@
 
 
 </div>
--->
 
-
+<!--
   <div class="list card">
-	<form name="cardForm" novalidate>
   	<label class="item item-input item-floating-label">
-  		<span class="input-label" style="font-size:9px">Receiver Email</span>  		
+  		<span class="input-label">Receiver Email</span>
+  		
   		<input type="email" placeholder="Receiver Email" ng-model="card.recipientEmail">
-  		<span style="color:red" ng-show="cardForm.recipientEmail.$dirty && cardForm.recipientEmail.$invalid">
-    		<span ng-show="cardForm.recipientEmail.$error.required">Email Address is required.</span>
-  		</span>
-      
 	</label>
 	<label class="item item-input item-floating-label">
-		<span class="input-label" style="font-size:9px">Content</span>
+		<span class="input-label">Content</span>
 		<textarea rows="8" 
 			placeholder="Content"
 			name="content" 
 			ng-model="card.content">
 		</textarea>
-		<span style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
-    		<span ng-show="cardForm.content.$error.minlength">To short.....</span>
-  		</span>
-        
-
 	</label>
-	<p style="margin-top:20px">Background</p>
 	<ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide>
 	    <div class="box"><img src="img/loved.jpg"></img></div>
@@ -78,10 +67,9 @@
 	<button class="button button-positive" style="width:100%;margin-top:10px" ng-click="send()">
   		Send
 	</button>
-</form>
 </div>	
 
-
+-->
 </ion-content>
 
 </ion-view>

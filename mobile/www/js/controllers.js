@@ -18,7 +18,9 @@ angular.module('starter.controllers', [])
 
   // Open the login modal
   $scope.login = function() {
+   // console.info("login");
     $scope.modal.show();
+
   };
 
   // Perform the login action when the user submits the login form
