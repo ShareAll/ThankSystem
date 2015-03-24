@@ -1,0 +1,18 @@
+<ion-view view-title="Device Check">
+  <ion-content>
+  	<p>Device Status</p>
+  	<ul>
+  		<li ng-repeat="result in checkResult">
+  			<p>{{result.name}}:{{result.state}}</p>
+  		</li>
+    </ul>
+    <button ng-click="takePicture()">Take picture</button>
+    <button ng-click="scheduleNotification()">Schedule Notification</button>
+    <button ng-click="gotoTodo()">Todo</button>
+    <div>
+    	<img id="myPhoto" style="max-width:100%;max-height:100%;"></img>
+    	<p ng-if="errMessage">{{errMessage}}</p>
+    </div>
+    
+  </ion-content>
+</ion-view>

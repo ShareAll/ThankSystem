@@ -2,9 +2,9 @@
 
 
 angular.module('thank.services.todoService',[])
-	.factory('todoService',['$http','$timeout','$q','$location','apiBase','$cordovaLocalNotification','$ionicPlatform',TodoService]);
+	.factory('todoService',['$http','$timeout','$q','$location','apiBase','$ionicPlatform','deviceCheckService',TodoService]);
 
-function TodoService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotification,$ionicPlatform) {
+function TodoService($http,$timeout,$q,$location,apiBase,$ionicPlatform,deviceCheckService) {
 //mock data;
 	var newTasks=[
 			{'id':1,'img':'img/karma.png','title':'Send ThankYou Card 1','author':'KARMA','notes':'Send thankyou and receive karma','score':5},
@@ -25,18 +25,20 @@ function TodoService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotificati
 		list:list,
 		detail:detail
 	};
+	
 	function initReminder() {
 		if(isReminderInited) return;
-		isReminderInited=true;
+		
         var alarmTime = new Date();
         alarmTime.setMinutes(alarmTime.getMinutes() + 1);
         list().then(function(resp) {
         	
         	$ionicPlatform.ready(function() {
-        		if (!window.cordova || window.cordova.plugins.notification) {
+        		if (!window.cordova || !window.cordova.plugins.notification) {
       				return;
    				}
-				var now = new Date().getTime(),
+   				isReminderInited=true;
+   				var now = new Date().getTime(),
                 _5_sec_from_now = new Date(now + 5 * 1000);
 	        	angular.forEach(resp.data.newTasks,function(val,ind){
 	        		cordova.plugins.notification.local.schedule({
@@ -44,7 +46,6 @@ function TodoService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotificati
 					    title: val.title,
 					    text: val.notes,
 					    at: _5_sec_from_now,
-					    every: "week",
 					    sound: null
 					    
 					});
@@ -80,9 +81,25 @@ function TodoService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotificati
 				newTasks.splice(ind, 1);
 				completeTasks.push(val);
 				$location.path('app/todoList');
-				totalScore+=val.score
+				totalScore+=val.score;
 				console.info("totalScore="+totalScore);
 			}
+		});
+		//update badge
+		console.log("Prepare to send complete notification");
+		list().then(function(resolve,reject) {
+			var numOfItems=newTasks.length;
+			var now = new Date().getTime();
+		  	var oneSecondsLater = new Date(now + 1 * 1000);
+			deviceCheckService.notify({
+				id: 10,
+				title: "You have "+numOfItems+" tasks",
+				text: "Please go complete them to receive karma score",
+				badge:numOfItems
+			});
+			console.log("todo.complete:Send "+numOfItems+" to device");
+			
+
 		});
 		return 0;
 

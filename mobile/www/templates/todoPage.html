@@ -57,7 +57,7 @@
 			ng-model="card.content"
 			minlength=10>
 		</textarea>
-		<span ng-cloak style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
+		<span ng-if="cardForm.content" style="color:red" ng-show="cardForm.content.$dirty && cardForm.content.$invalid">
     		<span ng-show="cardForm.content.$error.minlength">To short.....</span>
   		</span>
         

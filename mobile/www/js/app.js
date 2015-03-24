@@ -5,11 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
-  'ionic','ngCordova','starter.controllers',
+  'ionic','starter.controllers',
   'thank.controllers','thank.services'
 ])
 .constant('apiBase',"THANK")
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,8 +18,46 @@ angular.module('starter', [
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+        StatusBar.styleDefault();
     }
+
+    //INIT LOG CONSOLE
+    if (window.cordova && window.cordova.logger) {
+            window.cordova.logger.__onDeviceReady();
+    }
+    //INIT NOTIFICATION
+    if (window.plugin && window.plugin.notification) {
+
+        window.plugin.notification.local.setDefaults({
+            autoCancel: true
+        });
+        if (window.device && window.device.platform === 'iOS') {
+            window.plugin.notification.local.registerPermission();
+        }
+        window.plugin.notification.local.on('click', function (notification) {
+            console.log("click "+notification.id);
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
+            $state.go('app.todoList', {}, {location:'replace'});
+            console.log("click 2 "+notification.id);
+            //$timeout(function () {
+            //  $rootScope.$broadcast('cordovaLocalNotification:click', notification);
+            //});
+        });
+
+        window.plugin.notification.local.on('trigger', function (notification) {
+            $timeout(function () {
+                $rootScope.$broadcast('cordovaLocalNotification:trigger', notification);
+            });
+        });
+        console.log("init notification plugin");
+    
+    }
+
+    
+   
+
   });
 })
 
@@ -42,11 +80,12 @@ angular.module('starter', [
     }
   })
 
-  .state('app.browse', {
-    url: "/browse",
+  .state('app.deviceCheck', {
+    url: "/deviceCheck",
     views: {
       'menuContent': {
-        templateUrl: "templates/browse.html"
+        templateUrl: "templates/deviceCheck.html",
+        controller: 'deviceCheckCtrl'
       }
     }
   })
