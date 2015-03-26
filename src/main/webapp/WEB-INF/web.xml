@@ -66,7 +66,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 		<init-param>
 			<param-name>swagger.api.basepath</param-name>
-			<param-value>http://localhost:8080/ThankWeb/rest</param-value>
+			<param-value>/ThankWeb/rest</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
