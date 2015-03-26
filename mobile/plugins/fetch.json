@@ -28,5 +28,11 @@
             "type": "registry",
             "id": "org.apache.cordova.console"
         }
+    },
+    "com.phonegap.plugins.facebookconnect": {
+        "source": {
+            "type": "local",
+            "path": "/Users/fenwang/mypro/plugins/phonegap-facebook-plugin"
+        }
     }
 }

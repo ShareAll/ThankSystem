@@ -1,16 +1,11 @@
-<ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
-    </div>
-  </ion-header-bar>
+<ion-view view-title="Login">
   <ion-content>
+  	<img style="width:100%;max-width:100%;max-height:100%" src="img/loved.jpg"></img>
     <form ng-submit="doLogin()">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
+          <span class="input-label">Email Address</span>
+          <input type="text" ng-model="loginData.emailAddress">
         </label>
         <label class="item item-input">
           <span class="input-label">Password</span>
@@ -22,4 +17,4 @@
       </div>
     </form>
   </ion-content>
-</ion-modal-view>
+</ion-view>

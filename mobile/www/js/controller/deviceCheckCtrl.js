@@ -1,8 +1,8 @@
 (function() {
 	angular.module('thank.controllers.deviceCheckCtrl', [])
-		.controller('deviceCheckCtrl', ['$scope','$stateParams','$location','deviceCheckService','todoService','$state','$ionicHistory',DeviceCheckCtrl]);
+		.controller('deviceCheckCtrl', ['$scope','$timeout','$stateParams','$location','deviceCheckService','todoService','facebookService','$state','$ionicHistory',DeviceCheckCtrl]);
 
-	function DeviceCheckCtrl($scope,$stateParams,$location,deviceCheckService,todoService,$state,$ionicHistory) {
+	function DeviceCheckCtrl($scope,$timeout,$stateParams,$location,deviceCheckService,todoService,facebookService,$state,$ionicHistory) {
 		  
 		  deviceCheckService.check().then(function SUCCESS(resp) {
 		  	$scope.errMessage=JSON.stringify(resp.data);
@@ -70,8 +70,31 @@
 
 		  };//scheduleNotification
 
-		 
+		 $scope.loginFacebook=function() {
+		 	var permissions=["public_profile","email","user_friends","user_photos"];
+		 	facebookService.login(permissions).then(function SUCCESS(resp) {
+		 		$scope.errMessage=JSON.stringify(resp);
+		 		$timout(function() {$scope.$apply();},100);
+		 	}, function FAIL(resp) {
+		 		$scope.errMessage=JSON.stringify(resp);
+		 		$timeout(function() {$scope.$apply();},100);
+		 	});
+		 }//login facebook
 
+		 $scope.facebookImages=[
+		 	{source:'https://fbcdn-sphotos-f-a.akamaihd.net/hphotos-ak-prn2/v/t1.0-9/552630_532302626784987_102626387_n.jpg?oh=89bd48a861d580355ee34d685ea116ba&oe=556F9A53&__gda__=1437995037_2381a0414f0a8827fd3cfcb4677b8e25'},
+		 	{source:'https://fbcdn-sphotos-f-a.akamaihd.net/hphotos-ak-prn2/v/t1.0-9/p600x600/552630_532302626784987_102626387_n.jpg?oh=e3cb8c7b7c1c2a972195470d43f7f130&oe=55726CF4&__gda__=1438318213_76da2761d9eccde12a88a5d0642a4a35'}
+		 ];
+		 $scope.getFacebookPhoto=function() {
+		 	facebookService.getPhotos().then(function SUCCESS(resp){
+		 		$scope.errMessage=JSON.stringify(resp);
+		 		$scope.facebookImages=resp;
+		 		$timout(function() {$scope.$apply();},100);
+		 	},function FAIL(resp){
+		 		$scope.errMessage=JSON.stringify(resp);
+		 		$timeout(function() {$scope.$apply();},100);
+		 	});
+		 }//get Facebook Photo
 	}//DeviceCheckCtrl
 
 })();
