@@ -14,7 +14,7 @@ public class ThankConfig {
 	private String PROPERTY_FILE="config.properties";
 	public MailConfig mailConfig=null;
 	public MongoConfig mongoConfig=null;
-	
+	public MySQLConfig mysqlConfig =null;
 	private ThankConfig() {
 		 Properties properties =new Properties();
 		 InputStream inputStream = null;
@@ -26,6 +26,7 @@ public class ThankConfig {
 			 properties.load(inputStream);
 			 mongoConfig=new MongoConfig(properties);
 			 mailConfig=new MailConfig(properties);
+			 mysqlConfig = new MySQLConfig(properties);
 		 } catch (Exception ex) {
 			 ex.printStackTrace();
 			 System.err.println("Fail to load "+PROPERTY_FILE+",must quit");

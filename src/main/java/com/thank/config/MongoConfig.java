@@ -15,7 +15,7 @@ public class MongoConfig {
 	public MongoConfig(Properties p) {
 		this.hostName=p.getProperty("mongo.hostName");
 		this.port=Integer.parseInt(p.getProperty("mongo.port","27017"));
-		this.dbName=p.getProperty("mongo.dbName","thankyou");
+		this.dbName=p.getProperty("mongo.dbName","thank");
 		this.userName=p.getProperty("mongo.userName");
 		this.password=p.getProperty("mongo.password");
 	}
