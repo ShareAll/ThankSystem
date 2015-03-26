@@ -23,6 +23,7 @@ public class UserInfo implements Serializable{
 	private @Indexed String name;
 	private @Indexed String password;
 	private @Indexed String emailAddress;
+	private int score=1000;
 	public UserInfo() {
 		
 	}
@@ -30,9 +31,16 @@ public class UserInfo implements Serializable{
 		this.name=user.name;
 		this.password=user.password;
 		this.emailAddress=user.emailAddress;
+		this.score=user.score;
 	}
 	
 
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 	public String getPassword() {
 		return password;
 	}
