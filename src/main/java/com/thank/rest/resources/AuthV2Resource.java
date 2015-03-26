@@ -14,7 +14,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
 import com.thank.common.dao.UserDao;
+import com.thank.common.model.DeviceAuthInfo;
+import com.thank.common.model.DeviceSignUpVo;
+import com.thank.common.model.LoginException;
 import com.thank.common.model.UserInfo;
+import com.thank.common.model.UserNotExistException;
 import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
 import com.wordnik.swagger.annotations.Api;
@@ -59,6 +63,7 @@ public class AuthV2Resource {
 		String contextPath=request.getContextPath();
 		response.sendRedirect(contextPath+"/welcome.jsp");
 	}
+	
 	
 	@POST
 	@Path("login" )
@@ -118,6 +123,48 @@ public class AuthV2Resource {
 		}
 	}
 	
+	
+	@POST
+	@Path("autoLogin" )
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "autoLogin",
+    	notes = "Auto Login By device"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 401, message = "Device was NOT registered") })
+	public UserInfo autoLogin(DeviceAuthInfo deviceAuth) throws IOException {
+		UserInfo ret=dao.deviceLogin(deviceAuth.getDeviceId());
+		if(ret==null) {
+			throw new WFRestException(401,"Device was NOT registered");
+		} else {
+			return ret;
+		}
+	}
+	
+
+	
+	@POST
+	@Path("deviceLogin" )
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "deviceLogin",
+    	notes = "Device Login"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Fail to login") })
+	public UserInfo autoLogin(DeviceSignUpVo deviceSignIn) throws IOException {
+		try {
+			UserInfo user=dao.login(deviceSignIn.getEmailAddress(), deviceSignIn.getPassword());
+			dao.deviceBind(deviceSignIn.getDeviceId(), user);
+			return user;
+		} catch(UserNotExistException e) {
+			//auto login
+			return dao.deviceSignUp(deviceSignIn);
+		} catch(Exception e2) {
+			throw new WFRestException(500,"Fail to login");
+		}
+	}
 	
 
 

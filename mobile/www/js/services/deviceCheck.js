@@ -16,10 +16,7 @@ function DeviceCheckService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$
 	function listenClick($scope) {
 		$scope.$on('cordovaLocalNotification:click', function(notification) {
   			console.log("listenClick:click on "+notification.id);
-  			$ionicHistory.nextViewOptions({
-		  		disableBack: true
-			});
-			$state.go('app.todoList', {}, {location:'replace'});
+  			
 		});
 					
 	}
@@ -27,6 +24,9 @@ function DeviceCheckService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$
 		return $q(function(resolve,reject) {
 			$ionicPlatform.ready(function() {
 				var ret=[];
+				if(window.device) {
+					ret.push({"name":"deviceId","state":device.uuid});
+				} 
 				if(window.cordova) {
 					ret.push({"name":"cordova","state":"Ready"});
 				} else {
@@ -41,6 +41,11 @@ function DeviceCheckService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$
 					ret.push({"name":"camera","state":"Ready"});
 				} else {
 					ret.push({"name":"camera","state":"Not Ready"});
+				}
+				if(window.facebookConnectPlugin) {
+					ret.push({"name":"facebook","state":"Ready"});			
+				} else {
+					ret.push({"name":"facebook","state":"Not Ready"});			
 				}
         		resolve({
         			data:ret

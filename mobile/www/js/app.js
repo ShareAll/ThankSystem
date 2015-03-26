@@ -9,7 +9,21 @@ angular.module('starter', [
   'thank.controllers','thank.services'
 ])
 .constant('apiBase',"THANK")
-.run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state) {
+.run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state,loginService) {
+  
+  //check login state
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    var requireLogin = toState.data.requireLogin;
+
+    if (requireLogin && typeof $rootScope.currentUser === 'undefined') {
+        event.preventDefault();
+        $ionicHistory.nextViewOptions({
+                disableBack: true
+        });
+        $state.go('app.login');
+    } 
+  });
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -52,11 +66,15 @@ angular.module('starter', [
             });
         });
         console.log("init notification plugin");
-    
+        
+    }
+    //INIT FACEBOOK
+    if(window.facebookConnectPlugin) {
+        var FACEBOOK_APP="441815479314051";
+        facebookConnectPlugin.browserInit(FACEBOOK_APP_ID);
     }
 
     
-   
 
   });
 })
@@ -68,7 +86,23 @@ angular.module('starter', [
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
-    controller: 'AppCtrl'
+    controller: 'loginCtrl',
+    data: {
+      requireLogin: false
+    }
+  })
+
+ .state('app.login', {
+    url: "/login",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/login.html",
+        controller: 'loginCtrl'
+      }
+    },
+    data: {
+      requireLogin: false
+    }
   })
 
   .state('app.search', {
@@ -77,6 +111,9 @@ angular.module('starter', [
       'menuContent': {
         templateUrl: "templates/search.html"
       }
+    },
+    data: {
+      requireLogin: true
     }
   })
 
@@ -87,6 +124,9 @@ angular.module('starter', [
         templateUrl: "templates/deviceCheck.html",
         controller: 'deviceCheckCtrl'
       }
+    },
+    data: {
+      requireLogin: true
     }
   })
     .state('app.todoList', {
@@ -96,6 +136,9 @@ angular.module('starter', [
           templateUrl: "templates/todoList.html",
           controller: 'todoCtrl'
         }
+      },
+      data: {
+        requireLogin: true
       }
     })
 
@@ -106,8 +149,11 @@ angular.module('starter', [
           templateUrl: "templates/todoPage.html",
           controller: 'todoDetailCtrl'
       }
+    },
+    data: {
+      requireLogin: true
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/todoList');
+  $urlRouterProvider.otherwise('/app/login');
 });

@@ -20,6 +20,10 @@
     "org.apache.cordova.camera",
     "com.ionic.keyboard",
     "de.appplant.cordova.plugin.local-notification@0.8.1",
-    "org.apache.cordova.console"
+    "org.apache.cordova.console",
+    {
+      "id": "com.phonegap.plugins.facebookconnect",
+      "locator": "/Users/fenwang/mypro/plugins/phonegap-facebook-plugin"
+    }
   ]
 }
