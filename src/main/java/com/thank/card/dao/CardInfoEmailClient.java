@@ -61,9 +61,9 @@ public class CardInfoEmailClient {
 	//	URL url;
 		String cid="";
 		try {
-			URL curPath = CardInfoEmailClient.class.getProtectionDomain().getCodeSource().getLocation();
-			File f=new File(curPath.getPath()+"templates/"+card.getTemplateName()+".jpg");
-			cid = email.embed(f, "background");
+			URL curPath = getClass().getClassLoader().getResource("templates/"+card.getTemplateName()+".jpg");//CardInfoEmailClient.class.getProtectionDomain().getCodeSource().getLocation();
+		//	File f=new File(curPath.getPath()+"templates/"+card.getTemplateName()+".jpg");
+			cid = email.embed(curPath, "background");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
