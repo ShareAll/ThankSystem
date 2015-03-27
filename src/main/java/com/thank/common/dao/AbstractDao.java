@@ -8,13 +8,19 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.mapping.Mapper;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.QueryResults;
 import org.mongodb.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.UpdateResults;
 
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 import com.thank.config.MongoConfig;
 import com.thank.config.ThankConfig;
 
@@ -30,6 +36,8 @@ public abstract class AbstractDao<T> {
 	protected Datastore ds;
 	protected Class<T> cls;
 	protected MongoConfig config;
+	protected BasicDAO dao ;
+	
 	public AbstractDao(MongoClient client,String dbName,Class<T> cls) {
 		this.config=ThankConfig.instance().mongoConfig;
 		morphia=new Morphia();
@@ -43,6 +51,7 @@ public abstract class AbstractDao<T> {
 			client = getMongoClient(null, databaseName);
 		}
 		this.ds=morphia.createDatastore(client, databaseName);
+		dao = new BasicDAO(cls,client,morphia, databaseName);
 	}
 	
 	  
@@ -63,15 +72,87 @@ public abstract class AbstractDao<T> {
         return mongoClient;
     }
 	
+
+    public DBCollection getCollection() {
+        return dao.getCollection();
+    }
+    
+    public Query<T> createQuery(){
+    	return dao.createQuery();
+    }
+    
+    public UpdateOperations<T> createUpdateOperations() {
+        return dao.createUpdateOperations();
+    }
+    
+    
+    
 	public Object save(T val) {
-		Key<T> key = this.ds.save(val);
+		Key<T> key = dao.save(val);
 		return key.getId();
 	}
 
+	 public Object save(final T entity, final WriteConcern wc) {
+		    Key<T> key = dao.save(entity, wc);
+	        return key.getId();
+	    }
+	 
+	 public Key<T> findOneId() {
+	        return dao.findOneId();
+	    }
 
-	public T getSingleByAttr(String attrName, Object attrVal) {
-		return ds.find(this.cls).field(attrName).equal(attrVal).get();
-	}
+	    public Key<T> findOneId(final String key, final Object value) {
+	        return dao.findOneId(key, value);
+	    }
+
+	    public Key<T> findOneId(final Query<T> query) {
+	       return dao.findOneId(query);
+	    }
+	 
+	    
+	    public long count() {
+	        return dao.count();
+	    }
+
+	    public long count(final String key, final Object value) {
+	        return dao.count(key,value);
+	    }
+
+	    public long count(final Query<T> q) {
+	        return dao.count(q);
+	    }
+	    public T findOne(final String key, final Object value) {
+	        return (T)dao.findOne( key, value);
+	    }
+
+
+	    public T findOne(final Query<T> q) {
+	        return (T)dao.findOne(q);
+	    }
+	    
+	    public QueryResults<T> find() {
+	        return dao.find();
+	    }
+
+	    /* (non-Javadoc)
+	     * @see org.mongodb.morphia.DAO#find(org.mongodb.morphia.query.Query)
+	     */
+	    public QueryResults<T> find(final Query<T> q) {
+	        return dao.find(q);
+	    }
+	    
+//	public T getSingleByAttr(String attrName, Object attrVal) {
+//		return ds.find(this.cls).field(attrName).equal(attrVal).get();
+//	}
+	
+	public boolean exists(final String key, final Object value) {
+        return dao.exists(key, value);
+    }
+
+    public boolean exists(final Query<T> q) {
+        return dao.exists(q);
+    }
+    
 
 	public T getById(String id) {
 		return ds.get(this.cls, id);
@@ -90,13 +171,23 @@ public abstract class AbstractDao<T> {
 		return ds;
 	}
 	
-	public void update(ObjectId id, String attrName, Object attrVal) {
+	
+	 public UpdateResults updateFirst(final Query<T> q, final UpdateOperations<T> ops) {
+	        return dao.updateFirst(q, ops);
+	    }
+
+	    public UpdateResults update(final Query<T> q, final UpdateOperations<T> ops) {
+	        return dao.update(q, ops);
+	    }
+
+	
+	public <T> UpdateResults update(ObjectId id, String attrName, Object attrVal) {
 
 		if (attrVal == null) {
 			ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
 					.unset(attrName));
 		}
-		ds.update(getUpdateQuery(id),
+		return ds.update(getUpdateQuery(id),
 				ds.createUpdateOperations(this.cls).set(attrName, attrVal));
 	}
 
@@ -122,7 +213,7 @@ public abstract class AbstractDao<T> {
 				ops = ops.unset(var.getKey());
 			}
 		}
-		ds.update(getUpdateQuery(id), ops);
+	  ds.update(getUpdateQuery(id), ops);
 	}
 
 	// TODO Later : will check if it is Collection then..
@@ -155,4 +246,25 @@ public abstract class AbstractDao<T> {
 		ds.update(getUpdateQuery(id), ds.createUpdateOperations(this.cls)
 				.removeAll(attrName, attVals));
 	}
+	
+	 public WriteResult delete(final T entity) {
+	        return dao.delete(entity);
+	    }
+
+	    public WriteResult delete(final T entity, final WriteConcern wc) {
+	        return dao.delete(entity, wc);
+	    }
+
+	    public WriteResult deleteByQuery(final Query<T> q) {
+	        return dao.delete(q);
+	    }
+
+	    public Datastore getDatastore() {
+	        return dao.getDatastore();
+	    }
+
+	    public void ensureIndexes() {
+	        dao.ensureIndexes();
+	    }
+	
 }

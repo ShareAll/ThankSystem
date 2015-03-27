@@ -18,7 +18,6 @@ import com.thank.common.dao.UserDao;
 import com.thank.common.model.ClaimSignUpVo;
 import com.thank.common.model.DeviceAuthInfo;
 import com.thank.common.model.DeviceSignUpVo;
-import com.thank.common.model.LoginException;
 import com.thank.common.model.UserInfo;
 import com.thank.common.model.UserNotExistException;
 import com.thank.common.model.UserSummaryVo;
@@ -122,6 +121,30 @@ public class AuthV2Resource {
 				throw new WFRestException(401,"UserName already exist");
 			}
 			
+		}
+	}
+	
+	@POST
+	@Path("reset" )
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Reset password",
+    	notes = "Reset password"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 401, message = "The email address is not registered") })
+	public void reset(UserInfo request) throws IOException {	
+		String password, emailAddress;
+		password=request.getPassword();
+		emailAddress=request.getEmailAddress();
+		boolean updateResult = false;
+		try {
+			updateResult  = dao.resetPassword(emailAddress, password);
+			} catch(Exception e) {
+				throw new WFRestException(401,"Email address '"+emailAddress+"' does not exist");
+			}
+		if (!updateResult){
+			throw new WFRestException(401,"Email address '"+emailAddress+"' does not exist");
 		}
 	}
 	
