@@ -9,7 +9,7 @@ import org.apache.commons.dbcp.PoolableConnection;
 
 public class RDBConnectionLocator {
 
-	private static final ConcurrentMap<String, DBConnectionPool> connectionPoolMap = new ConcurrentHashMap<String, DBConnectionPool>();
+	private static final ConcurrentMap<String, RDBConnectionPool> connectionPoolMap = new ConcurrentHashMap<String, RDBConnectionPool>();
 
 	private static RDBConnectionLocator s_instance = new RDBConnectionLocator();
 
@@ -22,15 +22,15 @@ public class RDBConnectionLocator {
 	}
 
 
-	private static DBConnectionPool getConnectionPool(
+	private static RDBConnectionPool getConnectionPool(
 			String dataSourceIdentifier) {
 
-		DBConnectionPool connectionPool = connectionPoolMap
+		RDBConnectionPool connectionPool = connectionPoolMap
 				.get(dataSourceIdentifier);
 
 		if (connectionPool == null) {
 			try {
-				connectionPool = new DBConnectionPool(dataSourceIdentifier);
+				connectionPool = new RDBConnectionPool(dataSourceIdentifier);
 
 				connectionPoolMap.put(dataSourceIdentifier, connectionPool);
 
