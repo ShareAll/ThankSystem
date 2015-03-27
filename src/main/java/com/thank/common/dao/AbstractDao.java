@@ -141,9 +141,9 @@ public abstract class AbstractDao<T> {
 	        return dao.find(q);
 	    }
 	    
-//	public T getSingleByAttr(String attrName, Object attrVal) {
-//		return ds.find(this.cls).field(attrName).equal(attrVal).get();
-//	}
+	public T getSingleByAttr(String attrName, Object attrVal) {
+		return ds.find(this.cls).field(attrName).equal(attrVal).get();
+	}
 	
 	public boolean exists(final String key, final Object value) {
         return dao.exists(key, value);
@@ -237,9 +237,7 @@ public abstract class AbstractDao<T> {
 				.removeLast(attrName));
 	}
 
-	public void delete(T entity) {
-		ds.delete(entity);
-	}
+
 	public void updateRemoveAll(ObjectId id, String attrName,
 			List<Object> attVals) {
 
