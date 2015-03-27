@@ -33,10 +33,10 @@
 	<div style="color:blue;margin-top:50px">
 		<h2 style="text-align: center;font-size: 50;font-weight:100;">{{card.subject}}</h2>
 		<p style="margin: 5%;font-weight: bold;font-size:35;">{{card.content}}</p>
-		<form action="claim.jsp" method="post">
+		<form action="http://localhost:8080/ThankWeb/claim.jsp" method="post">
         	<input type="hidden" name="claimId" value="{{card.claimId}}"></input>
         	<input type="hidden" name="emailAddress" value="{{card.emailAddress}}"></input>
-        	<button type="submit" class="btn btn-primary" style="position:relative;left:10%;width:80%">Receive Your Karma</button>
+        	<a href="http://52.11.234.40:8080/ThankWeb/claim.jsp?claimId={{card.claimId}}&emailAddress={{card.emailAddress}}">Receive Your Karma</a>
         </form>
 		 
 	</div>

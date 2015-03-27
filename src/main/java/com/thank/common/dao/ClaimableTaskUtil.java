@@ -10,6 +10,9 @@ public class ClaimableTaskUtil {
 	static ClaimableTaskDao claimDao=new ClaimableTaskDao(null,null,ClaimableTask.class);
 	static UserDao userDao=new UserDao(null,null,UserInfo.class);
 	
+	public static void createClaimTask(ClaimableTask task) {
+		claimDao.save(task);
+	}
 	
 	public static int autoClaim(HttpServletRequest request,String claimId,String emailAddress) {
 		if(claimId==null || emailAddress==null) return -1;

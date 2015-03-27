@@ -1,5 +1,7 @@
 package com.thank.card.dao;
 
+import java.util.UUID;
+
 import org.junit.Test;
 
 import com.thank.common.model.CardInfo;
@@ -18,6 +20,7 @@ public class CardInfoEmailClientTest {
 	@Test
 	public void testSendMail() {
 		CardInfo card=new CardInfo();
+		//card.setCardId("1234567");
 		card.setTemplateName("loved");
 		card.setContent("It is my pleasure to work in paypal.");
 		card.setFromEmail("wangfengatustc@gmail.com");
