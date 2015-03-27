@@ -14,7 +14,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 		<init-param>
 			<param-name>excludedUrls</param-name>
-			<param-value>signup.jsp</param-value>
+			<param-value>signup.jsp,claim.jsp</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

@@ -146,6 +146,9 @@ public abstract class AbstractDao<T> {
 				.removeLast(attrName));
 	}
 
+	public void delete(T entity) {
+		ds.delete(entity);
+	}
 	public void updateRemoveAll(ObjectId id, String attrName,
 			List<Object> attVals) {
 

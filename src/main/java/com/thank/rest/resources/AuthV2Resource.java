@@ -13,7 +13,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.common.dao.ClaimableTaskUtil;
 import com.thank.common.dao.UserDao;
+import com.thank.common.model.ClaimSignUpVo;
 import com.thank.common.model.DeviceAuthInfo;
 import com.thank.common.model.DeviceSignUpVo;
 import com.thank.common.model.LoginException;
@@ -166,6 +168,31 @@ public class AuthV2Resource {
 		}
 	}
 	
+	
+
+	
+	@POST
+	@Path("claimSignUp" )
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "claimSignUp",
+    	notes = "Signup via claim"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Fail to signup") })
+	public void claimSignUp(ClaimSignUpVo claimSignUp) throws IOException {
+		try {
+			UserInfo ret=new UserInfo();
+			ret.setName(claimSignUp.getEmailAddress());
+			ret.setEmailAddress(claimSignUp.getEmailAddress());
+			ret.setPassword(claimSignUp.getPassword());
+			dao.save(ret);
+			this.login(ret);
+			ClaimableTaskUtil.autoClaim(request,claimSignUp.getClaimId(),claimSignUp.getEmailAddress());
+		} catch(Exception e) {
+			throw new WFRestException(500,"Fail to signUp");
+		}
+	}
 
 
 }
