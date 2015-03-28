@@ -10,6 +10,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
 
+import com.thank.common.dao.ClaimableTaskUtil;
 import com.thank.common.model.CardInfo;
 import com.thank.common.model.ClaimableTask;
 import com.thank.config.MailConfig;
@@ -72,11 +73,15 @@ public class CardInfoEmailClient {
 		try {
 			HtmlEmail email = new HtmlEmail();
 			initSessionInfo(email);
-			card.setCardId(UUID.randomUUID().toString());
+			if(card.getCardId()==null) {
+				card.setCardId(UUID.randomUUID().toString());
+			}
 			//Generate ClaimableTask
 			ClaimableTask claimTask=new ClaimableTask();
 			claimTask.setClaimId(card.getCardId());
 			claimTask.setEmailAddress(card.getRecipientEmail());
+			claimTask.setScore(1);
+			ClaimableTaskUtil.createClaimTask(claimTask);
 			
 			email.addTo(card.getRecipientEmail());
 			email.setFrom(card.getFromEmail());

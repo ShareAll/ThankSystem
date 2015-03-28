@@ -1,3 +1,8 @@
+<html ng-app="thankApp">
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+</head>
+<body ng-controller="claimCtrl">
 <%@ page import="com.thank.common.model.ClaimableTask" %>
 <%@ page import="com.thank.common.dao.ClaimableTaskUtil" %>
 
@@ -10,11 +15,6 @@
 	
 %>
 
-<html ng-app="thankApp">
-<head>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-</head>
-<body ng-controller="claimCtrl">
 <h2>Claim</h2>
 <div style="display:none" id="claimStatus"><%=status%></div>
 <div style="display:none" id="claimId"><%=claimId%></div>
@@ -50,7 +50,7 @@
 		$scope.claimStatus=document.getElementById("claimStatus").innerText;
 	
 		if($scope.claimStatus==0) {
-			window.location="index.jsp";
+			window.location="welcome.html";
 		} 
 		$scope.claim={password:""};
 		$scope.claim.claimId=document.getElementById("claimId").innerText;
@@ -59,7 +59,7 @@
 		$scope.submit=function() {
 			authService.signup($scope.claim).then(SUCCESS,FAIL);
 			function SUCCESS(resp) {
-				window.location="index.jsp";
+				window.location="welcome.html";
 			}
 			function FAIL(resp) {
 				$scope.lastError=resp.data.errorMsg;

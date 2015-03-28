@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.card.dao.CardDao;
 import com.thank.card.dao.CardInfoEmailClient;
 import com.thank.common.dao.ClaimableTaskDao;
 import com.thank.common.model.CardInfo;
@@ -33,6 +34,7 @@ public class CardResource {
 	@Context private HttpServletRequest request;
 	@Context private HttpServletResponse response;
 	ClaimableTaskDao dao=new ClaimableTaskDao(null,null,ClaimableTask.class);
+	CardDao cardDao = new CardDao(null,null,CardInfo.class);
 	
 	@POST
 	@Path("send" )
@@ -44,14 +46,12 @@ public class CardResource {
 		    @ApiResponse(code = 500, message = "Card sending exception") })
 	public void sendCard(CardInfo card) {
 		try {
-			card.setCardId(UUID.randomUUID().toString());			
+			card.setCardId(UUID.randomUUID().toString());
+			cardDao.save(card);
 			ClaimableTask task=new ClaimableTask();
 			task.setClaimId(card.getCardId());
 			task.setEmailAddress(card.getRecipientEmail());
 			dao.save(task);
-			
-			CardInfoEmailClient client=new CardInfoEmailClient();
-			client.send(card);
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
 		}
