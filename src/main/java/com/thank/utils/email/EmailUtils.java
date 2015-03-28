@@ -15,6 +15,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.thank.locator.EmailSessionLocator;
+
 
 public class EmailUtils {
 
@@ -132,6 +134,6 @@ public class EmailUtils {
 	}
 
 	public static void main(String[] args){
-		// sendEmail("pzou1@ebay.com", "pzou@ebay.com", "thank you", "thank");
+		 sendEmail("pzou1@ebay.com", "pzou@ebay.com", "thank you", "thank");
 	}
 }

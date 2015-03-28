@@ -6,7 +6,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.dbcp.PoolableConnection;
 
-
+/*******************************
+ * Name    RDBConnectionLocator
+ * @author pzou
+ *
+ */
 public class RDBConnectionLocator {
 
 	private static final ConcurrentMap<String, RDBConnectionPool> connectionPoolMap = new ConcurrentHashMap<String, RDBConnectionPool>();

@@ -10,7 +10,14 @@ import org.apache.commons.pool.impl.StackKeyedObjectPoolFactory;
 import com.thank.config.MySQLConfig;
 import com.thank.config.ThankConfig;
 
+/***********************************
+ * Name    RDBConnectionPoo
+ * @author pzou
+ *
+ */
 public class RDBConnectionPool {
+	
+	//dual existed on both mysql and oracle.
 	public static final String VALIDATE_QUERY = "SELECT 1 FROM Dual";
 
 	public static final int VALIDATE_QUERY_TIMEOUT = 1;
@@ -24,7 +31,6 @@ public class RDBConnectionPool {
 			 * done in helper method
 			 */
 			MySQLConfig loader = ThankConfig.instance().mysqlConfig;
-
 			Class.forName(loader.getDriveName()).newInstance();
 
 			/*
