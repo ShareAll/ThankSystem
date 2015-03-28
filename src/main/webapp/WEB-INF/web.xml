@@ -51,12 +51,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
 	<!-- Swagger Servlet -->
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-
+	<!--  serverlet for load timer just -->
+	<servlet>
+	  <servlet-name>JikarmaServlet</servlet-name>
+    <servlet-class>com.thank.servlets.JikarmaServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 	<servlet>
 		<servlet-name>Jersey2Config</servlet-name>
 		<servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
