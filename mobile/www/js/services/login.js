@@ -15,14 +15,17 @@ function LoginService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$ionicH
 		return $q(function(resolve,reject) {
 			$ionicPlatform.ready(function() {
 				if(window.device) {
-					resolve({
-						data:{
-							'name':'fenwang'
-						}
+					$http.post(apiBase+"/auth2/autoLogin",{
+						"deviceId":window.device.uuid
+					}).then(function(resp) {					
+						resolve(resp);
+					},function(resp) {
+						reject(resp);
 					});
+
 				} else {
 					reject({
-						data:{"status":"fail"}
+						data:{"status":"Device NOT ready"}
 					});
 				}
 			});
@@ -33,18 +36,25 @@ function LoginService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$ionicH
 		return $q(function(resolve,reject){
 			$ionicPlatform.ready(function() {
 				if(window.device) {
-					resolve({
-						data:{
-							'name':'fenwang'
-						}
-
-					})
+					$http.post(apiBase+"/auth2/deviceLogin",{
+						"deviceId":window.device.uuid,
+						"emailAddress":loginData.emailAddress,
+						"password":loginData.password,
+						"name":loginData.emailAddress
+					}).then(function(resp) {
+						resolve(resp);
+					},function(resp) {
+						reject(resp);
+					});
 				} else {
-					resolve({
-						data:{
-							'name':'fenwang'
-						}
-
+					$http.post(apiBase+"/auth2/login",{
+						"emailAddress":loginData.emailAddress,
+						"password":loginData.password
+						
+					}).then(function(resp) {
+						resolve(resp);
+					},function(resp) {
+						reject(resp);
 					});
 				}
 			});			

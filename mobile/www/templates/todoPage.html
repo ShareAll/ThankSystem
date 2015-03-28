@@ -72,8 +72,8 @@
 	    <div class="box yellow"><img src="img/nofear.jpg"></img></div>
 	  </ion-slide>
 	</ion-slide-box>
-	
-	<button class="button button-positive" style="width:100%;margin-top:10px" ng-click="send()">
+	<p ng-if="lastError" style="color:red"> {{lastError}}</p>
+	<button ng-disabled="isSending" class="button button-positive" style="width:100%;margin-top:10px" ng-click="send()">
   		Send +{{selectedTodo.score}}
 	</button>
 </form>

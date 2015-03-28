@@ -8,7 +8,7 @@ angular.module('starter', [
   'ionic','starter.controllers',
   'thank.controllers','thank.services'
 ])
-.constant('apiBase',"THANK")
+.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
 .run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state,loginService) {
   
   //check login state
@@ -116,7 +116,7 @@ angular.module('starter', [
       requireLogin: true
     }
   })
-
+/*
   .state('app.deviceCheck', {
     url: "/deviceCheck",
     views: {
@@ -128,7 +128,7 @@ angular.module('starter', [
     data: {
       requireLogin: true
     }
-  })
+  })*/
     .state('app.todoList', {
       url: "/todoList",
       views: {

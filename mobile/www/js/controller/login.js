@@ -7,17 +7,23 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
 	$scope.loginData = {};
 	$scope.inAutoLogin=true;
 	//auto login
-	loginService.autoLogin().then(function(resp) {
-		$rootScope.currentUser=resp.data;
-		$ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        $state.go('app.todoList', {}, {location:'replace'});
-		
-	},function() {
-		$scope.inAutoLogin=false;
-		console.info("auto login fail");
-	});
+	console.log("start auto login for 100 miliseconds");
+	$timeout(function() {
+		loginService.autoLogin().then(function(resp) {
+			console.log("autoLogin Done "+JSON.stringify(resp));
+			$rootScope.currentUser=resp.data;
+			$ionicHistory.nextViewOptions({
+	            disableBack: true
+	        });
+	        $state.go('app.todoList', {}, {location:'replace'});
+			$scope.inAutoLogin=false;
+		},function(resp) {
+			console.log("autoLogin Done "+JSON.stringify(resp));
+			$scope.inAutoLogin=false;
+			console.info("auto login fail");
+		});
+
+	},500);
 
 
   // Perform the login action when the user submits the login form
@@ -28,8 +34,8 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
             disableBack: true
         });
         $state.go('app.todoList', {}, {location:'replace'});
-    },function() {
-
+    },function(resp) {
+    	$scope.lastError=resp.data.errorMsg;
     });
     
   };// do login
