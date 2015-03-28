@@ -1,27 +1,18 @@
 package com.thank.card.dao;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
+import com.thank.common.dao.ClaimableTaskUtil;
 import com.thank.common.model.CardInfo;
+import com.thank.common.model.ClaimableTask;
 import com.thank.config.MailConfig;
 import com.thank.config.ThankConfig;
 /****
@@ -71,12 +62,27 @@ public class CardInfoEmailClient {
 		ret=ret.replaceAll("\\{\\{cid\\}\\}", cid);
 		ret=ret.replaceAll("\\{\\{card\\.subject\\}\\}", StringEscapeUtils.escapeHtml4(card.getSubject()));
 		ret=ret.replaceAll("\\{\\{card\\.content\\}\\}", StringEscapeUtils.escapeHtml4(card.getContent()));
+		
+
+		ret=ret.replaceAll("\\{\\{card\\.claimId\\}\\}", StringEscapeUtils.escapeJava(card.getCardId()));
+		ret=ret.replaceAll("\\{\\{card\\.emailAddress\\}\\}", StringEscapeUtils.escapeJava(card.getRecipientEmail()));
+		
 		return ret;	
 	}
 	public void send(CardInfo card) {
 		try {
 			HtmlEmail email = new HtmlEmail();
 			initSessionInfo(email);
+			if(card.getCardId()==null) {
+				card.setCardId(UUID.randomUUID().toString());
+			}
+			//Generate ClaimableTask
+			ClaimableTask claimTask=new ClaimableTask();
+			claimTask.setClaimId(card.getCardId());
+			claimTask.setEmailAddress(card.getRecipientEmail());
+			claimTask.setScore(1);
+			ClaimableTaskUtil.createClaimTask(claimTask);
+			
 			email.addTo(card.getRecipientEmail());
 			email.setFrom(card.getFromEmail());
 			//  email.setFrom("me@apache.org", "Me");

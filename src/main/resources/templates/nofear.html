@@ -1,8 +1,43 @@
 <html>
+<head>
+	<style>
+		.btn {
+		  display: inline-block;
+		  padding: 6px 12px;
+		  margin-bottom: 0;
+		  font-size: 14px;
+		  font-weight: 400;
+		  line-height: 1.42857143;
+		  text-align: center;
+		  white-space: nowrap;
+		  vertical-align: middle;
+		  -ms-touch-action: manipulation;
+		  touch-action: manipulation;
+		  cursor: pointer;
+		  -webkit-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		  background-image: none;
+		  border: 1px solid transparent;
+		  border-radius: 4px;
+		}
+	.btn-primary {
+	  color: #fff;
+	  background-color: #337ab7;
+	  border-color: #2e6da4;
+	}
+	</style>
+</head>
 <body style="background-image:url(cid:{{cid}});background-size:100%">
 	<div style="color:blue;margin-top:50px">
 		<h2 style="text-align: center;font-size: 50;font-weight:100;">{{card.subject}}</h2>
 		<p style="margin: 5%;font-weight: bold;font-size:35;">{{card.content}}</p>
+	   	<form action="http://localhost:8080/ThankWeb/claim.jsp" method="post">
+        	<input type="hidden" name="claimId" value="{{card.claimId}}"></input>
+        	<input type="hidden" name="emailAddress" value="{{card.emailAddress}}"></input>
+        	<a href="http://52.11.234.40:8080/ThankWeb/claim.jsp?claimId={{card.claimId}}&emailAddress={{card.emailAddress}}">Receive Your Karma</a>
+        </form>
 	</div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.thank.common.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,6 +44,13 @@ public class CardInfo implements Serializable{
 	}
 	
 
+	
+	public String getCardId() {
+		return cardId;
+	}
+	public void setCardId(String cardId) {
+		this.cardId = cardId;
+	}
 	public ObjectId getId() {
 		return id;
 	}
