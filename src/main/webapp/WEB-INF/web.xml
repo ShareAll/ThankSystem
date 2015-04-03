@@ -14,7 +14,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		</init-param>
 		<init-param>
 			<param-name>excludedUrls</param-name>
-			<param-value>signup.jsp,claim.jsp</param-value>
+			<param-value>signup.jsp,claim.jsp,chat.jsp</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -57,12 +57,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-	<!--  serverlet for load timer just -->
+	<!--  serverlet for load timer just
 	<servlet>
 	  <servlet-name>JikarmaServlet</servlet-name>
     <servlet-class>com.thank.servlets.JikarmaServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+   -->
 	<servlet>
 		<servlet-name>Jersey2Config</servlet-name>
 		<servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>

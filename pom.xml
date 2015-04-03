@@ -21,6 +21,26 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+<!-- web socket implementation-->
+<dependency>
+    <groupId>javax.websocket</groupId>
+    <artifactId>javax.websocket-api</artifactId>
+    <version>1.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.tomcat</groupId>
+	<artifactId>tomcat7-websocket</artifactId>
+	<version>7.0.59</version>
+	<exclusions>
+		<exclusion>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<groupId>org.apache.tomcat</groupId>
+		</exclusion>
+	</exclusions>
+</dependency>
+
+<!-- web socket implementation end-->
+
 		<dependency>
 	<groupId>mysql</groupId>
 	<artifactId>mysql-connector-java</artifactId>
@@ -77,6 +97,16 @@
 		<finalName>ThankWeb</finalName>
 
 		<plugins>
+		 <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat6-maven-plugin</artifactId>
+          <version>2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat7-maven-plugin</artifactId>
+          <version>2.0</version>
+        </plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
