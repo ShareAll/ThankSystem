@@ -35,6 +35,13 @@ public class UserDaoTest {
 
 	}
 	@Test
+	public void delete(){
+		//String email="wangfengatustc@gmail.com";
+		String email="fenwang@google.com";
+		UserDao dao=new UserDao(null,null,UserInfo.class);
+		dao.delete(dao.getByEmaiAddress(email));
+	}
+	@Test
 	public void testGetByName() {
 		UserDao dao=new UserDao(null,null,UserInfo.class);
 		UserInfo user=dao.getSingleByAttr("name","fenwang");

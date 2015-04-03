@@ -21,46 +21,42 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-<!-- web socket implementation-->
-<dependency>
-    <groupId>javax.websocket</groupId>
-    <artifactId>javax.websocket-api</artifactId>
-    <version>1.1</version>
-</dependency>
-<dependency>
-	<groupId>org.apache.tomcat</groupId>
-	<artifactId>tomcat7-websocket</artifactId>
-	<version>7.0.59</version>
-	<exclusions>
-		<exclusion>
-			<artifactId>tomcat-servlet-api</artifactId>
+		<!-- web socket implementation -->
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- -
+		<dependency>
 			<groupId>org.apache.tomcat</groupId>
-		</exclusion>
-	</exclusions>
-</dependency>
-
-<!-- web socket implementation end-->
+			<artifactId>tomcat7-websocket</artifactId>
+			<version>7.0.59</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>tomcat-servlet-api</artifactId>
+					<groupId>org.apache.tomcat</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+ -->
+		<!-- web socket implementation end -->
 
 		<dependency>
-	<groupId>mysql</groupId>
-	<artifactId>mysql-connector-java</artifactId>
-	<version>5.1.34</version>
-</dependency>
-		<dependency>
-	<groupId>commons-dbcp</groupId>
-	<artifactId>commons-dbcp</artifactId>
-	<version>1.4</version>
-</dependency>		
-		<!-- dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>2.13.0</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.34</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.code.morphia</groupId>
-			<artifactId>morphia</artifactId>
-			<version>0.102</version>
-		</dependency-->
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<!-- dependency> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
+			<version>2.13.0</version> </dependency> <dependency> <groupId>com.google.code.morphia</groupId> 
+			<artifactId>morphia</artifactId> <version>0.102</version> </dependency -->
 		<dependency>
 			<groupId>org.mongodb.morphia</groupId>
 			<artifactId>morphia</artifactId>
@@ -97,16 +93,12 @@
 		<finalName>ThankWeb</finalName>
 
 		<plugins>
-		 <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat6-maven-plugin</artifactId>
-          <version>2.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
-          <version>2.0</version>
-        </plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
