@@ -2,7 +2,6 @@ package com.thank.common.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 

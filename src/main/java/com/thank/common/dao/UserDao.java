@@ -1,9 +1,8 @@
 package com.thank.common.dao;
 
-import org.mongodb.morphia.query.UpdateResults;
+
 
 import com.mongodb.MongoClient;
-import com.thank.common.model.CardInfo;
 import com.thank.common.model.DeviceAuthInfo;
 import com.thank.common.model.DeviceSignUpVo;
 import com.thank.common.model.LoginException;
