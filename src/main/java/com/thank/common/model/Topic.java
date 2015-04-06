@@ -22,7 +22,8 @@ public class Topic implements Serializable{
 	private @Indexed Date creationDate;
 	private @Indexed Date startDate;
 	private @Indexed int expirationDays;
-	private @Indexed int accessLevel;
+	private @Indexed int accessLevel;//TODO: 0 self 1 friendly  2 all
+	private @Indexed int reminder;
 	//Use Set to avoid duplicted
 	private @Indexed Set<String> friendEmailList = new HashSet<String>();
 	//TODO need to chacke if external email list does not contain friend email list.
@@ -38,6 +39,7 @@ public class Topic implements Serializable{
 		this.startDate = topic.startDate;
 		this.expirationDays = topic.expirationDays;
 		this.accessLevel = topic.accessLevel;
+		this.reminder = topic.reminder;
 		this.friendEmailList.addAll(topic.getFriendList());
 		this.externalEmailList.addAll(topic.getExternalEmailList());
 	}
@@ -156,11 +158,11 @@ public class Topic implements Serializable{
 		StringBuffer sb = new StringBuffer("Topic [id=" + id + ", userEmail=" + userEmail + ", name="
 				+ name + ", creationDate=" + creationDate + ", startDate="
 				+ startDate + ", expirationDays=" + expirationDays
-				+ ", accessLevel=" + accessLevel + ", friendEmailList=(");
+				+ ", accessLevel=" + accessLevel + ", reminder="+reminder+", \nfriendEmailList=(");
 		for (String str: friendEmailList){
 			sb.append(str).append(" ");
 		}
-		sb.append("), externalEmailList=(");
+		sb.append("), \nexternalEmailList=(");
 		for (String str: externalEmailList){
 			sb.append(str).append(" ");
 		}
