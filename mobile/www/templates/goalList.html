@@ -1,0 +1,45 @@
+<ion-view view-title="Goals">
+  <ion-content>
+    <ion-list>
+
+      <ion-item class="item-avatar" ng-repeat="goal in goals" type="item-text-wrap" href="#/app/goalList/{{goal.id}}">
+        <div style="position:absolute;left:10px"><!--Donut chart-->
+          <div data-dimension="50" data-text="{{goal.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{goal.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
+        </div>
+        <!--
+        <img ng-src="{{goal.img}}">-->
+        <h4>{{goal.title}}</h4>
+        <div class="row" style="width:100%">
+          <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
+            <i class="icon ion-person-stalker"></i>
+                <span class="badge badge-positive" style="font-size:10px;top:5px">{{goal.friends}}</span>
+          </div>
+          <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
+            <i class="icon ion-android-chat"></i>
+            <span class="badge badge-positive" style="font-size:10px;top:5px">{{goal.comments}}</span>
+          </div>  
+        </div>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+
+
+<ion-footer-bar align-title="left" class="bar-positive">
+  <ion-tabs class="tabs-icon-top tabs-color-active-positive">
+
+
+    <ion-tab title="Friends Goals" icon-off="ion-ios7-pulse" icon-on="ion-ios7-pulse-strong" href="#/tab/dash">
+      <ion-nav-view name="tab-dash"></ion-nav-view>
+    </ion-tab>
+
+
+    <ion-tab title="Own Goals" icon-off="ion-ios7-chatboxes-outline" icon-on="ion-ios7-chatboxes" href="#/tab/chats">
+      <ion-nav-view name="tab-chats"></ion-nav-view>
+    </ion-tab>
+
+    
+  
+  </ion-tabs>
+</ion-footer-bar>
+</ion-view>
