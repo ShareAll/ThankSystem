@@ -1,7 +1,8 @@
 package com.thank.common.model;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -20,10 +21,12 @@ public class Topic implements Serializable{
 	private @Indexed String name;
 	private @Indexed Date creationDate;
 	private @Indexed Date startDate;
-	private @Indexed int expirationDate;
+	private @Indexed int expirationDays;
 	private @Indexed int accessLevel;
-	private @Indexed List<String> friendEmailList;
-	private @Indexed List<String> externalEmailList;
+	//Use Set to avoid duplicted
+	private @Indexed Set<String> friendEmailList = new HashSet<String>();
+	//TODO need to chacke if external email list does not contain friend email list.
+	private @Indexed Set<String> externalEmailList = new HashSet<String>();
 	
    public Topic() {
 		
@@ -33,9 +36,22 @@ public class Topic implements Serializable{
 		this.name = topic.name;
 		this.creationDate = topic.creationDate;
 		this.startDate = topic.startDate;
-		this.expirationDate = topic.expirationDate;
+		this.expirationDays = topic.expirationDays;
 		this.accessLevel = topic.accessLevel;
+		this.friendEmailList.addAll(topic.getFriendList());
+		this.externalEmailList.addAll(topic.getExternalEmailList());
 	}
+	
+	public void setFriendList(Set list){
+		//TODO: threadsafe ???
+		this.friendEmailList = new HashSet<String>();
+		this.friendEmailList.addAll(list);
+	}
+	public Set<String> getFriendList(){
+		return this.friendEmailList;
+	}
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -48,23 +64,29 @@ public class Topic implements Serializable{
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public int getExpirationDate() {
-		return expirationDate;
+	public int getExpirationDays() {
+		return expirationDays;
 	}
-	public void setExpirationDate(int expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setExpirationDays(int expirationDays) {
+		this.expirationDays = expirationDays;
 	}
-	public List<String> getFriendEmailList() {
+	public Set<String> getFriendEmailList() {
 		return friendEmailList;
 	}
-	public void setFriendEmailList(List<String> friendEmailList) {
-		this.friendEmailList = friendEmailList;
+	public void setFriendEmailList(Set<String> friendEmailList) {
+		this.friendEmailList.addAll(friendEmailList);
 	}
-	public List<String> getExternalEmailList() {
+	public void addFriendEmailList(String friendEmail) {
+		this.friendEmailList.add(friendEmail);
+	}
+	public Set<String> getExternalEmailList() {
 		return externalEmailList;
 	}
-	public void setExternalEmailList(List<String> externalEmailList) {
-		this.externalEmailList = externalEmailList;
+	public void setExternalEmailList(Set<String> externalEmailList) {
+		this.externalEmailList.addAll(externalEmailList);
+	}
+	public void addExternalEmailList(String externalEmail) {
+		externalEmailList.add(externalEmail);
 	}
 	public ObjectId getId() {
 		return id;
@@ -77,6 +99,74 @@ public class Topic implements Serializable{
 	}
 	public int getAccessLevel() {
 		return accessLevel;
+	}
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+	public void setAccessLevel(int accessLevel) {
+		this.accessLevel = accessLevel;
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + accessLevel;
+		result = prime * result + expirationDays;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : startDate.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Topic other = (Topic) obj;
+		if (accessLevel != other.accessLevel)
+			return false;
+		if (expirationDays != other.expirationDays)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Topic [id=" + id + ", userEmail=" + userEmail + ", name="
+				+ name + ", creationDate=" + creationDate + ", startDate="
+				+ startDate + ", expirationDays=" + expirationDays
+				+ ", accessLevel=" + accessLevel + ", friendEmailList=(");
+		for (String str: friendEmailList){
+			sb.append(str).append(" ");
+		}
+		sb.append("), externalEmailList=(");
+		for (String str: externalEmailList){
+			sb.append(str).append(" ");
+		}
+
+		sb.append(")]");
+		return sb.toString();
 	}
 	
 	
