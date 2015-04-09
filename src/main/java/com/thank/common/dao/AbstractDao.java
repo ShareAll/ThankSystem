@@ -91,7 +91,7 @@ public abstract class AbstractDao<T> {
 		Key<T> key = dao.save(val);
 		return key.getId();
 	}
-
+	
 	 public Object save(final T entity, final WriteConcern wc) {
 		    Key<T> key = dao.save(entity, wc);
 	        return key.getId();

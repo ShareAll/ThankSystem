@@ -2,7 +2,10 @@ package com.thank.topic.dao;
 
 import java.util.HashSet;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+
+import org.mongodb.morphia.query.Query;
 
 import com.mongodb.MongoClient;
 import com.thank.common.dao.AbstractDao;
@@ -19,7 +22,10 @@ public class TopicDao extends AbstractDao<Topic> {
 		super.update(topic.getId(),"deliverDate" , new Date());
 	}
 	
-
+	public List<Topic> getTopicByUser(String userEmail) {
+		Query<Topic> query=dao.createQuery().filter("userEmail", userEmail);
+		return dao.find(query).asList();	
+	}
 
 	
 	
@@ -37,7 +43,7 @@ public class TopicDao extends AbstractDao<Topic> {
 		friendList.add("ping_zou_20011@yahoo.com");
 		topic.setFriendEmailList(friendList);
 		try{
-		dao.save(topic);
+			dao.save(topic);
 		}catch(com.mongodb.MongoException e){
 			e.printStackTrace();
 
