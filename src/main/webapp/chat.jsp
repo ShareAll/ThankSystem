@@ -1,5 +1,98 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html ng-app="thankApp">
+<%
+	String roomId=request.getParameter("room");
+	if(roomId==null) roomId="global";
+	
+%>
 <head>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="https://cdn.rawgit.com/gdi2290/angular-websocket/v1.0.9/angular-websocket.min.js"></script>
+</head>
+<body ng-controller="chatController">
+	<p>{{socket_status}} {{socket_reconnect_timer}}</p>
+	 <form ng-submit="sendMessage()">
+	 	<input type="hidden" value="<%=roomId%>" id="roomId"/>
+        <input type="text" placeholder="type and press enter to chat" ng-model="msg"/>
+     </form>
+    <div id="console-container">
+        <wf-chat-console wf-Data="newChats"></wf-chat-console>
+    </div>
+    <script>
+    	angular.module('thankApp', ['ngWebSocket'])
+    		.directive("wfChatConsole",['$compile',WfChatConsole])
+    		.controller('chatController', ['$scope','$websocket','$interval',chatController]);
+    	
+    	function WfChatConsole($compile) {
+    		return {
+    			restrict: "EAC",
+    			transclude:false,
+    		    scope:{
+					wfData:'='
+    		    },
+    		    link: function($scope,elm,attrs) {
+    		    	$scope.$watch('wfData',function(newVal) {
+    		    		angular.forEach(newVal.data,function(val,ind) {
+    		    			var vv=JSON.parse(newVal.data);
+    		    			elm.append($compile("<a>"+vv.userName+"</a><p>"+vv.textContent+"</p>")($scope));	
+    		    		});
+    		    	},true);
+    		    }
+    		}
+    	}
+    	
+    	function chatController($scope,$websocket,$interval) {
+
+    	    $scope.socket_reconnect_timer=null;
+    	    $scope.socket_status="Connecting";
+    	    $scope.newChats={};
+    	    var roomId=angular.element(document.getElementById("roomId")).val();
+    		var ws=$websocket('ws://localhost:8080/ThankWeb/ws/chat/'+roomId);
+    		ws.onOpen(function(message) {
+    			console.info("On Open");
+    			$scope.socket_status="Connected";
+    			$scope.socket_reconnect_timer=null;
+    		});
+    	    ws.onClose(function(message) {
+    	    	console.info("On Close");
+    	    	$scope.socket_status="Disconnected";
+    	    });
+    		$interval(function() {
+    			if($scope.socket_reconnect_timer!=null) {
+    				if($scope.socket_reconnect_timer<=0) {
+    					ws.reconnect();
+    					$scope.socket_reconnect_timer=10;
+    				}
+    				$scope.socket_reconnect_timer--;
+    			} else if($scope.socket_status=="Disconnected") {
+    				$scope.socket_reconnect_timer=10;
+    				$scope.socket_status="Connecting";
+    			} 			
+    		},1000);
+    		ws.onMessage(function(message) {
+    			$scope.newChats.data=[message.data];
+    			console.info(message);
+    		});
+    		
+    		$scope.sendMessage=function() {
+    			if($scope.msg) {
+    				var json=JSON.stringify({
+    					textContent:$scope.msg
+    				});
+    				ws.send(json);
+    			}
+    		}
+    		
+ 	
+    	}
+    
+    
+    
+    </script>
+    
+</body>
+<!-- 
+
+
     <title>Chat</title>
     <style type="text/css"><![CDATA[
         input#chat {
@@ -118,3 +211,5 @@
 </div>
 </body>
 </html>
+
+ -->

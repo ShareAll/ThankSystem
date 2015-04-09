@@ -5,43 +5,72 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/ws/chat")
+import com.google.gson.Gson;
+import com.thank.chat.model.ChatMessage;
+import com.thank.common.model.UserInfo;
+import com.thank.rest.resources.UserContextUtil;
+
+@ServerEndpoint(value = "/ws/chat/{topic}",configurator = GetHttpSessionConfigurator.class)
 public class ChatSession {
 	private static final AtomicInteger connectionIds = new AtomicInteger(0);
-	private static final Set<ChatSession> connections =new CopyOnWriteArraySet<>();
-	
-	private final String nickname;
-	private Session session;
+	private UserInfo curUser=null;
+	private Session session=null;
 	public ChatSession() {
-		nickname = "guest" + connectionIds.getAndIncrement();
 	}
-	
+	public boolean sendMsg(String msg) {
+		if(session==null) return false;
+		try {
+			synchronized(this) {
+				session.getBasicRemote().sendText(msg);
+			}
+		}  catch (IOException e) {
+			try {
+				session.close();
+				session=null;
+			} catch (IOException e1) {
+			}
+			return false;
+		}
+		return true;
+	}
 	@OnOpen
-	public void start(Session session) {
+	public void start(Session session,EndpointConfig config,@PathParam("topic") String topic) {
 		this.session = session;
-		connections.add(this);
-		String message = String.format("* %s %s", nickname, "has joined.");
-		broadcast(message);
+        HttpSession httpSession= (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+        curUser=UserContextUtil.getCurUser(httpSession);
+        if(curUser==null) {
+        	curUser=new UserInfo();
+        	curUser.setName("Guest "+connectionIds.getAndIncrement());
+        } else if(curUser.getName()==null || curUser.getName().length()==0) {
+        	curUser.setName(curUser.getEmailAddress());
+        }
+        
+        ChatRoom room=room(topic);
+		room.addSession(this);
+		room.sendMsg(new ChatMessage(curUser.getName(),"I am joined"));
 	}
 	@OnClose
-	public void end() {
-		connections.remove(this);
-		String message = String.format("* %s %s",nickname, "has disconnected.");
-		broadcast(message);
+	public void end(@PathParam("topic") String topic) {
+		room(topic).removeSession(this);
 	}
-
+	public ChatRoom room(String topic) {
+		return ChatRoom.lookup(topic);
+	}
 	@OnMessage
-	public void incoming(String message) {
-		// Never trust the client
-		String filteredMessage = String.format("%s: %s",nickname, filter(message.toString()));
-		broadcast(filteredMessage);
+	public void incoming(String raw,@PathParam("topic") String topic) {
+		ChatMessage msg=ChatMessage.fromJson(raw);
+		msg.userName=curUser.getName();
+		room(topic).sendMsg(msg);
 	}
 	 
 	@OnError
@@ -49,47 +78,6 @@ public class ChatSession {
 	//	log.error("Chat Error: " + t.toString(), t);
 	}
 	
-	public static String filter(String message) {
-		if (message == null) return null;
-		char content[] = new char[message.length()];
-		message.getChars(0, message.length(), content, 0);
-		StringBuilder result = new StringBuilder(content.length + 50);
-		for (int i = 0; i < content.length; i++) {
-			switch (content[i]) {
-				case '<':
-					result.append("&lt;");
-					break;
-				case '>':
-					result.append("&gt;");
-					break;
-				case '&':
-					result.append("&amp;");
-					break;
-				case '"':
-					result.append("&quot;");
-					break;
-				default:
-					result.append(content[i]);
-			}
-		 }
-		return (result.toString());
-	}
-	
-	private static void broadcast(String msg) {
-		for (ChatSession client : connections) {
-			try {
-				synchronized (client) {
-					client.session.getBasicRemote().sendText(msg);
-				}
-			} catch (IOException e) {
-				connections.remove(client);
-				try {
-					client.session.close();
-				} catch (IOException e1) {
-				}
-				String message = String.format("* %s %s",client.nickname, "has been disconnected.");
-				broadcast(message);
-			}
-		}
-	 }	
+
+		
 }

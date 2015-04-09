@@ -20,15 +20,19 @@ public class UserContextUtil {
 			throw new WFRestException(401,"Not login yet");
 		} 
 	}
-
-	public static UserInfo getCurUser(HttpServletRequest request) {
-		HttpSession session=request.getSession();
+	public static UserInfo getCurUser(HttpSession session) {
+		if(session==null) return null;
 		Object ret=session.getAttribute(SESSION_CUR_USER);
 		if(ret==null || !(ret instanceof UserInfo) ) {
 			return null;
 		} else {
 			return (UserInfo) ret;
-		}	
+		}
+	}
+
+	public static UserInfo getCurUser(HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		return getCurUser(session);	
 	}
 	public static void saveInSession(HttpServletRequest request,UserInfo user) {
 		HttpSession session=request.getSession();
