@@ -115,6 +115,13 @@ public class Topic implements Serializable{
 		this.accessLevel = accessLevel;
 	}
 	
+	public void setReminder(ReminderEnum remindEnum){
+		this.reminder = remindEnum.getKey();
+	}
+	
+	public ReminderEnum getRemind(){
+		return ReminderEnum.getEnum(this.reminder);
+	}
 	
 	@Override
 	public int hashCode() {
