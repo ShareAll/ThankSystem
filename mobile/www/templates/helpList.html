@@ -1,29 +1,34 @@
 <ion-view view-title="Goals">
+  <ion-nav-buttons side="right">
+    <a class="ion-plus" ng-click="openGoalModal()" style="font-size:30px;margin-right:20px">
+    </a>
+   </ion-nav-buttons>
+
   <ion-content>
     <ion-list>
 
-      <ion-item class="item-avatar" ng-repeat="goal in goals" type="item-text-wrap" href="#/app/goalList/{{goal.id}}">
+      <ion-item class="item-avatar" ng-repeat="help in helpList" type="item-text-wrap" href="#/app/helpList/{{help.id}}" ng-click="setCurGoal(help.title)">
         <div style="position:absolute;left:10px"><!--Donut chart-->
-          <div data-dimension="50" data-text="{{goal.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{goal.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
+          <div data-dimension="50" data-text="{{help.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{help.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
         </div>
         <!--
         <img ng-src="{{goal.img}}">-->
-        <h4>{{goal.title}}</h4>
+        <h4>{{help.title}}</h4>
         <div class="row" style="width:100%">
           <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
             <i class="icon ion-person-stalker"></i>
-                <span class="badge badge-positive" style="font-size:10px;top:5px">{{goal.friends}}</span>
+                <span class="badge badge-positive" style="font-size:10px;top:5px">{{help.friends}}</span>
           </div>
           <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
             <i class="icon ion-android-chat"></i>
-            <span class="badge badge-positive" style="font-size:10px;top:5px">{{goal.comments}}</span>
+            <span class="badge badge-positive" style="font-size:10px;top:5px">{{help.comments}}</span>
           </div>  
         </div>
       </ion-item>
     </ion-list>
 
   </ion-content>
-
+<!--
 
 <ion-footer-bar align-title="left" class="bar-positive">
   <ion-tabs class="tabs-icon-top tabs-color-active-positive">
@@ -42,4 +47,5 @@
   
   </ion-tabs>
 </ion-footer-bar>
+-->
 </ion-view>

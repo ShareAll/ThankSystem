@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
-  'ionic','starter.controllers',
+  'ionic','thank.common','starter.controllers',
   'thank.controllers','thank.services'
 ])
 .constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
@@ -20,8 +20,10 @@ angular.module('starter', [
         $ionicHistory.nextViewOptions({
                 disableBack: true
         });
+
         $state.go('app.login');
-    } 
+    }
+    
   });
 
   $ionicPlatform.ready(function() {
@@ -29,6 +31,7 @@ angular.module('starter', [
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -81,12 +84,11 @@ angular.module('starter', [
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
   .state('app', {
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
-    controller: 'loginCtrl',
+    //controller: 'loginCtrl',
     data: {
       requireLogin: false
     }
@@ -113,7 +115,7 @@ angular.module('starter', [
       }
     },
     data: {
-      requireLogin: true
+      requireLogin: false
     }
   })
 /*
@@ -126,9 +128,34 @@ angular.module('starter', [
       }
     },
     data: {
-      requireLogin: true
+      requireLogin: false
     }
   })*/
+  .state('app.helpList',{
+      url:'/helpList',
+      views: {
+        'menuContent':{
+          templateUrl:"templates/helpList.html",
+          controller:'helpListCtrl'
+        }
+      },
+      data: {
+        requireLogin: false
+      }
+    })
+    .state('app.helpDetail', {
+      url: "/helpList/:helpId",
+      views: {
+        'menuContent': {
+            templateUrl: "templates/helpDetail.html",
+           controller: 'helpDetailCtrl'
+        }
+      },
+      data: {
+        requireLogin: false
+      }
+    })
+
     .state('app.todoList', {
       url: "/todoList",
       views: {
@@ -155,5 +182,5 @@ angular.module('starter', [
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/login');
+  $urlRouterProvider.otherwise('/app/helpList');
 });

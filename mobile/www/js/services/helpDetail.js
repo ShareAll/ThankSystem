@@ -1,11 +1,11 @@
 (function() {
 
 angular.module('thank.services.goalUpdateService',[])
-	.factory('goalUpdateService',['$http','$interval','$timeout','$q','$location','apiBase','$cordovaLocalNotification','$ionicPlatform',GoalUpdateService]);
+	.factory('goalUpdateService',['$http','$interval','$timeout','$q','$location','apiBase','$ionicPlatform',GoalUpdateService]);
 
-function GoalUpdateService($http,$interval,$timeout,$q,$location,apiBase,$cordovaLocalNotification,$ionicPlatform) {
+function GoalUpdateService($http,$interval,$timeout,$q,$location,apiBase,$ionicPlatform) {
 //mock data;
-
+	
 	var updates=[
 		{'id':0,'name':'fenwang','content':'Start'},
 		{'id':1,'name':'fenwang','content':'Complete the first phase'},
@@ -32,14 +32,10 @@ function GoalUpdateService($http,$interval,$timeout,$q,$location,apiBase,$cordov
 		});
 	}//end of listen
 
-	function send(name,message) {
+	function send(msg) {
 		var newId=updates.length;
-		updates.push({
-			id:newId,
-			name:name,
-			content:message
-		});
-		console.info("add "+newId);
+		updates.push(msg);
+		//console.info("add "+newId);
 		return $q(function(resolve,reject) {
 			resolve({
 				'data':{'status':'success'}

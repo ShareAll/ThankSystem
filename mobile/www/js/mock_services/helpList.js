@@ -1,9 +1,9 @@
 (function() {
 
-angular.module('thank.services.goalService',[])
-	.factory('goalService',['$http','$timeout','$q','$location','apiBase','$cordovaLocalNotification','$ionicPlatform',GoalService]);
+angular.module('thank.services.helpListService',[])
+	.factory('helpListService',['$http','$timeout','$q','$location','apiBase','$ionicPlatform',HelpListService]);
 
-function GoalService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotification,$ionicPlatform) {
+function HelpListService($http,$timeout,$q,$location,apiBase,$ionicPlatform) {
 //mock data;
 	var goals=[
 			{'id':1,'img':'img/karma.png','title':'Travel around US in 3 monthes','completeness':10.56,'friends':21,'comments':10},
@@ -16,9 +16,26 @@ function GoalService($http,$timeout,$q,$location,apiBase,$cordovaLocalNotificati
 
 	
 	return {
+		add:add,
 		list:list,
 		getDetail:getDetail
 	};
+	function add(goalData) {
+		return $q(function(resolve,reject){
+			var newGoal={
+				'id':goals.length+1,
+				'img':'img/karma.png',
+				'title':goalData.title,
+				'completeness':0.0,
+				'friends':0,
+				'comments':0
+			};
+			goals.push(newGoal);
+			resolve({
+				data:newGoal
+			})
+		});
+	}
 	function list() {
 		return $q(function(resolve,reject) {
 			resolve({
