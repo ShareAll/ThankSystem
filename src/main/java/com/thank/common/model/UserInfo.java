@@ -1,6 +1,8 @@
 package com.thank.common.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,10 +22,12 @@ import com.thank.rest.resources.UserContextUtil;
 public class UserInfo implements Serializable{
 	@Id ObjectId id;
 	private static final long serialVersionUID = 2150083552631231099L;
-	private @Indexed String name;
+	private @Indexed(unique=true) String name;
 	private @Indexed String password;
-	private @Indexed String emailAddress;
+	private @Indexed(unique=true) String emailAddress;
+	private @Indexed Set<String> contactList = new HashSet<String>();
 	private int score=1000;
+	
 	public UserInfo() {
 		
 	}
@@ -32,8 +36,19 @@ public class UserInfo implements Serializable{
 		this.password=user.password;
 		this.emailAddress=user.emailAddress;
 		this.score=user.score;
+		this.contactList.addAll(user.getContactList());
+	}
+	public void setContactList(Set<String> contact) {
+		this.contactList.addAll(contact);
 	}
 	
+	public void setContact(String contact) {
+		this.contactList.add(contact);
+	}
+	///TODO: assumeing no change outside
+	public Set<String> getContactList(){
+		return contactList;
+	}
 
 	public int getScore() {
 		return score;
