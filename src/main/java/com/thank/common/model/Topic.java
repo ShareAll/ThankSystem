@@ -29,6 +29,8 @@ public class Topic implements Serializable{
 	//TODO need to chacke if external email list does not contain friend email list.
 	private @Indexed Set<String> externalEmailList = new HashSet<String>();
 	private @Indexed int catId;
+	private @Indexed int state;   //TODO: default 0 complete 1
+	private @Indexed String summary;
 	
    public Topic() {
 		
@@ -44,6 +46,16 @@ public class Topic implements Serializable{
 		this.friendEmailList.addAll(topic.getFriendList());
 		this.externalEmailList.addAll(topic.getExternalEmailList());
 		this.catId =topic.getCatId();
+		this.state = topic.getState();
+		this.summary = topic.getSummary();
+	}
+	
+	public int getState(){
+		return state;
+	}
+	
+	public String getSummary(){
+		return summary;
 	}
 	
 	public int getCatId() {
@@ -136,6 +148,7 @@ public class Topic implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + accessLevel;
+		result = prime * result + catId;
 		result = prime * result + expirationDays;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
@@ -152,6 +165,8 @@ public class Topic implements Serializable{
 			return false;
 		Topic other = (Topic) obj;
 		if (accessLevel != other.accessLevel)
+			return false;
+		if (catId != other.catId)
 			return false;
 		if (expirationDays != other.expirationDays)
 			return false;
@@ -170,7 +185,7 @@ public class Topic implements Serializable{
 	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("Topic [id=" + id + ", userEmail=" + userEmail + ", name="
+		StringBuilder sb = new StringBuilder("Topic [id=" + id + ", userEmail=" + userEmail + ", name="
 				+ name + ", creationDate=" + creationDate + ", startDate="
 				+ startDate + ", expirationDays=" + expirationDays
 				+ ", accessLevel=" + accessLevel + ", reminder="+reminder+", \nfriendEmailList=(");
@@ -182,7 +197,12 @@ public class Topic implements Serializable{
 			sb.append(str).append(" ");
 		}
 
-		sb.append(")]");
+		sb.append(")");
+		sb.append(", state=").append(state);
+		if(state == 1){
+			sb.append(", Summary =").append(summary);
+		}
+		sb.append("]");
 		return sb.toString();
 	}
 	
