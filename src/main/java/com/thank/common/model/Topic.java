@@ -28,6 +28,7 @@ public class Topic implements Serializable{
 	private @Indexed Set<String> friendEmailList = new HashSet<String>();
 	//TODO need to chacke if external email list does not contain friend email list.
 	private @Indexed Set<String> externalEmailList = new HashSet<String>();
+	private @Indexed int catId;
 	
    public Topic() {
 		
@@ -42,8 +43,15 @@ public class Topic implements Serializable{
 		this.reminder = topic.reminder;
 		this.friendEmailList.addAll(topic.getFriendList());
 		this.externalEmailList.addAll(topic.getExternalEmailList());
+		this.catId =topic.getCatId();
 	}
 	
+	public int getCatId() {
+		return catId;
+	}
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
 	public void setFriendList(Set list){
 		//TODO: threadsafe ???
 		this.friendEmailList = new HashSet<String>();
