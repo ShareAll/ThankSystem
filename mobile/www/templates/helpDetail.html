@@ -4,21 +4,19 @@
         {{message.username}}:{{message.text}}
       </div>
     {{curGoal}}
-  
+
+              
 
     </ion-content>
 
  
+
 	<form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
         <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach> 
-            <div id="test" style="height:0px">
-              <p> board 1</p>
-               <p> board 2</p>
-            </div>
-            <div class="footer-btn-wrap">
-                  <button class="button button-icon icon  footer-btn"  onclick="$('#test').css('height','20px');return false;">TEST
-                  </button>
-              </div>
+            
+        <div style="margin-right:20px" ng-click="showGridBottomSheet($event)">
+          <i class="fa fa-chevron-circle-down" style="font-size:30px"></i>         
+        </div>
 
             	<label class="item-input-wrapper" style="background-color:white">
                 	<textarea ng-model="input_message" style="width:100%"value="" placeholder="Send a message or update (@+number) ..." required minlength="1" maxlength="1500" msd-elastic></textarea>

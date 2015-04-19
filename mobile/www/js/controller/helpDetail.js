@@ -1,9 +1,9 @@
 (function() {
 	
 	angular.module('thank.controllers.helpDetailCtrl', [])
-		.controller('helpDetailCtrl', ['$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout',HelpDetailCtrl]);
+		.controller('helpDetailCtrl', ['$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',HelpDetailCtrl]);
 
-	function HelpDetailCtrl($scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout) {
+	function HelpDetailCtrl($scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet) {
 	/*	var curId=0;
 		var contentElm=angular.element(document.getElementById('updates'));
 		$interval(function(){
@@ -83,6 +83,22 @@
  
     }; //$scope.sendMessage
 
+    $scope.actions=[{
+      "name":"+10",
+      "icon":"fa-plus-circle"
+    }];
+    $scope.showGridBottomSheet = function($event) {
+        $scope.alert = '';
+        $mdBottomSheet.show({
+          templateUrl: 'templates/helpDetail_action.html',
+          controller: 'helpDetailCtrl',
+          targetEvent: $event
+        }).then(function(clickedItem) {
+          $scope.alert = clickedItem.name + ' clicked!';
+        });
+      };
+
+
      // this keeps the keyboard open on a device only after sending a message, it is non obtrusive
     function keepKeyboardOpen() {
       console.log('keepKeyboardOpen');
@@ -92,6 +108,7 @@
       });
     } //keepKeyboardOpen
 	
+
 		
 } //HelpDetailCtrl
 

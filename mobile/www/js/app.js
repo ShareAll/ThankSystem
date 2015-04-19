@@ -5,7 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
-  'ionic','thank.common','starter.controllers',
+  'ionic',
+  'ngAria','ngMaterial',
+  'thank.common','starter.controllers',
   'thank.controllers','thank.services'
 ])
 .constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
