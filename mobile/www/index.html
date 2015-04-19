@@ -5,13 +5,19 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
+    <link href="lib/jquery-circliful/css/jquery.circliful.css" rel="stylesheet">
     <link href="lib/angular-material/angular-material.min.css" rel="stylesheet">   
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <link href="css/chat.css" rel="stylesheet">
+    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
+
+    <!--jQuery-->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/jquery-circliful/js/jquery.circliful.js"></script>
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     
@@ -22,14 +28,14 @@
     <script src="lib/angular-sanitize/angular-sanitize.js"></script>
     
     <script src="lib/angular-animate/angular-animate.js"></script>
-
+-->
     <script src="lib/angular-aria/angular-aria.js"></script>
--->   
 
-    <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master
+
+    <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master -->
 
     <script src="lib/angular-material/angular-material.js"></script>
-    -->
+
     
     
     <!-- cordova script (this will be a 404 during development) 
@@ -37,31 +43,37 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+
     <script src="js/app.js"></script>
+    <script src="js/common/common.js"></script>
+    <script src="lib/autolinker/autolinker.min.js"></script>
     <!-- all controllers-->
     <script src="js/controllers.js"></script>
     <script src="js/controller/login.js"></script>  
     <script src="js/controller/deviceCheckCtrl.js"></script>
     <script src="js/controller/todoCtrl.js"></script>
     <script src="js/controller/detailCtrl.js"></script>
+    <script src="js/controller/helpList.js"></script>
+    <script src="js/controller/helpDetail.js"></script>
     <script src="js/controller/main.js"></script>
-    <!-- all services in real -->
+    <!-- all services in real 
     <script src="js/services/facebook.js"></script>
-
     <script src="js/services/todo.js"></script>
     <script src="js/services/login.js"></script>
     <script src="js/services/card.js"></script> 
     <script src="js/services/deviceCheck.js"></script>
     <script src="js/services/main.js"></script>
-    
-    <!-- all services in mock
+    -->
+    <!-- all services in mock -->
     <script src="js/mock_services/facebook.js"></script>
     <script src="js/mock_services/todo.js"></script>
     <script src="js/mock_services/login.js"></script>
     <script src="js/mock_services/card.js"></script> 
     <script src="js/mock_services/deviceCheck.js"></script>
+    <script src="js/mock_services/helpList.js"></script>
+    <script src="js/mock_services/helpDetail.js"></script>
     <script src="js/mock_services/main.js"></script>
-    -->
+
   </head>
 
   <body ng-app="starter">

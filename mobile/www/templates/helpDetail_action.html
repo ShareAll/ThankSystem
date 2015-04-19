@@ -1,0 +1,10 @@
+<md-bottom-sheet class="md-grid">
+  <md-list>
+    <md-item ng-repeat="action in actions">
+      <md-button class="md-grid-item-content" ng-click="listItemClick($index)">
+        <i class="fa " ng-class='action.icon' style='font-size:52px'></i>
+        <div class="md-grid-text"> {{ action.name }} </div>
+      </md-button>
+    </md-item>
+  </md-list>
+</md-bottom-sheet>

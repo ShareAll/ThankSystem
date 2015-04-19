@@ -1,0 +1,95 @@
+.chat_comments {
+  width: 20em;
+  font: .85em/1.5em Helvetica, sans-serif;
+  padding: 1em;
+  margin: 0;
+  width:100%;
+  background: #000;
+}
+.chat_comments .chat_comment.right {
+  list-style: none;
+  position: relative;
+  padding: 0 6em 2em 0;
+}
+.chat_comments .chat_comment.right .author {
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 0;
+  width: 4em;
+  text-align: left;
+  white-space: nowrap;
+}
+.chat_comments .chat_comment.right .author .name {
+  color: rgba(255, 255, 255, 0.35);
+  display: block;
+  font-size: .75em;
+}
+.chat_comments .chat_comment.right .author .photo {
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
+  width: 2em;
+  border-radius: .25em;
+}
+.chat_comments .chat_comment.right .content {
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
+  padding: .25em 1em;
+  border-radius: .5em;
+  background: white;
+  position: relative;
+}
+.chat_comments .chat_comment.right .content:before {
+  z-index: 1;
+  content: ' ';
+  position: absolute;
+  border-left: 0;
+  border-right: 1em solid transparent;
+  border-bottom: 1em solid white;
+  left: auto;
+  right: -.95em;
+  top: .65em;
+}
+.chat_comments .chat_comment.right .content p {
+  margin: .5em 0;
+}
+.chat_comments .chat_comment {
+  list-style: none;
+  padding: 0 0 2em 6em;
+  position: relative;
+}
+.chat_comments .chat_comment .author {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4em;
+  text-align: right;
+  white-space: nowrap;
+}
+.chat_comments .chat_comment .author .name {
+  color: rgba(255, 255, 255, 0.35);
+  display: block;
+  font-size: .75em;
+}
+.chat_comments .chat_comment .author .photo {
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
+  width: 2em;
+  border-radius: .25em;
+}
+.chat_comments .chat_comment .content {
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
+  padding: .25em 1em;
+  border-radius: .5em;
+  background: white;
+  position: relative;
+}
+.chat_comments .chat_comment .content:before {
+  z-index: 1;
+  content: ' ';
+  position: absolute;
+  border-left: 1em solid transparent;
+  border-bottom: 1em solid white;
+  left: -.95em;
+  top: .65em;
+}
+.chat_comments .chat_comment .content p {
+  margin: .5em 0;
+}
