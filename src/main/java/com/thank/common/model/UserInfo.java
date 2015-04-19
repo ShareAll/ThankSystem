@@ -25,6 +25,7 @@ public class UserInfo implements Serializable{
 	private @Indexed(unique=true) String name;
 	private @Indexed String password;
 	private @Indexed(unique=true) String emailAddress;
+	//personal contact list
 	private @Indexed Set<String> contactList = new HashSet<String>();
 	private int score=1000;
 	
@@ -41,7 +42,7 @@ public class UserInfo implements Serializable{
 	public void setContactList(Set<String> contact) {
 		this.contactList.addAll(contact);
 	}
-	
+	//add one contact
 	public void setContact(String contact) {
 		this.contactList.add(contact);
 	}
@@ -84,8 +85,12 @@ public class UserInfo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "UserInfo [id=" + id + ", name=" + name + ", password="
-				+ password + ", emailAddress=" + emailAddress + "]";
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("UserInfo [id=").append(id) .append(", name=").append(name).append(", password=").
+				append(password).append(", emailAddress=").append( emailAddress).append(", contactList=")
+				.append(contactList.toString()).append("]");
+		return sb.toString();
 	}
 	@Override
 	public int hashCode() {
