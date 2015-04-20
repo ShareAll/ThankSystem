@@ -16,6 +16,9 @@ public class HelpCommentDao extends AbstractDao<HelpComment>  {
 		super(client, dbName, cls);
 	}
 	
+	public long getCommentsCount(String helpId) {
+		return dao.count("helpId", helpId);
+	}
 	public List<HelpComment> listComments(HelpSummary summary,String curUser) {
 		Query<HelpSummary> query=dao.createQuery();
 		query.filter("helpId",summary.id);
