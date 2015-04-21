@@ -16,11 +16,8 @@ public class HelpSummaryDao extends AbstractDao<HelpSummary> {
 	public HelpSummaryDao(MongoClient client, String dbName, Class<HelpSummary> cls) {
 		super(client, dbName, cls);
 	}
-	public void increaseSummaryProgress(HelpSummary help) {
-		HelpSummary origin=(HelpSummary) dao.get(help.id);
-		help.completeness+=origin.completeness;
+	public void updateSummaryProgress(HelpSummary help) {
 		if(help.completeness>100) help.completeness=100;
-		
 		UpdateOperations<HelpSummary> op = dao.createUpdateOperations().set("completeness", help.completeness);
 		Query<HelpSummary> query=dao.createQuery().filter("id", help.id);
 		dao.updateFirst(query,op);

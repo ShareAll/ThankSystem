@@ -108,7 +108,7 @@ public class HelpResource {
 		try {
 			
 			help.owner=user;//curUser.getEmailAddress();
-			summaryDao.increaseSummaryProgress(help);
+			summaryDao.updateSummaryProgress(help);
 			return help;
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
