@@ -1,62 +1,47 @@
 (function() {
 
-angular.module('thank.services.goalService',[])
-	.factory('goalService',['$http','$timeout','$q','$location','apiBase','$ionicPlatform',GoalService]);
+angular.module('thank.services.helpListService',[])
+	.factory('helpListService',['$http','$timeout','$q','$location','$rootScope','apiBase','$ionicPlatform',HelpListService]);
 
-function GoalService($http,$timeout,$q,$location,apiBase,$ionicPlatform) {
+function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPlatform) {
 //mock data;
-	var goals=[
-			{'id':1,'img':'img/karma.png','title':'Travel around US in 3 monthes','completeness':10.56,'friends':21,'comments':10},
-			{'id':2,'img':'img/karma.png','title':'Lose 10 pound in 20 days','completeness':55,'friends':11,'comments':9,'notes':'No updates in 5 days'},
-			{'id':3,'img':'img/karma.png','title':'Learn OpenStack in 20 days','completeness':0,'friends':5,'comments':200}
-	];
-	var mileStones=[
-		{'goalId':3,'title':'install dev stack','score':5}
-	];
 
-	
 	return {
 		add:add,
+		listBySubscriber:listBySubscriber,
 		list:list,
-		getDetail:getDetail
+		updateProgress:updateProgress
 	};
 	function add(goalData) {
-		return $q(function(resolve,reject){
-			var newGoal={
-				'id':goals.length+1,
-				'img':'img/karma.png',
-				'title':goalData.title,
-				'completeness':0.0,
-				'friends':0,
-				'comments':0
-			};
-			goals.push(newGoal);
-			resolve({
-				data:newGoal
-			})
-		});
+		
+		var curUser=$rootScope.currentUser;
+		var payload={
+			"title": goalData.title,
+  			"subscribers": goalData.subscribers
+		};
+		return $http.post(apiBase+"/help/createHelp?user="+curUser.emailAddress,payload);
+		
 	}	
+	function listBySubscriber() {
+		var curUser=$rootScope.currentUser;
+		return $http.get(apiBase+"/help/listBySubscriber?user="+curUser.emailAddress);
+
+	}
 	function list() {
-		return $q(function(resolve,reject) {
-			resolve({
-				data:goals
-			});
-		});
+		var curUser=$rootScope.currentUser;
+		return $http.get(apiBase+"/help/list?user="+curUser.emailAddress);
+		
 	}//end of list
 
-	function getDetail(goalId) {
-		var selectedGoal=null;
-		angular.forEach(goals,function(val,ind) {
-			if(val.id==goalId) {
-				selectedGoal=val;
-			}
-		});
-		return $q(function(resolve,reject) {
-			resolve({
-				data:selectedGoal
-			});
-		});
+	function updateProgress(helpId,incr) {
+		var curUser=$rootScope.currentUser;
 
+		var payload= {
+			id:helpId,
+			completeness:incr
+		};
+		return $http.post(apiBase+"/help/updateHelpProgress?user="+curUser.emailAddress+"&name="+curUser.name,payload);
+		
 	}
 
 

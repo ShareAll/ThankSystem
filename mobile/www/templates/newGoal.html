@@ -9,15 +9,28 @@
     <form name="goalForm" novalidate ng-submit="submitGoal()">
       <label class="item item-input item-floating-label">
         <span class="input-label" style="font-size:9px">Goal</span>
-            <textarea rows="3"  placeholder="Your Goal"
+        <textarea rows="3"  placeholder="Your Goal"
                 name="title" 
                 ng-model="goalData.title"
                 minlength=10>
-            </textarea>
-            <span ng-if="goalForm.title" style="color:red" ng-show="goalForm.title.$dirty && goalForm.title.$invalid">
-                <span ng-show="goalForm.title.$error.minlength">To short.....</span>
-            </span>
-        </label>
+        </textarea>
+        <span ng-if="goalForm.title" style="color:red" ng-show="goalForm.title.$dirty && goalForm.title.$invalid">
+            <span ng-show="goalForm.title.$error.minlength">To short.....</span>
+        </span>
+      </label>
+      <md-list>
+        <md-subheader class="md-no-sticky">Friends in your circle</md-subheader>
+        <md-list-item ng-repeat="friend in goalData.friends">
+          <p> {{ friend.name }} </p>
+          <md-checkbox class="md-secondary" ng-model="friend.selected"></md-checkbox>
+        </md-list-item>
+        <md-subheader class="md-no-sticky">Expert in System</md-subheader>
+          <md-list-item ng-repeat="expert in goalData.experts">
+            <p> {{ expert.name }} </p>
+            <md-checkbox class="md-secondary" ng-model="expert.selected"></md-checkbox>
+          </md-list-item>
+        
+
       <!--<div class="list">
         <label class="item item-input">
           <span class="input-label">Goal</span>

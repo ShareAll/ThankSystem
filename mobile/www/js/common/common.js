@@ -3,6 +3,8 @@
 angular.module('thank.common',[])
 	.filter('nl2br', ['$sce',nl2brFilter])
 	.directive('autolinker', ['$timeout',AutoLinkerDirective])
+  .directive('wfTextLower',['$parse',WfTextLower])
+  .directive('wfLogDom',[WfLogDom])
 
 function nl2brFilter($sce){
 	return function(msg,is_xhtml) { 
@@ -56,6 +58,34 @@ function AutoLinkerDirective($timeout) {
     }
 } //end of AutoLinkerDirective
 
+
+function WfTextLower($parse) {
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+        var lower = function(inputValue) {
+           if (inputValue === undefined) { inputValue = ''; }
+           var ret=inputValue.toLowerCase();
+           if(ret !== inputValue) {
+              modelCtrl.$setViewValue(ret);
+              modelCtrl.$render();
+            }         
+            return ret;
+         }
+         modelCtrl.$parsers.push(lower);
+         lower($parse(attrs.ngModel)(scope)); // capitalize initial value
+     }
+   };
+} //end of WfTextLower
+
+function WfLogDom() {
+   return {
+      restrict:"A",
+      link:function($scope,element,attrs) {
+         console.info("Dom Created: "+attrs.wfLogDom);
+      }
+   };
+} //end of WFLogDom
 
 
 })();

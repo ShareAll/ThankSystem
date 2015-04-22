@@ -1,9 +1,9 @@
 (function() {
 	
 	angular.module('thank.controllers.helpDetailCtrl', [])
-		.controller('helpDetailCtrl', ['$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',HelpDetailCtrl]);
+		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',HelpDetailCtrl]);
 
-	function HelpDetailCtrl($scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet) {
+	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet) {
 	/*	var curId=0;
 		var contentElm=angular.element(document.getElementById('updates'));
 		$interval(function(){
@@ -20,20 +20,37 @@
 		},2000);
 */
 	var helpId=$stateParams.helpId;
-
-	
-	$scope.curUser='fenwang';
+  var curUser=$rootScope.currentUser.emailAddress;
+  var curUserName=$rootScope.currentUser.name;
+  console.info("helpId="+helpId+",curUser="+curUser);
+  $scope.curUser=curUser;
 	var messageCheckTimer;
 	var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
     var footerBar; // gets set in $ionicView.enter
     var scroller;
     var txtInput; // ^^^
-
+    var lastCommentId="";
+    $scope.messages=[];
+  function refreshComment(fn) {
+    
+    helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,lastCommentId).then(function(resp) {
+        if(resp.data) {
+          $.each(resp.data,function(ind,val) {
+            $scope.messages.push(val);
+            lastCommentId=val.id;
+          });
+        }
+        if(fn) {
+          fn();
+        }
+        
+    });
+    
+  }
 	$scope.$on('$ionicView.enter', function() {
-      	console.log('UserMessages $ionicView.enter');
-      	helpDetailService.getMessages(helpId).then(function(resp) {
-      		$scope.messages=resp.data
-      	});
+      	//console.log('UserMessages $ionicView.enter');
+        refreshComment();
+
       
       	$timeout(function() {
 	        footerBar = document.body.querySelector('#userMessagesView .bar-footer');
@@ -42,8 +59,9 @@
 	    }, 0);
 
       	messageCheckTimer = $interval(function() {
-        	// here you could check for new messages if your app doesn't use push notifications or user disabled them
-      	}, 20000);
+          refreshComment();
+        	
+      	}, 3000);
     });
 
     $scope.$on('$ionicView.leave', function() {
@@ -57,11 +75,7 @@
 
 
 	$scope.sendMessage=function(msgForm) {
-      	var message = {
-      		date:new Date(),
-        	username:$scope.curUser,
-        	text: $scope.input_message
-      	};
+      	
       	keepKeyboardOpen();
       // if you do a web service call this will be needed as well as before the viewScroll calls
       // you can't see the effect of this in the browser it needs to be used on a real device
@@ -69,32 +83,67 @@
       //keepKeyboardOpen();
       
       //MockService.sendMessage(message).then(function(data) {
-      $scope.input_message = '';
+     // $scope.input_message = '';
+     if($scope.input_message && $scope.input_message.length>0) {
+        helpDetailService.sendComment(helpId,$scope.input_message,curUser,curUserName).then(function(resp1) {
+            $scope.input_message="";
+            refreshComment(function() {
+              $timeout(function() {
+                  keepKeyboardOpen();
+                  viewScroll.scrollBottom(true);
+              }, 0);
 
-      helpDetailService.send(message).then(function(resp) {
-      	  $scope.messages=resp.data;
-      	  $timeout(function() {
-        	keepKeyboardOpen();
-        	viewScroll.scrollBottom(true);
-     	  }, 0);
+            });
+            
+           
+        });
 
-      });
+     }
 
  
     }; //$scope.sendMessage
 
-    $scope.actions=[{
-      "name":"+10",
-      "icon":"fa-plus-circle"
-    }];
+  
+
+    $scope.updateProgress = function(incr) {
+      if($rootScope.curGoal.completeness>=100) return;
+      if($rootScope.curGoal.completeness) {
+        $rootScope.curGoal.completeness+=incr;
+      } else {
+        $rootScope.curGoal.completeness=incr;
+      }
+
+      helpListService.updateProgress(helpId,$rootScope.curGoal.completeness);
+      $rootScope.lastUpdateTime=new Date().getTime();
+      $mdBottomSheet.hide();
+    };
+    $scope.closeHelp=function() {
+      console.info("close help");
+      $mdBottomSheet.hide();
+    };
+    $scope.inviteMore=function() {
+      console.info("invite more");
+      $mdBottomSheet.hide();
+    };
+
+    $scope.showListBottomSheet=function($event) {
+        $mdBottomSheet.show({
+          templateUrl: 'templates/helpDetail_top_action.html',
+          controller: 'helpDetailCtrl',
+          targetEvent: $event
+        }).then(function() {
+          //console.info(clickedItem.name + ' clicked!');
+        });
+
+    }
     $scope.showGridBottomSheet = function($event) {
         $scope.alert = '';
         $mdBottomSheet.show({
           templateUrl: 'templates/helpDetail_action.html',
           controller: 'helpDetailCtrl',
           targetEvent: $event
-        }).then(function(clickedItem) {
-          $scope.alert = clickedItem.name + ' clicked!';
+        }).then(function() {
+          //console.info(clickedItem.name + ' clicked!');
         });
       };
 

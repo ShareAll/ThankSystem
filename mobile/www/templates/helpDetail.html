@@ -1,9 +1,54 @@
-<ion-view view-title="{{curGoal}}" id="userMessagesView" cache-view="false">
+
+<ion-view view-title="{{curGoal.title | limitTo:15}}..." id="userMessagesView" cache-view="false">
+   <ion-nav-buttons side="right">
+    <a class="fa fa-ellipsis-h" ng-click="showListBottomSheet($event)" style="font-size:30px;margin-right:20px">
+    </a>
+   </ion-nav-buttons>
+
   	<ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  
-      <div ng-repeat="message in messages">
-        {{message.username}}:{{message.text}}
+      <div ng-repeat="message in messages" ng-class="curUser!==message.owner?'message-others':'message-self'">
+        {{message.ownerName}}:{{message.content}}
+        <div wf-Log-Dom="{{message.content}}"></div>
       </div>
-    {{curGoal}}
+   
+    <!--  
+        <div ng-repeat="message in messages" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">      
+            <div ng-if="curUser!== message.username">          
+                <img ng-click="viewProfile(message)" class="profile-pic left" ng-src="img/photo/{{message.username}}.jpg" onerror="onProfilePicError(this)" />
+   
+                <div class="chat-bubble left">      
+                    <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+                    </div>
+      
+                    <div class="message-detail">
+                        <span ng-click="viewProfile(message)" class="bold">{{message.username}}</span>,
+                        <span am-time-ago="message.date"></span>
+                    </div>
+      
+                </div>
+            </div>
+      
+            <div ng-if="curUser === message.username">
+                <img ng-click="viewProfile(message)" class="profile-pic right" ng-src="img/photo/{{message.username}}.jpg" onerror="onProfilePicError(this)" />
+                    
+                <div class="chat-bubble right">
+      
+                    <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+                    </div>
+      
+                    <div class="message-detail">
+            <span ng-click="viewProfile(message)" class="bold">{{curUser}}</span>, 
+                        <span am-time-ago="message.date"></span>
+                    </div>
+      
+              </div>
+                    
+            </div>
+      
+            <div class="cf"></div>
+      
+        </div>
+      -->
 
               
 
@@ -12,14 +57,17 @@
  
 
 	<form name="sendMessageForm" ng-submit="sendMessage(sendMessageForm)" novalidate>
+        <label ng-if="curGoal.completeness && curGoal.completeness==100"class="item" style="position:absolute;bottom:44px;width:100%;padding:0;margin:0">
+          <button class="button button-block button-positive" type="submit" style="padding:0;margin:0">Complete the help</button>
+        </label>
         <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach> 
-            
+        
         <div style="margin-right:20px" ng-click="showGridBottomSheet($event)">
           <i class="fa fa-chevron-circle-down" style="font-size:30px"></i>         
         </div>
 
             	<label class="item-input-wrapper" style="background-color:white">
-                	<textarea ng-model="input_message" style="width:100%"value="" placeholder="Send a message or update (@+number) ..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+                	<textarea ng-model="input_message" style="width:100%"value="" placeholder="Send a comment ..." required minlength="1" maxlength="1500" msd-elastic></textarea>
             	</label>
             	<div class="footer-btn-wrap">
                 	<button class="button button-icon icon  footer-btn" type="submit"

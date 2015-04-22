@@ -7,6 +7,7 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
 	$scope.loginData = {};
 	$scope.inAutoLogin=true;
 	//auto login
+    /*
 	console.log("start auto login for 100 miliseconds");
 	$timeout(function() {
 		loginService.autoLogin().then(function(resp) {
@@ -15,7 +16,7 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
 			$ionicHistory.nextViewOptions({
 	            disableBack: true
 	        });
-	        $state.go('app.todoList', {}, {location:'replace'});
+	        $state.go($rootScope.default_page, {}, {location:'replace'});
 			$scope.inAutoLogin=false;
 		},function(resp) {
 			console.log("autoLogin Done "+JSON.stringify(resp));
@@ -24,16 +25,17 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
 		});
 
 	},500);
-
+*/
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     loginService.deviceSignUp($scope.loginData).then(function(resp){
     	$rootScope.currentUser=resp.data;
+        $rootScope.currentUser.friends=["pzou@ebay.com","jikarma@ebay.com",'fenwang@ebay.com'];
    		$ionicHistory.nextViewOptions({
             disableBack: true
         });
-        $state.go('app.todoList', {}, {location:'replace'});
+        $state.go($rootScope.default_page, {}, {location:'replace'});
     },function(resp) {
     	$scope.lastError=resp.data.errorMsg;
     });
@@ -45,6 +47,7 @@ function LoginCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state,
   	$ionicHistory.nextViewOptions({
             disableBack: true
     });
+    console.info("logout");
   	$state.go('app.login',{}, {location:'replace'});
   }
 

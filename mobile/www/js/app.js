@@ -10,9 +10,10 @@ angular.module('starter', [
   'thank.common','starter.controllers',
   'thank.controllers','thank.services'
 ])
-.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
+//.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
+.constant('apiBase',"http://127.0.0.1:8080/ThankWeb/rest")
 .run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state,loginService) {
-  
+  $rootScope.default_page="app.helpList";
   //check login state
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
     var requireLogin = toState.data.requireLogin;
@@ -22,7 +23,7 @@ angular.module('starter', [
         $ionicHistory.nextViewOptions({
                 disableBack: true
         });
-
+        console.info("origin to="+toState);
         $state.go('app.login');
     }
     
@@ -58,7 +59,7 @@ angular.module('starter', [
             $ionicHistory.nextViewOptions({
                 disableBack: true
             });
-            $state.go('app.todoList', {}, {location:'replace'});
+            $state.go('app.helpList', {}, {location:'replace'});
             console.log("click 2 "+notification.id);
             //$timeout(function () {
             //  $rootScope.$broadcast('cordovaLocalNotification:click', notification);
@@ -142,7 +143,7 @@ angular.module('starter', [
         }
       },
       data: {
-        requireLogin: false
+        requireLogin: true
       }
     })
     .state('app.helpDetail', {
@@ -154,7 +155,7 @@ angular.module('starter', [
         }
       },
       data: {
-        requireLogin: false
+        requireLogin: true
       }
     })
 
@@ -184,5 +185,6 @@ angular.module('starter', [
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/helpList');
+  $urlRouterProvider.otherwise('/app/login');
+
 });

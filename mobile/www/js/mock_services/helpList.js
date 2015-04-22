@@ -6,7 +6,7 @@ angular.module('thank.services.helpListService',[])
 function HelpListService($http,$timeout,$q,$location,apiBase,$ionicPlatform) {
 //mock data;
 	var goals=[
-			{'id':1,'img':'img/karma.png','title':'Travel around US in 3 monthes','completeness':10.56,'friends':21,'comments':10},
+			{'id':1,'img':'img/karma.png','title':'Travel around US in 3 monthes','completeness':10,'friends':21,'comments':10},
 			{'id':2,'img':'img/karma.png','title':'Lose 10 pound in 20 days','completeness':55,'friends':11,'comments':9,'notes':'No updates in 5 days'},
 			{'id':3,'img':'img/karma.png','title':'Learn OpenStack in 20 days','completeness':0,'friends':5,'comments':200}
 	];
@@ -35,7 +35,7 @@ function HelpListService($http,$timeout,$q,$location,apiBase,$ionicPlatform) {
 				data:newGoal
 			})
 		});
-	}
+	}	
 	function list() {
 		return $q(function(resolve,reject) {
 			resolve({

@@ -1,10 +1,22 @@
 <md-bottom-sheet class="md-grid">
   <md-list>
-    <md-item ng-repeat="action in actions">
-      <md-button class="md-grid-item-content" ng-click="listItemClick($index)">
-        <i class="fa " ng-class='action.icon' style='font-size:52px'></i>
-        <div class="md-grid-text"> {{ action.name }} </div>
+    <md-item>
+      <md-button class="md-grid-item-content" ng-click="updateProgress(5)" style="min-width:0px">
+        <i class="fa fa-plus-circle" style='font-size:52px'></i>
+        <div class="md-grid-text"> +5 </div>
       </md-button>
     </md-item>
+    <md-item>
+      <md-button class="md-grid-item-content" ng-click="updateProgress(10)" style="min-width:0px">
+        <i class="fa fa-plus-circle" style='font-size:52px'></i>
+        <div class="md-grid-text"> +10 </div>
+      </md-button>
+    </md-item>    
+   <md-item>
+      <md-button class="md-grid-item-content" ng-click="updateProgress(20)" style="min-width:0px">
+        <i class="fa fa-plus-circle" style='font-size:52px'></i>
+        <div class="md-grid-text"> +20 </div>
+      </md-button>
+    </md-item>        
   </md-list>
 </md-bottom-sheet>

@@ -18,3 +18,16 @@ img.face {
 	width: 48px;
 	margin: 16px;
 }
+
+.message-others {
+    font-color:blue;
+    font-weight: 600;
+}
+
+.bottom-tab-button {
+    color:grey !important;
+}
+.bottom-tab-button.active {
+    color:black !important;
+}
+
