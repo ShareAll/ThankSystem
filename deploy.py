@@ -51,12 +51,12 @@ class Deployer:
 
     def stop_service(self):
         try:
-            run("service %s stop && sleep 30" % self.context['tomcat_service_name'])
+            sudo("service %s stop && sleep 30" % self.context['tomcat_service_name'])
         except:
             pass
 
     def start_service(self):
-        run("service %s start && sleep 1 " % self.context['tomcat_service_name'])
+        sudo("(nohup service %s start &) && ps aux|grep %s &&sleep 5 && ps aux|grep %s " % (self.context['tomcat_service_name'],self.context['tomcat_service_name'],self.context['tomcat_service_name']))
     
     def clean_war(self):
         for remotePath in context['remove_files']:
