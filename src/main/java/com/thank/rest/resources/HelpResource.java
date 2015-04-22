@@ -13,14 +13,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.types.ObjectId;
-
 import com.sun.jersey.spi.resource.Singleton;
 import com.thank.common.model.HelpComment;
 import com.thank.common.model.HelpSummary;
 import com.thank.rest.shared.model.WFRestException;
 import com.thank.topic.dao.HelpCommentDao;
 import com.thank.topic.dao.HelpSummaryDao;
+import com.thank.utils.IDGenerator;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -86,7 +85,7 @@ public class HelpResource {
 		try {
 			//UserInfo curUser=UserContextUtil.getCurUser(request);
 			//if(curUser==null) throw new RuntimeException("Please login first");
-			help.id=ObjectId.get().toHexString();
+			help.id=IDGenerator.genId();
 			help.owner=user;//curUser.getEmailAddress();
 		
 			summaryDao.save(help);
@@ -104,11 +103,19 @@ public class HelpResource {
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 500, message = "Service exception") })
-	public HelpSummary updateHelpProgress(@QueryParam("user")String user,HelpSummary help) {
+	public HelpSummary updateHelpProgress(@QueryParam("user")String user,@QueryParam("name") String userName,HelpSummary help) {
 		try {
 			
 			help.owner=user;//curUser.getEmailAddress();
 			summaryDao.updateSummaryProgress(help);
+			//create Comment
+			HelpComment comment=new HelpComment();
+			comment.id=IDGenerator.genId();
+			comment.helpId=help.id;
+			comment.content="Progress Update to "+help.completeness;
+			comment.owner=user;
+			comment.ownerName=userName;
+			commentDao.save(comment);
 			return help;
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
@@ -123,13 +130,13 @@ public class HelpResource {
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 500, message = "Service exception") })
-	public List<HelpComment> listComments(@QueryParam("user")String user,@QueryParam("helpId")String helpId) {
+	public List<HelpComment> listComments(@QueryParam("owner")String owner,@QueryParam("user")String user,@QueryParam("helpId")String helpId,@QueryParam("lastCommentId") String lastCommentId) {
 		try {
 			//UserInfo curUser=UserContextUtil.getCurUser(request);
 			//if(curUser==null) throw new RuntimeException("Please login first");
-			HelpSummary summary=summaryDao.getById(helpId);
-			if(summary==null) throw new RuntimeException("No help with id "+helpId);
-			return commentDao.listComments(summary, user);
+			//HelpSummary summary=summaryDao.getById(helpId);
+			//if(summary==null) throw new RuntimeException("No help with id "+helpId);
+			return commentDao.listComments(helpId,owner, user,lastCommentId);
 			
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
@@ -150,7 +157,8 @@ public class HelpResource {
 			//if(curUser==null) throw new RuntimeException("Please login first");
 			comment.owner=user;
 			comment.createTime=new Date();
-			comment.id=ObjectId.get().toHexString();
+			comment.id=IDGenerator.genId();
+			
 			commentDao.save(comment);
 			summaryDao.increaseCommentCount(comment.helpId);
 			return comment;

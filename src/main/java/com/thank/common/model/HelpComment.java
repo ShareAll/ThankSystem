@@ -15,5 +15,6 @@ public class HelpComment implements Serializable {
 	public String content;
 	public @Indexed Date createTime=new Date();
 	public String owner;
+	public String ownerName;
 	
 }

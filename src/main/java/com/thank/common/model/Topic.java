@@ -1,7 +1,7 @@
 package com.thank.common.model;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bson.types.ObjectId;

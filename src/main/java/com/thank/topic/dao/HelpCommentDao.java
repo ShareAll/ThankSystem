@@ -8,7 +8,6 @@ import org.mongodb.morphia.query.Query;
 import com.mongodb.MongoClient;
 import com.thank.common.dao.AbstractDao;
 import com.thank.common.model.HelpComment;
-import com.thank.common.model.HelpSummary;
 
 public class HelpCommentDao extends AbstractDao<HelpComment>  {
 
@@ -19,11 +18,12 @@ public class HelpCommentDao extends AbstractDao<HelpComment>  {
 	public long getCommentsCount(String helpId) {
 		return dao.count("helpId", helpId);
 	}
-	public List<HelpComment> listComments(HelpSummary summary,String curUser) {
-		Query<HelpSummary> query=dao.createQuery();
-		query.filter("helpId",summary.id);
-		if(!curUser.equals(summary.owner)) {
-			query.filter("owner in ", Arrays.asList(summary.owner,curUser));
+	public List<HelpComment> listComments(String helpId,String owner, String curUser,String lastCommentId) {
+		Query<HelpComment> query=dao.createQuery();
+		query.filter("helpId",helpId);
+		query.filter("id >", lastCommentId);
+		if(!curUser.equals(owner)) {
+			query.filter("owner in ", Arrays.asList(owner,curUser));
 		}
 		return dao.find(query).asList();	
 	}

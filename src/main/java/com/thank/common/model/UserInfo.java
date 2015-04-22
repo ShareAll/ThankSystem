@@ -1,6 +1,7 @@
 package com.thank.common.model;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.thank.jersey.plugin.GsonUtil;
 import com.thank.rest.resources.UserContextUtil;
 /***
@@ -29,6 +32,16 @@ public class UserInfo implements Serializable{
 	private @Indexed Set<String> contactList = new HashSet<String>();
 	private int score=1000;
 	
+	public String toJson() {
+		Gson gson=new Gson();
+		return gson.toJson(this);
+	}
+	public static UserInfo fromJson(String jsonString){
+		Gson gson = new Gson();
+		JsonReader reader = new JsonReader(new StringReader(jsonString));
+		reader.setLenient(true);
+		return gson.fromJson(reader, UserInfo.class);
+	}
 	public UserInfo() {
 		
 	}
