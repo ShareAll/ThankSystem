@@ -7,9 +7,18 @@
   </ion-header-bar>
   <ion-content>
     <form name="goalForm" novalidate ng-submit="submitGoal()">
+       <fancy-select
+            placeholder="TEST",
+            header-text="Single"
+            allow-empty='false'
+            value="goalData.categoryId"
+            text="category.name"
+            items="categories">
+      </fancy-select>
+      <a ng-click="openCategoryModal()">{{selectedCategory}}</a>
       <label class="item item-input item-floating-label">
-        <span class="input-label" style="font-size:9px">Goal</span>
-        <textarea rows="3"  placeholder="Your Goal"
+        <span class="input-label" style="font-size:9px">Help Title</span>
+        <textarea rows="3"  placeholder="Help Title"
                 name="title" 
                 ng-model="goalData.title"
                 minlength=10>

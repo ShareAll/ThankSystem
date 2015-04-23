@@ -9,6 +9,21 @@
 		  $scope.goalData={
 		  	'goalText':''
 		  };
+          //get all categories
+          helpListService.listAllCategories().then(function SUCCESS(resp) {
+                $scope.categories=[];
+                $.each(resp.data,function(ind,val) {
+                    $scope.categories.push({
+                        id:val.id,
+                        text:val.name,
+                        checked:false,
+                        icon:null
+                    });
+                });
+                
+                //    $scope.categories=  resp.data;
+                  //  $scope.categoryModal=modal;
+          });  
           var lastRefreshTime=0;
           $scope.changeTab=function(mytab) {
             if(mytab) {
@@ -67,6 +82,13 @@
                      {"name":"expert2@google.com",selected:false}
                     ]
                 };
+                $scope.loadCategories=function() {
+                    helpListService.listAllCategories().then(function SUCCESS(resp) {
+                        $scope.categories=  resp.data;
+                        console.info(resp);
+                    });
+                    
+                };
                 $.each($rootScope.currentUser.friends,function(ind,val){
                     if(val!=$rootScope.currentUser.emailAddress) {
                         $scope.goalData.friends.push({
@@ -78,6 +100,24 @@
                 });
                 
   		  });
+          /***Open Goal Selection Window***/
+        $ionicModal.fromTemplateUrl('templates/categoryDlg.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function(modal) {
+                    
+          });
+          $scope.openCategoryModal=function() {
+            $scope.categoryModal.show();
+          }
+          $scope.closeCategoryModal=function() {
+            $scope.categoryModal.hide();
+          }
+          $scope.selectCategory=function(cat) {
+            $scope.selectedCategory=cat;
+            $scope.categoryModal.hide();
+          }
+
   		  $scope.openGoalModal = function() {
   		  	console.info("open modal");
     		$scope.goalModal.show();
@@ -86,6 +126,7 @@
             var payload={};
             payload.title=$scope.goalData.title;
             payload.subscribers=[];
+            payload.categoryId=$scope.goalData.categoryId;
             var subscribers={};
             $.each($scope.goalData.friends,function(ind,val){
                 if(val.selected) {

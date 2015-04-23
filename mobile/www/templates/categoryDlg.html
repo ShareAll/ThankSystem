@@ -1,0 +1,16 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Select Category</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeCategoryModal()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-avatar" ng-repeat="category in categories" type="item-text-wrap" ng-click="selectCategory(category)">
+        <h4>{{category}}}</h4>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-modal-view>

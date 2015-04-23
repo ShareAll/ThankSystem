@@ -7,16 +7,22 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 //mock data;
 
 	return {
+		listAllCategories:listAllCategories,
 		add:add,
 		listBySubscriber:listBySubscriber,
 		list:list,
 		updateProgress:updateProgress
 	};
+	function listAllCategories() {
+		return $http.get(apiBase+"/category/list");
+	}
+
 	function add(goalData) {
 		
 		var curUser=$rootScope.currentUser;
 		var payload={
 			"title": goalData.title,
+			"categoryId":goalData.categoryId,
   			"subscribers": goalData.subscribers
 		};
 		return $http.post(apiBase+"/help/createHelp?user="+curUser.emailAddress,payload);
