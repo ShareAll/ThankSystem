@@ -34,9 +34,7 @@
     var lastCommentId="";
     $scope.messages=[];
   function refreshComment(fn) {
-    $ionicLoading.show({
-        template: 'Loading...'
-    });
+   
     helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,lastCommentId).then(function(resp) {
         if(resp.data) {
           $.each(resp.data,function(ind,val) {
@@ -44,18 +42,23 @@
             lastCommentId=val.id;
           });
         }
-        if(fn) {
-          fn();
-        }
         
     }).finally(function(){
-      $ionicLoading.hide();
+      if(fn) {
+          fn();
+        }
+      
     });
     
   }
 	$scope.$on('$ionicView.enter', function() {
       	//console.log('UserMessages $ionicView.enter');
-        refreshComment();
+        $ionicLoading.show({
+          template: 'Loading...'
+        });
+        refreshComment(function() {
+          $ionicLoading.hide();
+        });
 
       
       	$timeout(function() {
