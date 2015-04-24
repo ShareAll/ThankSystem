@@ -17,7 +17,6 @@ function HelpDetailService($http,$interval,$timeout,$q,$location,apiBase,$ionicP
             	user:user,
             	helpId: helpId,
             	lastCommentId:lastCommentId,
-
         	}
         });
 		

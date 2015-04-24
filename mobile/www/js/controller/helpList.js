@@ -1,18 +1,20 @@
 (function() {
 	angular.module('thank.controllers.helpListCtrl', [])
-		.controller('helpListCtrl', ['$rootScope','$scope','$timeout','$stateParams','helpListService','$ionicModal',HelpListCtrl]);
+		.controller('helpListCtrl', ['$rootScope','$scope','$timeout','$stateParams','helpListService','$ionicModal','$ionicLoading',HelpListCtrl]);
 
-	function HelpListCtrl($rootScope,$scope,$timeout,$stateParams,helpListService,$ionicModal) {
+	function HelpListCtrl($rootScope,$scope,$timeout,$stateParams,helpListService,$ionicModal,$ionicLoading) {
 		  $scope.helpList = [];
 		  $rootScope.curGoal=null;
 		  console.info("Load GOAL Control");
 		  $scope.goalData={
 		  	'goalText':''
 		  };
+          $scope.category_text="Select Category";
           //get all categories
           helpListService.listAllCategories().then(function SUCCESS(resp) {
                 $scope.categories=[];
                 $.each(resp.data,function(ind,val) {
+
                     $scope.categories.push({
                         id:val.id,
                         text:val.name,
@@ -46,6 +48,11 @@
 
 		 function refreshHelpList() {
             var promise=null;
+            $ionicLoading.show({
+              template: 'Loading...'
+            });
+            //always clear existing cache
+            $scope.helpList=[];
             if($scope.view.tab_myhelp) {
                 promise=helpListService.list();
             } else {
@@ -57,7 +64,9 @@
                     $('div.circliful:not(:has(span.circle-text))').circliful();
                 },100);
                     //console.dir($scope.goals);    
-            });                
+            }).finally(function() {
+               $ionicLoading.hide();
+            })               
          }
 
          $scope.$on('$ionicView.enter', function() {
@@ -76,12 +85,7 @@
     		animation: 'slide-in-up'
   		  }).then(function(modal) {
     			$scope.goalModal = modal;
-                $scope.goalData={friends:[],
-                    experts:[
-                     {"name":"expert1@google.com",selected:false},
-                     {"name":"expert2@google.com",selected:false}
-                    ]
-                };
+                
                 $scope.loadCategories=function() {
                     helpListService.listAllCategories().then(function SUCCESS(resp) {
                         $scope.categories=  resp.data;
@@ -89,18 +93,10 @@
                     });
                     
                 };
-                $.each($rootScope.currentUser.friends,function(ind,val){
-                    if(val!=$rootScope.currentUser.emailAddress) {
-                        $scope.goalData.friends.push({
-                            name:val,
-                            selected:false
-                        })
 
-                    }
-                });
                 
   		  });
-          /***Open Goal Selection Window***/
+          /***Open Goal Selection Window**
         $ionicModal.fromTemplateUrl('templates/categoryDlg.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -116,11 +112,29 @@
           $scope.selectCategory=function(cat) {
             $scope.selectedCategory=cat;
             $scope.categoryModal.hide();
-          }
+          }*/
 
   		  $scope.openGoalModal = function() {
   		  	console.info("open modal");
     		$scope.goalModal.show();
+            $scope.goalData={friends:[],
+                    experts:[
+                     {"name":"expert1@google.com",selected:false},
+                     {"name":"expert2@google.com",selected:false}
+                    ]
+                };
+            $.each($rootScope.currentUser.friends,function(ind,val){
+                    if(val!=$rootScope.currentUser.emailAddress) {
+                        $scope.goalData.friends.push({
+                            name:val,
+                            selected:false
+                        })
+
+                    }
+                });    
+            $scope.category_text="Select Category";
+            
+            
   		  };
   		  $scope.submitGoal=function() {
             var payload={};
@@ -150,6 +164,9 @@
   		  }
   		  $scope.closeModal = function() {
     		$scope.goalModal.hide();
+            
+           
+
   		  };
   			
   		  $scope.$on('$destroy', function() {

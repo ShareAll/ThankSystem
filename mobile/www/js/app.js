@@ -10,8 +10,8 @@ angular.module('starter', [
   'thank.common','starter.controllers',
   'thank.controllers','thank.services'
 ])
-//.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
-.constant('apiBase',"http://127.0.0.1:8080/ThankWeb/rest")
+.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
+//.constant('apiBase',"http://127.0.0.1:8080/ThankWeb/rest")
 .run(function($ionicPlatform,$timeout,$rootScope,$ionicHistory,$state,loginService) {
   $rootScope.default_page="app.helpList";
   //check login state

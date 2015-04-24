@@ -118,9 +118,11 @@ function FancySelect($ionicModal) {
                     scope.defaultText   = scope.text || '';
 
                     /* Notes in the right side of the label */
+
                     scope.noteText      = attrs.noteText || '';
                     scope.noteImg       = attrs.noteImg || '';
                     scope.noteImgClass  = attrs.noteImgClass || '';
+
                     
                     /* Optionnal callback function */
                     // scope.callback = attrs.callback || null;
@@ -217,7 +219,6 @@ function FancySelect($ionicModal) {
 
                         // Set selected text
                         scope.text = item.text;
-
                         // Set selected value
                         scope.value = item.id;
 

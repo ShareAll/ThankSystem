@@ -1,9 +1,10 @@
 (function() {
 	
 	angular.module('thank.controllers.helpDetailCtrl', [])
-		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',HelpDetailCtrl]);
+		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',
+      '$ionicLoading',HelpDetailCtrl]);
 
-	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet) {
+	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading) {
 	/*	var curId=0;
 		var contentElm=angular.element(document.getElementById('updates'));
 		$interval(function(){
@@ -19,6 +20,7 @@
 			});	
 		},2000);
 */
+
 	var helpId=$stateParams.helpId;
   var curUser=$rootScope.currentUser.emailAddress;
   var curUserName=$rootScope.currentUser.name;
@@ -32,7 +34,9 @@
     var lastCommentId="";
     $scope.messages=[];
   function refreshComment(fn) {
-    
+    $ionicLoading.show({
+        template: 'Loading...'
+    });
     helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,lastCommentId).then(function(resp) {
         if(resp.data) {
           $.each(resp.data,function(ind,val) {
@@ -44,6 +48,8 @@
           fn();
         }
         
+    }).finally(function(){
+      $ionicLoading.hide();
     });
     
   }
