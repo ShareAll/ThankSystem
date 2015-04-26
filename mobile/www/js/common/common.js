@@ -5,6 +5,7 @@ angular.module('thank.common',[])
 	.directive('autolinker', ['$timeout',AutoLinkerDirective])
   .directive('wfTextLower',['$parse',WfTextLower])
   .directive('wfLogDom',[WfLogDom])
+  .directive('wfMatch',['$parse',WfMatch])
   .directive('fancySelect',['$ionicModal',FancySelect])
 
 function nl2brFilter($sce){
@@ -89,6 +90,37 @@ function WfLogDom() {
 } //end of WFLogDom
 
 
+function WfMatch($parse) {
+  return {
+      require: '?ngModel',
+      restrict: 'A',
+      link: function(scope, elem, attrs, ctrl) {
+          if(!ctrl) {
+                if(console && console.warn){
+                    console.warn('Match validation requires ngModel to be on the element');
+                }
+                return;
+          }
+          var matchGetter = $parse(attrs.wfMatch);
+
+          scope.$watch(getMatchValue, function(){
+                ctrl.$$parseAndValidate();
+          });
+
+          ctrl.$validators.wfmatch = function(){
+                return ctrl.$viewValue === getMatchValue();
+          };
+
+          function getMatchValue(){
+              var match = matchGetter(scope);
+              if(angular.isObject(match) && match.hasOwnProperty('$viewValue')){
+                  match = match.$viewValue;
+              }
+              return match;
+          }
+      }//link
+  };
+}
 
 function FancySelect($ionicModal) {
     return {
