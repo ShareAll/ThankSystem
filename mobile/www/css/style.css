@@ -31,3 +31,7 @@ img.face {
     color:black !important;
 }
 
+span.input_error {
+    color:red;
+    margin-left:20px;
+}

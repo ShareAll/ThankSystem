@@ -1,0 +1,43 @@
+<ion-view view-title="Sign Up">
+  <ion-content>
+    <img style="width:100%;max-width:100%;max-height:100%" src="img/signup.jpg"></img>
+    <form name="signupForm" novalidate ng-submit="doSignUp()">
+      <div>
+        <label class="item item-input">
+          <span class="input-label">Email Address</span>
+          <input name="emailAddress" type="email" ng-model="signupData.emailAddress" wf-text-lower required>
+        </label>
+
+        <span class="input_error" ng-show="signupForm.emailAddress.$error.required && signupForm.emailAddress.$dirty">Email is required</span>    
+        <span class="input_error" ng-show="!signupForm.emailAddress.$error.required && signupForm.emailAddress.$error.email && signupForm.emailAddress.$dirty">invalid email</span>
+        
+        <label class="item item-input">
+          <span class="input-label">Name</span>
+          <input name="name" type="text" ng-model="signupData.name" minlength=5>          
+        </label>  
+        <span class="input_error" ng-if="signupForm.name" ng-show="signupForm.name.$dirty && signupForm.name.$invalid">
+              <span ng-show="signupForm.name.$error.minlength">Name is too short</span>
+          </span>       
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input name="password" type="password" ng-model="signupData.password" required>               
+        </label>
+         <span class="input_error" ng-show="signupForm.password.$error.required && signupForm.password.$dirty">Password is required</span> 
+        
+        <label class="item item-input">
+          <span class="input-label">Repeat password</span>
+          <input type="password" name="repeat_password" ng-model="signupData.repeat_password" wf-match="signupData.password" required>
+        </label>
+        <span class="input_error" ng-show="signupForm.repeat_password.$error.required && signupForm.repeat_password.$dirty">Repeat Password is required</span> 
+        <span class="input_error" ng-show="!signupForm.repeat_password.$error.required && signupForm.repeat_password.$error.wfmatch && signupForm.repeat_password.$dirty">Password NOT Match</span>
+        
+        <p style="color:red;font-size:12px" ng-if="lastError">{{lastError}}</p>
+        <label class="item">
+          <button class="button button-block button-positive" ng-disabled="!signupForm.$valid" type="submit">Sign Up</button>
+          
+        </label>
+
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

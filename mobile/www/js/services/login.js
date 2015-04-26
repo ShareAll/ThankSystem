@@ -8,6 +8,7 @@ angular.module('thank.services.loginService',[])
 function LoginService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$ionicHistory,$state) {
 	return {
 		autoLogin:autoLogin,
+		signUp:signUp,
 		deviceSignUp:deviceSignUp
 	};
 
@@ -31,6 +32,14 @@ function LoginService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$ionicH
 			});
 		});					
 	}
+	function signUp(signUpData) {
+		return $http.post(apiBase+"/auth2/signup",{
+				"emailAddress":signUpData.emailAddress,
+				"password":signUpData.password,
+				"name":signUpData.name		
+		});
+
+	};
 
 	function deviceSignUp(loginData) {
 		return $q(function(resolve,reject){

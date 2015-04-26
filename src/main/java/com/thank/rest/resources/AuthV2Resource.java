@@ -101,7 +101,7 @@ public class AuthV2Resource {
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 401, message = "The email address already registered") })
-	public void signUp(UserInfo request) throws IOException {	
+	public UserInfo signUp(UserInfo request) throws IOException {	
 		UserInfo ret=null;
 		String userName,password, emailAddress;
 		userName=request.getName();
@@ -116,9 +116,9 @@ public class AuthV2Resource {
 				ret.setEmailAddress(emailAddress);
 				ret.setPassword(password);
 				dao.save(ret);
-				this.login(request);
+				return this.login(request);
 			} catch(Exception e) {
-				throw new WFRestException(401,"UserName already exist");
+				throw new WFRestException(401,e.getMessage());
 			}
 			
 		}
