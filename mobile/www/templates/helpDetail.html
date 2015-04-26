@@ -1,12 +1,12 @@
 
 <ion-view view-title="{{curGoal.title | limitTo:15}}..." id="userMessagesView" cache-view="false">
-<!--
-   <ion-nav-buttons side="right">
-    <a class="fa fa-ellipsis-h" ng-click="showListBottomSheet($event)" style="font-size:30px;margin-right:20px">
-    </a>
-   </ion-nav-buttons>
--->
-  	<ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  
+
+    <ion-nav-buttons side="right">
+        <a class="fa fa-ellipsis-h" ng-click="showListBottomSheet($event)" style="font-size:30px;margin-right:20px">
+        </a>
+    </ion-nav-buttons>
+  
+    <ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  
       <div ng-repeat="message in messages" ng-class="curUser!==message.owner?'message-others':'message-self'">
         {{message.ownerName}}:{{message.content}}
         <div wf-Log-Dom="{{message.content}}"></div>

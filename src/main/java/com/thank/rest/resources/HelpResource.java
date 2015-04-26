@@ -96,6 +96,23 @@ public class HelpResource {
 	}
 	
 	@POST
+	@Path("updateHelpInvitation" )
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Update Help Invitation",
+    	notes = "Update Help Invitation"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Service exception") })
+	public HelpSummary updateHelpInvitation(@QueryParam("user")String user,HelpSummary help) {
+		try {
+			summaryDao.updateInvitation(help);
+			return help;
+		} catch(Exception e) {
+			throw new WFRestException(500,e.getMessage());
+		}
+	}	
+	
+	@POST
 	@Path("updateHelpProgress" )
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Update Help progress",

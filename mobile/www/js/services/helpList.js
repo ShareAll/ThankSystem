@@ -11,7 +11,9 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 		add:add,
 		listBySubscriber:listBySubscriber,
 		list:list,
-		updateProgress:updateProgress
+		updateProgress:updateProgress,
+		updateInvitation:updateInvitation
+
 	};
 	function listAllCategories() {
 		return $http.get(apiBase+"/category/list");
@@ -48,6 +50,15 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 		};
 		return $http.post(apiBase+"/help/updateHelpProgress?user="+curUser.emailAddress+"&name="+curUser.name,payload);
 		
+	}
+	function updateInvitation(helpId,subscribers) {
+		var curUser=$rootScope.currentUser;
+		var payload={
+			id:helpId,
+			subscribers:subscribers
+		};
+		return $http.post(apiBase+"/help/updateHelpInvitation?user="+curUser.emailAddress,payload);
+
 	}
 
 

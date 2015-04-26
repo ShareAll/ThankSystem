@@ -2,9 +2,9 @@
 	
 	angular.module('thank.controllers.helpDetailCtrl', [])
 		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',
-      '$ionicLoading',HelpDetailCtrl]);
+      '$ionicLoading','$ionicModal','$mdDialog',HelpDetailCtrl]);
 
-	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading) {
+	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading,$ionicModal,$mdDialog) {
 	/*	var curId=0;
 		var contentElm=angular.element(document.getElementById('updates'));
 		$interval(function(){
@@ -21,6 +21,7 @@
 		},2000);
 */
 
+
 	var helpId=$stateParams.helpId;
   var curUser=$rootScope.currentUser.emailAddress;
   var curUserName=$rootScope.currentUser.name;
@@ -33,6 +34,15 @@
     var txtInput; // ^^^
     var lastCommentId="";
     $scope.messages=[];
+
+    // init edit invitation dialog
+   
+      
+      
+    
+     
+ 
+
   function refreshComment(fn) {
    
     helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,lastCommentId).then(function(resp) {
@@ -59,7 +69,6 @@
         refreshComment(function() {
           $ionicLoading.hide();
         });
-
       
       	$timeout(function() {
 	        footerBar = document.body.querySelector('#userMessagesView .bar-footer');
@@ -126,13 +135,20 @@
       $rootScope.lastUpdateTime=new Date().getTime();
       $mdBottomSheet.hide();
     };
+
+    
+
     $scope.closeHelp=function() {
       console.info("close help");
       $mdBottomSheet.hide();
     };
-    $scope.inviteMore=function() {
-      console.info("invite more");
+    $scope.editInvitation=function(ev) {
+      console.info("Edit Invitation");
       $mdBottomSheet.hide();
+      modelScope=$scope.modal_invite_more.scope;
+      modelScope.init();
+      $scope.modal_invite_more.show();
+      
     };
 
     $scope.showListBottomSheet=function($event) {
@@ -166,6 +182,52 @@
       });
     } //keepKeyboardOpen
 	
+
+    //init dialogs
+    $ionicModal.fromTemplateUrl('invite_more_to_help.html', {
+        scope:null,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+          // invite more friend to help
+          $scope.modal_invite_more = modal;
+          modal.scope.init=function(){
+            var modalScope=modal.scope;
+            modalScope.data={
+                friends:[]
+            }
+            var invites={};
+            $.each($rootScope.curGoal.subscribers,function(ind,val){
+                invites[val]=val;
+            });
+            $.each($rootScope.currentUser.friends,function(ind,val){
+                modalScope.data.friends.push({
+                  name:val,
+                  selected:invites[val]!=undefined
+                })
+            });
+          };
+          modal.scope.submit=function() {
+              console.info("click submit");
+              var subscribers=[];
+              $.each(modal.scope.data.friends,function(ind,val){
+                  if(val.selected) subscribers.push(val.name);
+              })
+              
+              helpListService.updateInvitation(helpId,subscribers)
+              .then(function SUCCESS(){
+                $rootScope.curGoal.subscribers=subscribers;
+                
+              });
+              //console.dir(modal.scope.data)
+              modal.hide(); 
+          }   
+          modal.scope.close=function() {
+              console.info("close dlg");
+              modal.hide(); 
+          }
+          console.dir(modal);     
+    });
+
 
 		
 } //HelpDetailCtrl
