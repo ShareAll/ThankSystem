@@ -10,8 +10,9 @@ import com.thank.config.MongoConfig;
 import com.thank.config.ThankConfig;
 
 public class MongoUtil {
-	public MongoClient getMongoClient(MongoClient mongoClient,String dbName) {
+	public static MongoClient getMongoClient(MongoClient mongoClient,String dbName) {
 		MongoConfig config=ThankConfig.instance().mongoConfig;
+		if(dbName==null) dbName=config.getDbName();
 		try {
 			if (mongoClient == null){
 				ServerAddress sd = new ServerAddress(config.getHostName(), config.getPort());
@@ -26,6 +27,11 @@ public class MongoUtil {
 			e.printStackTrace();
 		}
 		return mongoClient;
+	}
+	public static DB getMongoDb(MongoClient client,String dbName) {
+		MongoConfig config=ThankConfig.instance().mongoConfig;
+		if(dbName==null) dbName=config.getDbName();
+		return getMongoClient(client,dbName).getDB(dbName);
 	}
 	DB db;
 	public MongoUtil(MongoClient client,String dbName) {

@@ -2,12 +2,20 @@ package com.thank.common.dao;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
+
 import com.mongodb.MongoClient;
 import com.thank.common.model.DeviceAuthInfo;
 import com.thank.common.model.DeviceSignUpVo;
+import com.thank.common.model.HelpSummary;
 import com.thank.common.model.LoginException;
 import com.thank.common.model.UserInfo;
 import com.thank.common.model.UserNotExistException;
+import com.thank.common.model.UserSummaryVo;
 /***
  * User DAO to query user info and login and signup
  * @author fenwang
@@ -21,7 +29,6 @@ public class UserDao extends AbstractDao<UserInfo> {
 		public DeviceAuthInfo getByDeviceId(String deviceId) {
 			return this.findOne("deviceId", deviceId);
 		}
-		
 	}
 	DeviceAuthDao deviceDao=null;
 	public UserDao(MongoClient client, String dbName, Class<UserInfo> cls) {
@@ -54,6 +61,27 @@ public class UserDao extends AbstractDao<UserInfo> {
 		return this.findOne("emailAddress",deviceSignUp.getEmailAddress());
 		
 	}
+	
+	public void addFriend(String emailAddress,String friend) {
+		Query<UserInfo> query=this.createQuery().filter("emailAddress", emailAddress);
+		UpdateOperations<UserInfo> op = dao.createUpdateOperations().add("contactList", friend);
+		dao.updateFirst(query, op);
+	}
+	
+	public List<UserSummaryVo> getFriends(String emailAddress) {
+		UserInfo user=this.getByEmaiAddress(emailAddress);
+		Query<UserInfo> query=this.createQuery().filter("emailAddress in", user.getContactList())
+				.retrievedFields(true, "name","emailAddress");
+		List<UserInfo> users=this.find(query).asList();
+		List<UserSummaryVo> ret=new ArrayList<UserSummaryVo>();
+		if(users!=null) {
+			for(UserInfo userItem:users) {
+				ret.add(new UserSummaryVo(userItem));
+			}
+		}
+		return ret;
+	}
+	
 	public UserInfo addScore(String emailAddress,int delta) {
 		UserInfo user=this.findOne("emailAddress", emailAddress);
 		if(user==null) return null;

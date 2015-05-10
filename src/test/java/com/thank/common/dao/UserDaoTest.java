@@ -1,10 +1,13 @@
 package com.thank.common.dao;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.thank.common.dao.UserDao;
 import com.thank.common.model.LoginException;
 import com.thank.common.model.UserInfo;
+import com.thank.common.model.UserSummaryVo;
 
 public class UserDaoTest {
 	@Test
@@ -33,6 +36,15 @@ public class UserDaoTest {
 			
 		}
 
+	}
+	@Test
+	public void testGetFriends() {
+		UserDao dao=new UserDao(null,null,UserInfo.class);
+		List<UserSummaryVo> friends=dao.getFriends("fenwang@ebay.com");
+		for(UserSummaryVo friend:friends) {
+			System.out.println(friend);
+			System.out.println(friend.name+":"+friend.emailAddress);
+		}
 	}
 	@Test
 	public void delete(){
