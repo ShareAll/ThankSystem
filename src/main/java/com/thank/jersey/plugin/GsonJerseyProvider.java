@@ -24,11 +24,9 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class GsonJerseyProvider implements MessageBodyWriter<Object>,
-		MessageBodyReader<Object> {
-
+public class GsonJerseyProvider implements MessageBodyWriter<Object>,MessageBodyReader<Object> {
 	private static final String UTF_8 = "UTF-8";
-
+	
 	@Override
 	public boolean isReadable(Class<?> type, Type genericType,
 			java.lang.annotation.Annotation[] annotations, MediaType mediaType) {

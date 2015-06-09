@@ -1,0 +1,52 @@
+<ion-view view-title="Friends">
+ 
+  <ion-content>
+    <div class="list list-inset">
+      <label class="item item-input" style="width:80%">     
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="email" ng-model="friend_email" placeholder="Find Friend">
+          
+      </label>
+      <button style="position: absolute;right: 10px;top: 0px;" ng-click="addFriend($event,friend_email)" class="button icon ion-person-add"></button>
+      
+    </div>
+
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab md-on-select="refreshTab(true)"label="Friend Request">
+        <md-content class="md-padding"> 
+
+          <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in friend_requests">
+              <img ng-src="{{item.requester | f_photo}}" class="md-avatar" alt="{{item.who}}" />
+              <div class="md-list-item-text">
+                <h4>{{item.requester_name}}</h4>
+                <p>{{item.requester}}</p>
+              </div>
+              <a class="item-content button icon-right ion-chevron-right button-calm"" ng-click="accept(item.requester)">Accept</a>
+            </md-list-item>
+          </md-list>
+        </md-content>
+      </md-tab>
+      <md-tab md-on-select="refreshTab(false)" label="My Friends">
+        <md-content class="md-padding">
+          
+          <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in friends">
+              <img ng-src="{{item.emailAddress | f_photo}}" class="md-avatar" alt="{{item.who}}" />
+              <div class="md-list-item-text">
+                <h4>{{item.name}}</h4>
+                <p>{{item.emailAddress}}}</p>
+              </div>
+             
+            </md-list-item>
+          </md-list>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+    
+
+  </ion-content>
+
+</ion-footer-bar>
+
+</ion-view>

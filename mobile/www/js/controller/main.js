@@ -6,8 +6,8 @@
 		'thank.controllers.deviceCheckCtrl',
 		'thank.controllers.helpListCtrl',
 		'thank.controllers.helpDetailCtrl',
-		'thank.controllers.todoCtrl',
-		'thank.controllers.todoDetailCtrl'
+        'thank.controllers.friendCtrl',
+		'thank.controllers.settingCtrl'
 	]);
 
 })();

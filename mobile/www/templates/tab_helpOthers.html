@@ -1,0 +1,26 @@
+<ion-view view-title="Help Others">
+    <ion-content>
+      <ion-list>
+
+        <ion-item class="item-avatar" ng-repeat="help in helpList" type="item-text-wrap" href="#/helpList/{{help.id}}" ng-click="setCurGoal(help,false)">
+            <div style="position:absolute;left:10px">
+                <!--User picture-->
+                <img style="width:50px;height:50px" ng-src="{{help.owner | f_photo}}"  alt="" >
+            </div>
+            
+            <h2>{{help.title}}</h2>
+            <div class="row" style="width:100%">
+                <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
+                    <i class="icon ion-person-stalker"></i>
+                    <span class="badge badge-positive" style="font-size:10px;top:5px">{{help.subscribers.length}}</span>
+                </div>
+                <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
+                    <i class="icon ion-android-chat"></i>
+                    <span class="badge badge-positive" style="font-size:10px;top:5px">{{help.comments}}</span>
+                </div>  
+            </div>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+</ion-view>

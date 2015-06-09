@@ -5,15 +5,20 @@
    </ion-nav-buttons>
 
   <ion-content>
-    <ion-list>
+    <ion-list can-swipe='true'>
 
       <ion-item class="item-avatar" ng-repeat="help in helpList" type="item-text-wrap" href="#/app/helpList/{{help.id}}" ng-click="setCurGoal(help)">
-        <div style="position:absolute;left:10px"><!--Donut chart-->
-          <div data-dimension="50" data-text="{{help.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{help.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
+        <div style="position:absolute;left:10px">
+          <!--Donut chart-->
+          <div ng-if="view.tab_myhelp" data-dimension="50" data-text="{{help.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{help.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
+          <!--User picture-->
+          <img  ng-if="!view.tab_myhelp" style="width:50px;height:50px" ng-src="{{help.owner | f_photo}}"  alt="" >
         </div>
         <!--
         <img ng-src="{{goal.img}}">-->
-        <h4>{{help.title}}</h4>
+        <h2>{{help.title}}</h2>
+        <h4>{{help.lastComment}}</h4>
+        <!--
         <div class="row" style="width:100%">
           <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
             <i class="icon ion-person-stalker"></i>
@@ -24,19 +29,33 @@
             <span class="badge badge-positive" style="font-size:10px;top:5px">{{help.comments}}</span>
           </div>  
         </div>
+      -->
+        <ion-option-button class="button-positive" ng-click="edit(item)">
+              Edit
+        </ion-option-button>
       </ion-item>
     </ion-list>
 
   </ion-content>
 
 
-<ion-footer-bar align-title="left" class="bar-positive" style="height:57px">
+<ion-footer-bar align-title="left" class="bar-positive" style="height:65px">
   <section layout="row" layout-sm="row" layout-align="center center" style="width:100%">
       <md-button class="md-icon-button md-primary bottom-tab-button" ng-class="view.tab_myhelp?'active':'none'" aria-label="Help List" style="width:50%;height:90%" ng-click="changeTab(true)">
         <i class="fa fa-list-ol" ng-class='action.icon' style='font-size:30px'></i>
+        <p style="line-height:10px;font-size:10px">Help Me</p>
       </md-button>
       <md-button class="md-icon-button md-accent bottom-tab-button" aria-label="Supports" ng-class="view.tab_myhelp?'none':'active'" style="width:50%;height:90%" ng-click="changeTab(false)">
         <i class="fa fa-users" ng-class='action.icon' style='font-size:30px'></i>
+        <p style="line-height:10px;font-size:10px">Helo Others</p>
+      </md-button>
+      <md-button class="md-icon-button md-primary bottom-tab-button" ng-class="view.tab_myhelp?'active':'none'" aria-label="Help List" style="width:50%;height:90%" ng-click="changeTab(true)">
+        <i class="fa fa-users" ng-class='action.icon' style='font-size:30px'></i>
+        <p style="line-height:10px;font-size:10px">Friends</p>
+      </md-button>
+      <md-button class="md-icon-button md-primary bottom-tab-button" ng-class="view.tab_myhelp?'active':'none'" aria-label="Help List" style="width:50%;height:90%" ng-click="changeTab(true)">
+        <i class="fa fa-male" ng-class='action.icon' style='font-size:30px'></i>
+        <p style="line-height:10px;font-size:10px">Me</p>
       </md-button>
   </section>
       

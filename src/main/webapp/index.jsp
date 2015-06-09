@@ -3,7 +3,8 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 </head>
 <body ng-controller="mainCtrl">
-<div ng-if="auth"> 
+<div ng-if="auth">
+	<img src="rest/photo/signup"></img>
 	<h2>Welcome, {{auth.name}}</h2>
 	<form action="rest/auth/logout" method="post">
 		<button type="submit">Logout</button>

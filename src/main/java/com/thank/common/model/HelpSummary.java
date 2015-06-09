@@ -17,7 +17,15 @@ public class HelpSummary implements Serializable {
 	public long categoryId;
 	public @Indexed String owner;
 	public String title;
+	public String lastCommentId="";
+	public String lastComment="";
+	public String lastCommenter="";
+	public int privacy=PRIVACY_PUBLIC;
 	public int completeness=0;
 	public Set<String> subscribers=new HashSet<String>();
 	public int comments=0;
+	
+	public  final static int PRIVACY_PUBLIC=1;
+	public  final static int PRIVACY_PRIVATE=2;
+	
 }

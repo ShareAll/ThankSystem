@@ -1,0 +1,26 @@
+<ion-view view-title="Settings">
+  <ion-content>
+    <form>
+       <md-list>
+          <md-list-item class="md-3-line">
+              <img id="myPhoto" style="width:60px;height:60px;margin-right:30px" ng-src="{{photo_src}}" alt="">
+              <a class="fa fa-camera-retro" style="font-size:50px;margin-right:20px" ng-click="getPhoto(true)"></a>
+              <a class="fa fa-folder-open-o" style="font-size:50px;" ng-click="getPhoto(false)"></a>
+          </md-list-item>
+      </md-list>
+      <md-list role="list" class="md-default-theme">
+          <label class="item item-input">
+              <span class="input-label">Name</span>
+              <input type="text" ng-model="setting.name" wf-text-lower>
+          </label>
+      </md-list>
+      <md-list role="list" class="md-default-theme">
+          <label class="item-input">
+              <button class="button button-block button-positive" type="submit" style="margin-right:20px" ng-click="update($event)">Submit</button>
+          </label>     
+      </md-list>
+     
+    </form>
+    
+  </ion-content>
+</ion-view>

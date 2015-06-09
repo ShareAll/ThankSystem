@@ -49,24 +49,28 @@
     <script src="js/common/common.js"></script>
     <script src="lib/autolinker/autolinker.min.js"></script>
     <!-- all controllers-->
-    <script src="js/controllers.js"></script>
     <script src="js/controller/login.js"></script>  
     <script src="js/controller/signup.js"></script> 
     <script src="js/controller/deviceCheckCtrl.js"></script>
-    <script src="js/controller/todoCtrl.js"></script>
+    <script src="js/controller/friendCtrl.js"></script>
     <script src="js/controller/detailCtrl.js"></script>
     <script src="js/controller/helpList.js"></script>
     <script src="js/controller/helpDetail.js"></script>
+    <script src="js/controller/settingCtrl.js"></script>
     <script src="js/controller/main.js"></script>
     <!-- all services in real -->
     <script src="js/services/facebook.js"></script>
     <script src="js/services/todo.js"></script>
     <script src="js/services/login.js"></script>
+    <script src="js/services/friendRequest.js"></script>
     <script src="js/services/card.js"></script> 
     <script src="js/services/deviceCheck.js"></script>
     <script src="js/services/helpList.js"></script>
     <script src="js/services/helpDetail.js"></script>    
+    <script src="js/services/photo.js"></script>
+    <script src="js/services/profile.js"></script>
     <script src="js/services/main.js"></script>
+
     
     <!-- all services in mock 
     <script src="js/mock_services/facebook.js"></script>
@@ -80,7 +84,12 @@
     -->
   </head>
 
-  <body ng-app="starter">
+  <body ng-app="jikarma">
+    <ion-nav-bar class="bar-stable" back-button-type="button-icon" back-button-icon="ion-arrow-left-c">
+      <!--<ion-nav-back-button>
+      </ion-nav-back-button>-->
+    </ion-nav-bar>
+ 
     <ion-nav-view></ion-nav-view>
     <div ng-include="'templates/common.html'"></div>
     <div ng-include="'templates/dlg/common_dlgs.html'"></div>

@@ -9,13 +9,14 @@ function HelpDetailService($http,$interval,$timeout,$q,$location,apiBase,$ionicP
 		listComment:listComment,
 		sendComment:sendComment
 	};
-	function listComment(owner,helpId,user,lastCommentId) {
+	function listComment(owner,helpId,user,privacy,lastCommentId) {
 		
 		return $http.get(apiBase+"/help/listComment",{
 			params: {
 				owner:owner,
             	user:user,
             	helpId: helpId,
+            	privacy:privacy,
             	lastCommentId:lastCommentId,
         	}
         });

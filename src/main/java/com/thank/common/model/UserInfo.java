@@ -28,6 +28,7 @@ public class UserInfo implements Serializable{
 	private @Indexed(unique=true) String name;
 	private @Indexed String password;
 	private @Indexed(unique=true) String emailAddress;
+	private @Indexed String cacheId;
 	//personal contact list
 	private @Indexed Set<String> contactList = new HashSet<String>();
 	private int score=1000;
@@ -50,6 +51,7 @@ public class UserInfo implements Serializable{
 		this.password=user.password;
 		this.emailAddress=user.emailAddress;
 		this.score=user.score;
+		this.cacheId=user.cacheId;
 		this.contactList.addAll(user.getContactList());
 	}
 	public void setContactList(Set<String> contact) {
@@ -96,6 +98,12 @@ public class UserInfo implements Serializable{
 	}
 
 
+	public String getCacheId() {
+		return cacheId;
+	}
+	public void setCacheId(String cacheId) {
+		this.cacheId = cacheId;
+	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

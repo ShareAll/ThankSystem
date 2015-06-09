@@ -7,7 +7,10 @@
 		'thank.services.helpDetailService',
 		'thank.services.todoService',
 		'thank.services.deviceCheckService',
-		'thank.services.facebookService'
+		'thank.services.friendRequestService',
+		'thank.services.facebookService',
+		'thank.services.profileService',
+		'thank.services.photoService'
 	]);
 
 })();

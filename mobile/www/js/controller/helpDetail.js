@@ -45,12 +45,24 @@
 
   function refreshComment(fn) {
    
-    helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,lastCommentId).then(function(resp) {
+    helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,$rootScope.curGoal.privacy,lastCommentId).then(function(resp) {
         if(resp.data) {
-          $.each(resp.data,function(ind,val) {
-            $scope.messages.push(val);
-            lastCommentId=val.id;
-          });
+          console.dir(resp.data);
+          if(resp.data.comments) {
+              $.each(resp.data.comments,function(ind,val) {
+                if(val.id>lastCommentId) {
+                  $scope.messages.push(val);
+                  lastCommentId=val.id;
+                }
+              });            
+          }
+          if(resp.data.users) {
+            //rebuild friend map
+            $rootScope.friendMap={};
+            $.each(resp.data.users,function(ind,val) {
+                $rootScope.friendMap[val.emailAddress]=val;
+            });
+          }
         }
         
     }).finally(function(){
@@ -201,8 +213,9 @@
             });
             $.each($rootScope.currentUser.friends,function(ind,val){
                 modalScope.data.friends.push({
-                  name:val,
-                  selected:invites[val]!=undefined
+                  name:val.name,
+                  emailAddress:val.emailAddress,
+                  selected:invites[val.emailAddress]!=undefined
                 })
             });
           };
@@ -210,7 +223,7 @@
               console.info("click submit");
               var subscribers=[];
               $.each(modal.scope.data.friends,function(ind,val){
-                  if(val.selected) subscribers.push(val.name);
+                  if(val.selected) subscribers.push(val.emailAddress);
               })
               
               helpListService.updateInvitation(helpId,subscribers)
@@ -225,7 +238,7 @@
               console.info("close dlg");
               modal.hide(); 
           }
-          console.dir(modal);     
+          //console.dir(modal);     
     });
 
 

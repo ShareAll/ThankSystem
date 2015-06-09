@@ -9,6 +9,7 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 	return {
 		listAllCategories:listAllCategories,
 		add:add,
+		update:update,
 		listBySubscriber:listBySubscriber,
 		list:list,
 		updateProgress:updateProgress,
@@ -24,11 +25,23 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 		var curUser=$rootScope.currentUser;
 		var payload={
 			"title": goalData.title,
+			"privacy":goalData.privacy,
 			"categoryId":goalData.categoryId,
   			"subscribers": goalData.subscribers
 		};
-		return $http.post(apiBase+"/help/createHelp?user="+curUser.emailAddress,payload);
-		
+		return $http.post(apiBase+"/help/createHelp?user="+curUser.emailAddress,payload);	
+	}	
+	function update(helpId,goalData) {	
+		var curUser=$rootScope.currentUser;
+		var payload={
+			"id": helpId,
+			"title": goalData.title,
+			"privacy":goalData.privacy,
+			"categoryId":goalData.categoryId,
+  			"subscribers": goalData.subscribers
+		};
+		console.dir(payload);
+		return $http.post(apiBase+"/help/updateHelp?user="+curUser.emailAddress,payload);	
 	}	
 	function listBySubscriber() {
 		var curUser=$rootScope.currentUser;

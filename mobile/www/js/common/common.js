@@ -1,12 +1,14 @@
 (function() {
 
 angular.module('thank.common',[])
-	.filter('nl2br', ['$sce',nl2brFilter])
+    .filter('nl2br', ['$sce',nl2brFilter])
+    .filter('f_username',['$rootScope',userNameFilter])
+    .filter('f_photo',['$rootScope','apiBase',photoAddr])
 	.directive('autolinker', ['$timeout',AutoLinkerDirective])
-  .directive('wfTextLower',['$parse',WfTextLower])
-  .directive('wfLogDom',[WfLogDom])
-  .directive('wfMatch',['$parse',WfMatch])
-  .directive('fancySelect',['$ionicModal',FancySelect])
+    .directive('wfTextLower',['$parse',WfTextLower])
+    .directive('wfLogDom',[WfLogDom])
+    .directive('wfMatch',['$parse',WfMatch])
+    .directive('fancySelect',['$ionicModal',FancySelect])
 
 function nl2brFilter($sce){
 	return function(msg,is_xhtml) { 
@@ -17,10 +19,30 @@ function nl2brFilter($sce){
 	 }
 } //end nl2br filter
 
+function userNameFilter($rootScope) { 
+    return function(emailAddr) {
+        var currentUser=$rootScope.currentUser;
+        var friendMap=$rootScope.friendMap;
+        if(emailAddr==currentUser.emailAddress) return "me";
+        else {
+            if(friendMap[emailAddr]) return friendMap[emailAddr].name;
+            return emailAddr;
+        }
+    }
+}
 
+function photoAddr($rootScope,apiBase) { 
+    return function(emailAddr) {
+        var currentUser=$rootScope.currentUser;
+
+        
+        if(!emailAddr) emailAddr="default";
+        // return apiBase+"/photo?key="+(emailAddr.replace("@","_").replace(".","_"));
+        return apiBase+"/photo?key="+encodeURIComponent(emailAddr)+"&cacheId="+$rootScope.cacheId
+    }
+}
 
 // directives
-
 function AutoLinkerDirective($timeout) {
     return {
       restrict: 'A',
@@ -124,146 +146,111 @@ function WfMatch($parse) {
 
 function FancySelect($ionicModal) {
     return {
-      /* Only use as <fancy-select> tag */
-      restrict : 'E',
-      /* Our template */
-      templateUrl: 'fancy-select.html',
-      /* Attributes to set */
-      scope: {
+        /* Only use as <fancy-select> tag */
+        restrict : 'E',
+        /* Our template */
+        templateUrl: 'fancy-select.html',
+        /* Attributes to set */
+        scope: {
             'items'        : '=', /* Items list is mandatory */
             'text'         : '=', /* Displayed text is mandatory */
-            'value'        : '=', /* Selected value binding is mandatory */
-            'callback'     : '&'
-      },
+            'value'        : '='/* Selected value binding is mandatory */
+            
+        },
 
-      link: function (scope, element, attrs) {
+        link: function (scope, element, attrs) {
+            /* Default values */
+            scope.multiSelect   = attrs.multiSelect === 'true' ? true : false;
+            scope.allowEmpty    = attrs.allowEmpty === 'false' ? false : true;
+            scope.$watch("modal.scope.text",function(newVal,oldVal) {
+                console.info("newVal="+newVal);
+            });
+            /* Header used in ion-header-bar */
+            scope.headerText    = attrs.headerText || '';
 
-                    /* Default values */
-                    scope.multiSelect   = attrs.multiSelect === 'true' ? true : false;
-                    scope.allowEmpty    = attrs.allowEmpty === 'false' ? false : true;
+            /* Text displayed on label */
+            // scope.text          = attrs.text || '';
+            scope.defaultText   = scope.text || '';
 
-                    /* Header used in ion-header-bar */
-                    scope.headerText    = attrs.headerText || '';
+            /* Notes in the right side of the label */
+            scope.noteText      = attrs.noteText || '';
+            scope.noteImg       = attrs.noteImg || '';
+            scope.noteImgClass  = attrs.noteImgClass || '';
 
-                    /* Text displayed on label */
-                    // scope.text          = attrs.text || '';
-                    scope.defaultText   = scope.text || '';
+            $ionicModal.fromTemplateUrl( 'fancy-select-items.html',
+                {'scope': scope}
+            ).then(function(modal) {
+                scope.modal = modal;
+            });
 
-                    /* Notes in the right side of the label */
-
-                    scope.noteText      = attrs.noteText || '';
-                    scope.noteImg       = attrs.noteImg || '';
-                    scope.noteImgClass  = attrs.noteImgClass || '';
-
-                    
-                    /* Optionnal callback function */
-                    // scope.callback = attrs.callback || null;
-
-                    /* Instanciate ionic modal view and set params */
-
-                    /* Some additionnal notes here : 
-                     * 
-                     * In previous version of the directive,
-                     * we were using attrs.parentSelector
-                     * to open the modal box within a selector. 
-                     * 
-                     * This is handy in particular when opening
-                     * the "fancy select" from the right pane of
-                     * a side view. 
-                     * 
-                     * But the problem is that I had to edit ionic.bundle.js
-                     * and the modal component each time ionic team
-                     * make an update of the FW.
-                     * 
-                     * Also, seems that animations do not work 
-                     * anymore.
-                     * 
-                     */
-                    $ionicModal.fromTemplateUrl(
-                        'fancy-select-items.html',
-                          {'scope': scope}
-                    ).then(function(modal) {
-                        scope.modal = modal;
+            /* Validate selection from header bar */
+            scope.validate = function (event) {
+                // Construct selected values and selected text
+                if (scope.multiSelect == true) {
+                    // Clear values
+                    scope.value = '';
+                    scope.text = '';
+                    // Loop on items
+                    jQuery.each(scope.items, function (index, item) {
+                        if (item.checked) {
+                            scope.value = scope.value + item.id+';';
+                            scope.text = scope.text + item.text+', ';
+                        }
                     });
+                    // Remove trailing comma
+                    scope.value = scope.value.substr(0,scope.value.length - 1);
+                    scope.text = scope.text.substr(0,scope.text.length - 2);
+                }
 
-                    /* Validate selection from header bar */
-                    scope.validate = function (event) {
-                        // Construct selected values and selected text
-                        if (scope.multiSelect == true) {
+                // Select first value if not nullable
+                if (typeof scope.value == 'undefined' || scope.value == '' || scope.value == null ) {
+                    if (scope.allowEmpty == false) {
+                        scope.value = scope.items[0].id;
+                        scope.text = scope.items[0].text;
 
-                            // Clear values
-                            scope.value = '';
-                            scope.text = '';
+                        // Check for multi select
+                        scope.items[0].checked = true;
+                    } else {
+                        scope.text = scope.defaultText;
+                    }
+                }
 
-                            // Loop on items
-                            jQuery.each(scope.items, function (index, item) {
-                                if (item.checked) {
-                                    scope.value = scope.value + item.id+';';
-                                    scope.text = scope.text + item.text+', ';
-                                }
-                            });
-
-                            // Remove trailing comma
-                            scope.value = scope.value.substr(0,scope.value.length - 1);
-                            scope.text = scope.text.substr(0,scope.text.length - 2);
-                        }
-
-                        // Select first value if not nullable
-                        if (typeof scope.value == 'undefined' || scope.value == '' || scope.value == null ) {
-                            if (scope.allowEmpty == false) {
-                                scope.value = scope.items[0].id;
-                                scope.text = scope.items[0].text;
-
-                                // Check for multi select
-                                scope.items[0].checked = true;
-                            } else {
-                                scope.text = scope.defaultText;
-                            }
-                        }
-
-                        // Hide modal
-                        scope.hideItems();
+                // Hide modal
+                scope.hideItems();
                         
-                        // Execute callback function
-                        if (typeof scope.callback == 'function') {
-                            scope.callback (scope.value);
-                        }
-                    }
+               
+            } //scope.validate
 
-                    /* Show list */
-                    scope.showItems = function (event) {
-                        event.preventDefault();
-                        scope.modal.show();
-                    }
+            /* Show list */
+            scope.showItems = function (event) {
+                event.preventDefault();
+                scope.modal.show();
+            }
 
-                    /* Hide list */
-                    scope.hideItems = function () {
-                        scope.modal.hide();
-                    }
+            /* Hide list */
+            scope.hideItems = function () {
+                scope.modal.hide();
+            }
+            
+            /* Destroy modal */
+            scope.$on('$destroy', function() {
+                scope.modal.remove();
+            });
 
-                    /* Destroy modal */
-                    scope.$on('$destroy', function() {
-                      scope.modal.remove();
-                    });
+            /* Validate single with data */
+            scope.validateSingle = function (item) {
+                // Set selected text
+                scope.text = item.text;
+                // Set selected value
+                scope.value = item.id;
 
-                    /* Validate single with data */
-                    scope.validateSingle = function (item) {
-
-                        // Set selected text
-                        scope.text = item.text;
-                        // Set selected value
-                        scope.value = item.id;
-
-                        // Hide items
-                        scope.hideItems();
+                // Hide items
+                scope.hideItems();
                         
-                        // Execute callback function
-                        if (typeof scope.callback == 'function') {
-                            scope.callback (scope.value);
-                        }
-                    } //scope.validateSingle
-                } //end of link
-        }; //end of return
+                
+            } //scope.validateSingle
+        } //end of link
+    }; //end of return
 }// end of FancySelect
 
 

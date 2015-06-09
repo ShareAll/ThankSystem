@@ -3,6 +3,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 </head>
 <body ng-controller="signupCtrl">
+<img src="rest/photo/signup"></img>
 <h2>Signup</h2>
 <form method="POST" ng-submit="submit()">
 	<p ng-show="loginError"> {{loginError}}</p>

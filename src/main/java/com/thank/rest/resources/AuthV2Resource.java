@@ -43,17 +43,25 @@ public class AuthV2Resource {
 	UserDao dao=new UserDao(null,null,UserInfo.class);
 	
 	@GET
+	@Path("currentUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "get User",
     	notes = "get User",
-    	response = UserSummaryVo.class
+    	response = UserFriendInfo.class
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 404, message = "User not found") })
-	public UserSummaryVo getCurrentUser() {
-		UserContextUtil.authenticate(request);
-		UserInfo ret=UserContextUtil.getCurUser(request);
-		return new UserSummaryVo(ret);	
+	public UserFriendInfo getCurrentUser(@QueryParam("user")String user) {
+		UserFriendInfo ret=null;
+		try {
+			ret=new UserFriendInfo(dao.getByEmaiAddress(user));
+			ret.setPassword(null);
+			ret.friends=dao.getFriends(user);
+			return ret;
+		} catch(Exception e) {
+			throw new WFRestException(404,e.getMessage());
+		}
+		
 	}
 	
 	
@@ -69,6 +77,17 @@ public class AuthV2Resource {
 		response.sendRedirect(contextPath+"/welcome.jsp");
 	}
 	
+	public static class UserFriendInfo extends UserInfo {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3089799237454896246L;
+		public List<UserSummaryVo> friends=null;
+		public UserFriendInfo() {}
+		public UserFriendInfo(UserInfo info) {
+			super(info);
+		}
+	}
 	
 	
 	@POST
@@ -81,8 +100,8 @@ public class AuthV2Resource {
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 404, message = "User not found Or Password is wrong") })
-	public  UserInfo login(UserInfo user) throws IOException {	
-		UserInfo ret=null;
+	public  UserFriendInfo login(UserInfo user) throws IOException {	
+		UserFriendInfo ret=null;
 		String authErrorMsg="User not found Or Password is wrong";
 		if(request==null) throw new WFRestException(404,authErrorMsg);
 		String emailAddress=user.getEmailAddress();
@@ -90,10 +109,12 @@ public class AuthV2Resource {
 		
 		if(emailAddress==null || password==null) throw new WFRestException(404,authErrorMsg);
 		try {
-			ret=dao.login(emailAddress,password);
+			ret=new UserFriendInfo(dao.login(emailAddress,password));
+			ret.friends=dao.getFriends(emailAddress);
 			UserContextUtil.saveInSession(request, ret);
 			return ret;
 		} catch(Exception e) {
+			e.printStackTrace();
 			throw new WFRestException(404,authErrorMsg);
 		}
 	}
@@ -123,6 +144,7 @@ public class AuthV2Resource {
 				dao.save(ret);
 				return this.login(request);
 			} catch(Exception e) {
+				e.printStackTrace();
 				throw new WFRestException(401,e.getMessage());
 			}
 			
@@ -145,9 +167,9 @@ public class AuthV2Resource {
 		boolean updateResult = false;
 		try {
 			updateResult  = dao.resetPassword(emailAddress, password);
-			} catch(Exception e) {
-				throw new WFRestException(401,"Email address '"+emailAddress+"' does not exist");
-			}
+		} catch(Exception e) {
+			throw new WFRestException(401,"Email address '"+emailAddress+"' does not exist");
+		}
 		if (!updateResult){
 			throw new WFRestException(401,"Email address '"+emailAddress+"' does not exist");
 		}

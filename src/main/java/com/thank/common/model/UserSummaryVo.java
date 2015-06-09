@@ -8,6 +8,7 @@ public class UserSummaryVo {
 
 	public String name;
 	public String emailAddress;
+	public String cacheId;
 
 	public UserSummaryVo() {
 
@@ -15,6 +16,7 @@ public class UserSummaryVo {
 	public UserSummaryVo(UserInfo user) {
 		this.name=user.getName();
 		this.emailAddress=user.getEmailAddress();
+		this.cacheId=user.getCacheId();
 	}
 
 }

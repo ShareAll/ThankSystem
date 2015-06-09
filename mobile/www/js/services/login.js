@@ -2,16 +2,28 @@
 
 
 angular.module('thank.services.loginService',[])
-	.factory('loginService',['$http','$timeout','$q','$location','apiBase','$ionicPlatform',
+	.factory('loginService',['$http','$timeout','$q','$rootScope','$location','apiBase','$ionicPlatform',
 		'$ionicHistory','$state',LoginService]);
 
-function LoginService($http,$timeout,$q,$location,apiBase,$ionicPlatform,$ionicHistory,$state) {
+function LoginService($http,$timeout,$q,$rootScope,$location,apiBase,$ionicPlatform,$ionicHistory,$state) {
 	return {
 		autoLogin:autoLogin,
 		signUp:signUp,
-		deviceSignUp:deviceSignUp
+		deviceSignUp:deviceSignUp,
+		getCurrentUser:getCurrentUser
 	};
-
+	function getCurrentUser() {
+		if($rootScope.currentUser) {
+			return $http.get(apiBase+"/auth2/currentUser?user="+$rootScope.currentUser.emailAddress);	
+		} else {
+			return $q(function(resolve,reject){
+				reject({
+					data:{"status":"not login"}
+				});
+			})
+		}
+		
+	}
 	function autoLogin() {
 		return $q(function(resolve,reject) {
 			$ionicPlatform.ready(function() {

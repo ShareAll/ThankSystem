@@ -1,5 +1,6 @@
 package com.thank.rest.resources;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.common.dao.UserDao;
 import com.thank.common.model.HelpComment;
 import com.thank.common.model.HelpSummary;
+import com.thank.common.model.UserInfo;
+import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
 import com.thank.topic.dao.HelpCommentDao;
 import com.thank.topic.dao.HelpSummaryDao;
@@ -38,6 +42,7 @@ public class HelpResource {
 	@Context private HttpServletResponse response;
 	HelpSummaryDao summaryDao=new HelpSummaryDao(null,null,HelpSummary.class);
 	HelpCommentDao commentDao=new HelpCommentDao(null,null,HelpComment.class);
+	UserDao userDao=new UserDao(null,null,UserInfo.class);
 	@GET
 	@Path("list" )
 	@Produces(MediaType.APPLICATION_JSON)
@@ -50,7 +55,9 @@ public class HelpResource {
 		try {
 			//UserInfo curUser=UserContextUtil.getCurUser(request);
 			//if(curUser==null) throw new RuntimeException("Please login first");	
-			return summaryDao.listSummaryByOwner(user);
+			
+			List<HelpSummary> ret= summaryDao.listSummaryByOwner(user);
+			return ret;
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
 		}
@@ -86,6 +93,27 @@ public class HelpResource {
 			//UserInfo curUser=UserContextUtil.getCurUser(request);
 			//if(curUser==null) throw new RuntimeException("Please login first");
 			help.id=IDGenerator.genId();
+			help.owner=user;//curUser.getEmailAddress();
+			help.lastCommenter=user;
+			summaryDao.save(help);
+			return help;
+		} catch(Exception e) {
+			throw new WFRestException(500,e.getMessage());
+		}
+	}
+	@POST
+	@Path("updateHelp" )
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "update help",
+    	notes = "update help"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Service exception") })
+	public HelpSummary updateHelp(@QueryParam("user")String user,HelpSummary help) {
+		try {
+			//UserInfo curUser=UserContextUtil.getCurUser(request);
+			//if(curUser==null) throw new RuntimeException("Please login first");
+			if(help.id==null || help.id.length()==0) throw new RuntimeException("Not valid help id");
 			help.owner=user;//curUser.getEmailAddress();
 		
 			summaryDao.save(help);
@@ -139,6 +167,10 @@ public class HelpResource {
 		}
 	}	
 	
+	public static class ListCommentResponse {
+		public List<HelpComment> comments;
+		public List<UserSummaryVo> users;
+	}
 	@GET
 	@Path("listComment" )
 	@Produces(MediaType.APPLICATION_JSON)
@@ -147,13 +179,25 @@ public class HelpResource {
     	)
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 500, message = "Service exception") })
-	public List<HelpComment> listComments(@QueryParam("owner")String owner,@QueryParam("user")String user,@QueryParam("helpId")String helpId,@QueryParam("lastCommentId") String lastCommentId) {
+	public ListCommentResponse listComments(@QueryParam("owner")String owner,@QueryParam("user")String user,@QueryParam("helpId")String helpId,@QueryParam("privacy") int privacy,@QueryParam("lastCommentId") String lastCommentId) {
 		try {
 			//UserInfo curUser=UserContextUtil.getCurUser(request);
 			//if(curUser==null) throw new RuntimeException("Please login first");
 			//HelpSummary summary=summaryDao.getById(helpId);
 			//if(summary==null) throw new RuntimeException("No help with id "+helpId);
-			return commentDao.listComments(helpId,owner, user,lastCommentId);
+			ListCommentResponse ret=new ListCommentResponse();
+			if(lastCommentId==null || lastCommentId.length()==0) {
+				//need to return help subscribers map
+				HelpSummary summary=summaryDao.getById(helpId);
+				List<String> userList=new ArrayList<String>();
+				if(!summary.subscribers.isEmpty()) 
+					userList.addAll(summary.subscribers);
+				userList.add(summary.owner);
+				ret.users=userDao.getUserSummaries(userList);
+				
+			}
+			ret.comments= commentDao.listComments(helpId,owner, user,privacy,lastCommentId);
+			return ret;
 			
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
@@ -177,7 +221,7 @@ public class HelpResource {
 			comment.id=IDGenerator.genId();
 			
 			commentDao.save(comment);
-			summaryDao.increaseCommentCount(comment.helpId);
+			summaryDao.updateLastComment(comment.helpId,comment.owner,comment.id,comment.content);
 			return comment;
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());

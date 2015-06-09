@@ -7,25 +7,26 @@ function SignupCtrl($scope,$rootScope,$timeout,$stateParams,$ionicHistory,$state
     $scope.signupData = {};
 
 
-  // Perform the login action when the user submits the login form
-  $scope.doSignUp = function() {
+    // Perform the login action when the user submits the login form
+    $scope.doSignUp = function() {
     
-    loginService.signUp($scope.signupData).then(function(resp){
+        loginService.signUp($scope.signupData).then(function SUCCESS(resp){
 
-        $rootScope.currentUser=resp.data;
-        $rootScope.currentUser.friends=["pzou@ebay.com","jikarma@ebay.com",'fenwang@ebay.com'];
-        $ionicHistory.nextViewOptions({
-            disableBack: true
+            $rootScope.currentUser=resp.data;
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
+            $state.go($rootScope.default_page, {}, {location:'replace'});
+        },function(resp) {
+            $scope.lastError=resp.data.errorMsg;
         });
-        $state.go($rootScope.default_page, {}, {location:'replace'});
-    },function(resp) {
-        $scope.lastError=resp.data.errorMsg;
-    });
     
-  };// do signUp
-
-
-}//LoginCtrl
+    };// do signUp
+/*
+    $scope.goBack=function() {
+        $state.go("login");
+    }*/
+}//SignUpCtrl
 
 })();
 

@@ -3,6 +3,7 @@ package com.thank.common.dao;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.mongodb.morphia.query.Query;
@@ -11,7 +12,6 @@ import org.mongodb.morphia.query.UpdateOperations;
 import com.mongodb.MongoClient;
 import com.thank.common.model.DeviceAuthInfo;
 import com.thank.common.model.DeviceSignUpVo;
-import com.thank.common.model.HelpSummary;
 import com.thank.common.model.LoginException;
 import com.thank.common.model.UserInfo;
 import com.thank.common.model.UserNotExistException;
@@ -35,6 +35,7 @@ public class UserDao extends AbstractDao<UserInfo> {
 		super(client, dbName, cls);
 		deviceDao=new DeviceAuthDao(client,dbName,DeviceAuthInfo.class);
 	}
+	
 	
 	public UserInfo getByEmaiAddress(String emailAddress) {
 		return this.findOne("emailAddress", emailAddress);
@@ -68,9 +69,9 @@ public class UserDao extends AbstractDao<UserInfo> {
 		dao.updateFirst(query, op);
 	}
 	
-	public List<UserSummaryVo> getFriends(String emailAddress) {
-		UserInfo user=this.getByEmaiAddress(emailAddress);
-		Query<UserInfo> query=this.createQuery().filter("emailAddress in", user.getContactList())
+	public List<UserSummaryVo> getUserSummaries(Collection<String> emailAddresses) {
+		if(emailAddresses==null) return new ArrayList<UserSummaryVo>();
+		Query<UserInfo> query=this.createQuery().filter("emailAddress in", emailAddresses)
 				.retrievedFields(true, "name","emailAddress");
 		List<UserInfo> users=this.find(query).asList();
 		List<UserSummaryVo> ret=new ArrayList<UserSummaryVo>();
@@ -80,6 +81,13 @@ public class UserDao extends AbstractDao<UserInfo> {
 			}
 		}
 		return ret;
+	}
+	public List<UserSummaryVo> getFriends(String emailAddress) {
+		UserInfo user=this.getByEmaiAddress(emailAddress);
+		if(user==null || user.getContactList()==null || user.getContactList().isEmpty()) {
+			return new ArrayList<UserSummaryVo>();
+		}
+		return getUserSummaries(user.getContactList());
 	}
 	
 	public UserInfo addScore(String emailAddress,int delta) {

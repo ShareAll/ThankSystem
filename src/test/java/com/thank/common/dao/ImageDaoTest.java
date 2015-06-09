@@ -15,21 +15,25 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 public class ImageDaoTest {
 	@Test
 	public void testSave() throws FileNotFoundException {
+		//String file="/Users/fenwang/Documents/IMG_0144.jpg";
 		String file="/Users/fenwang/Documents/signup.jpg";
 		DB db=MongoUtil.getMongoDb(null, null);
 		ImageDao dao=new ImageDao(db);
 		dao.save("signup", new FileInputStream(file));
+	
 	}
 	@Test
 	public void testLoad() throws FileNotFoundException, IOException {
-		String file="/Users/fenwang/Documents/test.jpg";
+		String file="/Users/fenwang/Documents/test1.jpg";
 		DB db=MongoUtil.getMongoDb(null, null);
 		ImageDao dao=new ImageDao(db);
-		dao.writeTo("signup", new FileOutputStream(file));
+		dao.writeTo("test01_ebay_com", new FileOutputStream(file));
 	}
 	@Test
 	public void testBase64() throws IOException {
+		//String file="/Users/fenwang/Documents/test.jpg";
 		String file="/Users/fenwang/Documents/IMG_0144.jpg";
+		
 		ByteArrayOutputStream bos=new ByteArrayOutputStream();
 		byte[] buf=new byte[4096];
 		int len=0;
@@ -41,6 +45,6 @@ public class ImageDaoTest {
 		FileWriter fw=new FileWriter("/Users/fenwang/Documents/base.txt");
 		fw.write(Base64.encode(bos.toByteArray()));
 		fw.close();
-		//System.out.println(Base64.encode(bos.toByteArray()));
+		System.out.println(Base64.encode(bos.toByteArray()));
 	}
 }

@@ -1,7 +1,9 @@
 package com.thank.rest.resources;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -56,17 +59,30 @@ public class PhotoResource {
 	}
 
 	
-	@GET
-	@Path("{key}" )
-	
+	@GET	
 	@ApiOperation(value = "get image based on key",
     	notes = "get image based on key"
     )
 	@ApiResponses(value = { 
 		    @ApiResponse(code = 500, message = "Service exception") })
-	public void getImage(@PathParam("key")String key) {
+	public void getImage(@QueryParam("key")String key) {
 		try {
-			dao.writeTo(key,response.getOutputStream());
+			int maxAge=600;//600 seconds
+			long expiry = new Date().getTime() + maxAge*1000;
+			if(dao.exist(key)) {
+				response.setDateHeader("Expires", expiry);
+				response.addHeader("Cache-Control","no-transform,public,max-age="+maxAge);
+				//ByteArrayOutputStream bos=new ByteArrayOutputStream();
+				response.setContentType("image/jpeg");
+				dao.writeTo(key,response.getOutputStream());
+				response.getOutputStream().flush();
+				//dao.writeTo(key,bos);
+				
+				//System.out.println(bos.toByteArray().length);
+			} else {
+				response.sendRedirect("../images/default.jpg");
+			}
+			
 		} catch (IOException e) {
 			throw new WFRestException(500,e.getMessage());
 		}

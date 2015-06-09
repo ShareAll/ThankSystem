@@ -1,24 +1,27 @@
-
-<ion-view view-title="{{curGoal.title | limitTo:15}}..." id="userMessagesView" cache-view="false">
-
+<ion-view view-title="{{curGoal.title | limitTo:15}}..." id="userMessagesView" cache-view="false"> 
+    <ion-nav-buttons side="left">
+        <button class="button back-button buttons button-icon ion-arrow-left-c header-item" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+    
     <ion-nav-buttons side="right">
-        <a class="fa fa-ellipsis-h" ng-click="showListBottomSheet($event)" style="font-size:30px;margin-right:20px">
+        <a class="fa fa-pie-chart" ng-click="showGridBottomSheet($event)" style="font-size:30px;width:70px;text-align:center">
         </a>
     </ion-nav-buttons>
   
     <ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  
-      <div ng-repeat="message in messages" ng-class="curUser!==message.owner?'message-others':'message-self'">
-        {{message.ownerName}}:{{message.content}}
+     <!-- <div ng-repeat="message in messages" ng-class="curUser!==message.owner?'message-others':'message-self'">
+        {{message.owner | f_username}}:{{message.content}}
         <div wf-Log-Dom="{{message.content}}"></div>
       </div>
-   
-    <!--  
+    -->  
         <div ng-repeat="message in messages" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">      
-            <div ng-if="curUser!== message.username">          
-                <img ng-click="viewProfile(message)" class="profile-pic left" ng-src="img/photo/{{message.username}}.jpg" onerror="onProfilePicError(this)" />
-   
+            <div ng-if="curUser!== message.owner">   
+                <div class="img_item" style="float:left">       
+                    <img ng-click="viewProfile(message)" ng-src="{{message.owner | f_photo}}" onerror="onProfilePicError(this)" />
+                    <span class="caption">{{message.owner | f_username}}</span>
+                </div>    
                 <div class="chat-bubble left">      
-                    <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+                    <div class="message" ng-bind-html="message.content | nl2br" autolinker>
                     </div>
       
                     <div class="message-detail">
@@ -29,16 +32,19 @@
                 </div>
             </div>
       
-            <div ng-if="curUser === message.username">
-                <img ng-click="viewProfile(message)" class="profile-pic right" ng-src="img/photo/{{message.username}}.jpg" onerror="onProfilePicError(this)" />
-                    
+            <div ng-if="curUser === message.owner">
+                <div class="img_item" style="float:right">
+                    <img ng-click="viewProfile(message)" ng-src="{{message.owner | f_photo}}" onerror="onProfilePicError(this)" />
+                    <span class="caption">{{message.owner | f_username}}</span>
+            
+                </div>    
                 <div class="chat-bubble right">
       
-                    <div class="message" ng-bind-html="message.text | nl2br" autolinker>
+                    <div class="message" ng-bind-html="message.content | nl2br" autolinker>
                     </div>
       
                     <div class="message-detail">
-            <span ng-click="viewProfile(message)" class="bold">{{curUser}}</span>, 
+                        <span ng-click="viewProfile(message)" class="bold">{{curUser}}</span>, 
                         <span am-time-ago="message.date"></span>
                     </div>
       
@@ -49,7 +55,7 @@
             <div class="cf"></div>
       
         </div>
-      -->
+      
 
               
 
@@ -63,18 +69,17 @@
         </label>
         <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach> 
         
-        <div ng-if="curGoal.owner==currentUser.emailAddress" style="margin-right:20px" ng-click="showGridBottomSheet($event)">
-          <i class="fa fa-chevron-circle-down" style="font-size:30px"></i>         
-        </div>
+        
 
             	<label class="item-input-wrapper" style="background-color:white">
-                	<textarea ng-model="input_message" style="width:100%"value="" placeholder="Send a comment ..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+                	<input ng-model="input_message" style="width:100%" value="" placeholder="Send a comment ..." required minlength="1" maxlength="1500"></input>
             	</label>
-            	<div class="footer-btn-wrap">
-                	<button class="button button-icon icon  footer-btn" type="submit"
-                        ng-disabled="!input_message || input_message === ''">Send
-                	</button>
-            	</div>
+            	
+                <button class="button button-icon icon  footer-btn" type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;">Send
+                </button>
+             <div ng-if="curGoal.owner==currentUser.emailAddress" style="margin-right:10px" ng-click="showListBottomSheet($event)">
+                <i class="fa fa-plus-circle" style="width:50px;text-align:center;font-size:30px"></i>         
+            </div>   	
         </ion-footer-bar> 
  
     </form>  

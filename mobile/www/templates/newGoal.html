@@ -1,13 +1,12 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">New Goal</h1>
+    <h1 class="title">{{goal_title}}</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeModal()">Close</button>
+      <button class="button button-clear" ng-click="close()">Close</button>
     </div>
   </ion-header-bar>
   <ion-content>
-    <form name="goalForm" novalidate ng-submit="submitGoal()">
-
+    <form name="goalForm" novalidate ng-submit="submit()">
       <label class="item item-input item-floating-label">
         <span class="input-label" style="font-size:9px">Choose Category</span>
       </label>
@@ -15,11 +14,11 @@
             header-text="Choose Category"
             allow-empty='false'
             value="goalData.categoryId"
-            text="category_text"
+            text="goalData.categoryText"
             items="categories">
       </fancy-select>
-   
-      <a ng-click="openCategoryModal()">{{selectedCategory}}</a>
+      
+     <!-- <a ng-click="openCategoryModal()">{{selectedCategory}}</a>-->
       <label class="item item-input item-floating-label">
         <span class="input-label" style="font-size:9px">Help Title</span>
         <textarea rows="3"  placeholder="Help Title"
@@ -31,10 +30,25 @@
             <span ng-show="goalForm.title.$error.minlength">To short.....</span>
         </span>
       </label>
+      <!--
+      <label>
+          <p>Content Privacy:</p>
+          <md-radio-group ng-model="goalData.privacy" class="md-primary">
+            <md-radio-button value=0 class="md-primary">Conversation is Shared</md-radio-button>
+            <md-radio-button value=1>Conversation is Private</md-radio-button>       
+          </md-radio-group>
+      </label>
+    -->
+      <label>
+        <span class="input-label" style="font-size:9px">Content Privacy</span>
+        <md-switch ng-model="goalData.isPublic" aria-label="Privacy">
+          {{ goalData.isPublic?"Content is shared":"Keep Private" }}
+        </md-switch>
+      </label>
       <md-list>
         <md-subheader class="md-no-sticky">Friends in your circle</md-subheader>
         <md-list-item ng-repeat="friend in goalData.friends">
-          <p> {{ friend.name }} </p>
+          <p> {{ friend.name }} ( {{friend.emailAddress}}) </p>
           <md-checkbox class="md-secondary" ng-model="friend.selected"></md-checkbox>
         </md-list-item>
         <md-subheader class="md-no-sticky">Expert in System</md-subheader>
@@ -52,7 +66,7 @@
         -->
         <p style="color:red;font-size:12px" ng-if="lastError">{{lastError}}</p>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Add Goal</button>
+          <button class="button button-block button-positive" type="submit">{{title}}</button>
         </label>
       </div>
     </form>

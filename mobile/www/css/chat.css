@@ -94,7 +94,7 @@ img.profile-pic.right {
 .chat-bubble.left {
   background-color: #e6e5eb;
   float: left;
-  margin-left: 55px;
+ 
 }
 
 .chat-bubble.left:before {
@@ -107,7 +107,6 @@ img.profile-pic.right {
   background-color: #158ffe;
   color: #fff;
   float: right;
-  margin-right: 55px;
 }
 
 .chat-bubble.right:before {
@@ -192,4 +191,21 @@ a.autolinker {
 
 .loader .ion-loading-c {
   font-size: 64px;
+}
+
+
+div.img_item {
+    margin-top:10px;
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    width: 60px;
+}
+div.img_item img {
+    width: 40px;
+    height: 40px;
+    background-color: grey;
+}
+div.img_item .caption {
+    display: block;
 }

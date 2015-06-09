@@ -10,7 +10,7 @@
       <md-list>
           <md-subheader class="md-no-sticky">Friends in your circle</md-subheader>
           <md-list-item ng-repeat="friend in editFriend.friends">
-            <p> {{ friend.name }} </p>
+            <p> {{ friend.name }} ({{friend.emailAddress}}) </p>
             <md-checkbox class="md-secondary" ng-model="friend.selected"></md-checkbox>
           </md-list-item>
           

@@ -42,9 +42,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<param-value>
+				com.thank.jersey.plugin,
 				com.wordnik.swagger.jaxrs.json,
 				com.wordnik.swagger.jersey.listing,
-				com.thank.jersey.plugin,
 				com.thank.rest.resources
 			</param-value>
 		</init-param>
