@@ -1,5 +1,5 @@
 angular.module('jikarma', [
-    'ionic','ngAria','ngMaterial',
+    'ionic','ngAria','ngMaterial','ngMessages',
     'thank.common',
     'thank.controllers','thank.services'
 ])
@@ -8,6 +8,7 @@ angular.module('jikarma', [
 .run(function($ionicPlatform,$ionicNavBarDelegate,$timeout,$interval,$rootScope,$ionicHistory,$state,loginService,profileService) {
     $rootScope.default_page="tab.helpMe";
     $rootScope.cacheId=new Date().getTime();
+    $rootScope.helpTrack={};
     //check login state
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
        // var requireLogin = toState.data.requireLogin;

@@ -15,7 +15,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
+import com.thank.common.dao.MongoCounter;
 import com.thank.common.dao.UserDao;
+import com.thank.common.model.Counter;
 import com.thank.common.model.HelpComment;
 import com.thank.common.model.HelpSummary;
 import com.thank.common.model.UserInfo;
@@ -23,6 +25,7 @@ import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
 import com.thank.topic.dao.HelpCommentDao;
 import com.thank.topic.dao.HelpSummaryDao;
+import com.thank.utils.CategoryUtil;
 import com.thank.utils.IDGenerator;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -42,6 +45,7 @@ public class HelpResource {
 	@Context private HttpServletResponse response;
 	HelpSummaryDao summaryDao=new HelpSummaryDao(null,null,HelpSummary.class);
 	HelpCommentDao commentDao=new HelpCommentDao(null,null,HelpComment.class);
+	MongoCounter counterDao=new MongoCounter(null,null,Counter.class);
 	UserDao userDao=new UserDao(null,null,UserInfo.class);
 	@GET
 	@Path("list" )
@@ -95,6 +99,10 @@ public class HelpResource {
 			help.id=IDGenerator.genId();
 			help.owner=user;//curUser.getEmailAddress();
 			help.lastCommenter=user;
+			if(help.categoryId==0) {
+				
+				help.categoryId=CategoryUtil.instance().getCategoryId("Education").id;
+			}
 			summaryDao.save(help);
 			return help;
 		} catch(Exception e) {
@@ -219,9 +227,9 @@ public class HelpResource {
 			comment.owner=user;
 			comment.createTime=new Date();
 			comment.id=IDGenerator.genId();
-			
+			comment.pos=counterDao.getNext(comment.helpId);
 			commentDao.save(comment);
-			summaryDao.updateLastComment(comment.helpId,comment.owner,comment.id,comment.content);
+			summaryDao.updateLastComment(comment.helpId,comment.owner,comment.id,comment.content,comment.pos);
 			return comment;
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());

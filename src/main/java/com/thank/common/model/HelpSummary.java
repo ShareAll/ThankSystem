@@ -20,6 +20,7 @@ public class HelpSummary implements Serializable {
 	public String lastCommentId="";
 	public String lastComment="";
 	public String lastCommenter="";
+	public long lastPos=0l;
 	public int privacy=PRIVACY_PUBLIC;
 	public int completeness=0;
 	public Set<String> subscribers=new HashSet<String>();

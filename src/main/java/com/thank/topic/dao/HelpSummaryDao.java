@@ -27,12 +27,14 @@ public class HelpSummaryDao extends AbstractDao<HelpSummary> {
 		Query<HelpSummary> query=dao.createQuery().filter("id", help.id);
 		dao.updateFirst(query,op);
 	}
-	public void updateLastComment(String helpId,String commenter,String commentId,String comment) {
+	public void updateLastComment(String helpId,String commenter,String commentId,String comment,long commentPos) {
 		Query<HelpSummary> query=dao.createQuery().filter("id", helpId).filter("lastCommentId < ",commentId);
 		UpdateOperations<HelpSummary> op = dao.createUpdateOperations()
 				.set("lastComment", comment)
 				.set("lastCommentId",commentId)
-				.set("lastCommenter",commenter);
+				.set("lastCommenter",commenter)
+				.set("lastPos", commentPos);
+		
 		dao.updateFirst(query, op);
 	}
 	public HelpSummary getSummaryById(String helpId) {	

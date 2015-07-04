@@ -7,6 +7,7 @@
   </ion-header-bar>
   <ion-content>
     <form name="goalForm" novalidate ng-submit="submit()">
+      <!--
       <label class="item item-input item-floating-label">
         <span class="input-label" style="font-size:9px">Choose Category</span>
       </label>
@@ -17,19 +18,18 @@
             text="goalData.categoryText"
             items="categories">
       </fancy-select>
-      
+      -->
      <!-- <a ng-click="openCategoryModal()">{{selectedCategory}}</a>-->
-      <label class="item item-input item-floating-label">
-        <span class="input-label" style="font-size:9px">Help Title</span>
-        <textarea rows="3"  placeholder="Help Title"
-                name="title" 
-                ng-model="goalData.title"
-                minlength=10>
-        </textarea>
-        <span ng-if="goalForm.title" style="color:red" ng-show="goalForm.title.$dirty && goalForm.title.$invalid">
-            <span ng-show="goalForm.title.$error.minlength">To short.....</span>
-        </span>
-      </label>
+      <md-input-container>
+        <label>Title</label>
+        <input ng-minlength="10" required name="title" ng-model="goalData.title">
+        <div ng-messages="goalForm.title.$error">
+          <div ng-message="required">Title is required.</div>
+          <div ng-message="minlength">Too Short....</div>
+        </div>
+        
+      </md-input-container>
+     
       <!--
       <label>
           <p>Content Privacy:</p>
@@ -66,7 +66,7 @@
         -->
         <p style="color:red;font-size:12px" ng-if="lastError">{{lastError}}</p>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">{{title}}</button>
+          <button class="button button-block button-positive" ng-disabled="!goalForm.$valid"  type="submit">{{title}}</button>
         </label>
       </div>
     </form>

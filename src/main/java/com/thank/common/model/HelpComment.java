@@ -11,6 +11,7 @@ import org.mongodb.morphia.annotations.Indexed;
 public class HelpComment implements Serializable {
 	private static final long serialVersionUID = 4095458934651927857L;
 	public @Id String id;
+	public @Indexed long pos;
 	public @Indexed String helpId;
 	public String content;
 	public @Indexed Date createTime=new Date();

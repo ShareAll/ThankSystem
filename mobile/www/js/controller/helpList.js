@@ -6,7 +6,8 @@
 		  $scope.helpList = [];
 		  $rootScope.curGoal=null;
 		  console.info("Load GOAL Control");
-		  
+		 
+
       $scope.goalData={
 		  	'goalText':'',
             'categoryText':"Select Category"
@@ -36,7 +37,18 @@
             }
             var userPromise=loginService.getCurrentUser();
             $q.all([promise, userPromise]).then(function(resps){
-                $scope.helpList=resps[0].data;
+                var helpList=resps[0].data;
+                console.dir($scope.helpTrack);
+                $.each(helpList,function(ind,val){
+                    var prevId=$rootScope.helpTrack[val.id];
+                    if(!prevId) {
+                        prevId=val.lastPos;
+                        $rootScope.helpTrack[val.id]=prevId;
+                    }
+                    val.unread=val.lastPos-prevId;
+                });
+
+                $scope.helpList=helpList;
                 $timeout(function() {
                     $('div.circliful:not(:has(span.circle-text))').circliful();
                 },100);

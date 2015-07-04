@@ -53,8 +53,9 @@
                 if(val.id>lastCommentId) {
                   $scope.messages.push(val);
                   lastCommentId=val.id;
+                  $rootScope.helpTrack[val.helpId]=val.pos;
                 }
-              });            
+              });          
           }
           if(resp.data.users) {
             //rebuild friend map

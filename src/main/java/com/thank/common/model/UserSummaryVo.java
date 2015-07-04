@@ -1,11 +1,16 @@
 package com.thank.common.model;
+
+import java.io.Serializable;
+
 /***
  * Model with subset information of user info with non private info
  * @author fenwang
  *
  */
-public class UserSummaryVo {
+public class UserSummaryVo implements Serializable {
 
+
+	private static final long serialVersionUID = 6439147254654038061L;
 	public String name;
 	public String emailAddress;
 	public String cacheId;

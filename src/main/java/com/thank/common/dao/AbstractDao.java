@@ -51,7 +51,9 @@ public abstract class AbstractDao<T> {
 			client = getMongoClient(null, databaseName);
 		}
 		this.ds=morphia.createDatastore(client, databaseName);
+		
 		dao = new BasicDAO(cls,client,morphia, databaseName);
+
 	}
 	
 	  
@@ -64,6 +66,7 @@ public abstract class AbstractDao<T> {
                 	mongoClient = new MongoClient(sd, Arrays.asList(credential));
             	} else {
             		mongoClient = new MongoClient(sd);
+            		
             	}
             }
         } catch (Exception e) {
@@ -72,6 +75,7 @@ public abstract class AbstractDao<T> {
         return mongoClient;
     }
 	
+    
 
     public DBCollection getCollection() {
         return dao.getCollection();
@@ -85,7 +89,9 @@ public abstract class AbstractDao<T> {
         return dao.createUpdateOperations();
     }
     
-    
+    public void insert(T val) {
+    	dao.getCollection().insert(morphia.toDBObject(val));
+    }
     
 	public Object save(T val) {
 		Key<T> key = dao.save(val);
