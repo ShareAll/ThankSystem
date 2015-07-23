@@ -38,7 +38,7 @@ public class HelpSummaryDaoTest {
 		String commentMessage="it is a test";
 		String helpId="2015-05-25-17:35:585563bfee30041d301b86a5ef";
 		HelpSummaryDao summaryDao=new HelpSummaryDao(null,null,HelpSummary.class);
-		summaryDao.updateLastComment(helpId, commenter,commentId, commentMessage);
+		summaryDao.updateLastComment(helpId, commenter,commentId, commentMessage,0);
 	}
 	
 	@Test

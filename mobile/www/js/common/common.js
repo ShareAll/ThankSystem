@@ -4,11 +4,12 @@ angular.module('thank.common',[])
     .filter('nl2br', ['$sce',nl2brFilter])
     .filter('f_username',['$rootScope',userNameFilter])
     .filter('f_photo',['$rootScope','apiBase',photoAddr])
-	.directive('autolinker', ['$timeout',AutoLinkerDirective])
+    .directive('autolinker', ['$timeout',AutoLinkerDirective])
     .directive('wfTextLower',['$parse',WfTextLower])
     .directive('wfLogDom',[WfLogDom])
     .directive('wfMatch',['$parse',WfMatch])
     .directive('fancySelect',['$ionicModal',FancySelect])
+    
 
 function nl2brFilter($sce){
 	return function(msg,is_xhtml) { 

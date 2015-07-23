@@ -1,0 +1,30 @@
+<!--It is common dlgs template and need to be cached-->
+<!-- 1. invite more to help-->
+<script id="invite_more_to_help.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Invite More Friends</h1>
+      <div class="buttons">
+        <button class="button button-clear" ng-click="close()">Close</button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <form name="add_friend_Form" novalidate ng-submit="submit()">
+      <md-list>
+          <md-subheader class="md-no-sticky">Friends in your circle</md-subheader>
+          <md-list-item ng-repeat="friend in data.friends">
+            <p> {{ friend.name }}  ({{friend.emailAddress}}) </p>
+            <md-checkbox class="md-secondary" ng-model="friend.selected"></md-checkbox>
+          </md-list-item>
+          
+          <p style="color:red;font-size:12px" ng-if="lastError">{{lastError}}</p>
+          <label class="item">
+            <button class="button button-block button-positive" type="submit">Invite</button>
+          </label>
+        </div>
+      </form>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<!--2. -->

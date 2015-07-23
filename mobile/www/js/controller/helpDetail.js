@@ -1,8 +1,28 @@
 (function() {
 	
 	angular.module('thank.controllers.helpDetailCtrl', [])
+    .filter('voterListFilter',[voterListFilter])
 		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',
       '$ionicLoading','$ionicModal','$mdDialog',HelpDetailCtrl]);
+
+
+  function voterListFilter() { 
+      return function(votes) {
+          if(!votes || votes.length==0) return "No one voted";
+          if(votes.length==1) {
+            return votes[0].substring(0,10) +" likes it"
+          } 
+          var ret=votes[0].substring(0,10)
+          for(var i=1;i<votes.length && i<3;i++) {
+            ret+=","+votes[i].substring(0,10)
+          }
+          if(votes.length>3) {
+            ret+=" and other "+(votes.length-3)+" friends "
+          }
+          ret+=" like it"
+          return ret;
+      }
+  }
 
 	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading,$ionicModal,$mdDialog) {
 	/*	var curId=0;
@@ -20,7 +40,10 @@
 			});	
 		},2000);
 */
-
+  $scope.searchBar={
+    txt:'',
+    show:false
+  }
 
 	var helpId=$stateParams.helpId;
   var curUser=$rootScope.currentUser.emailAddress;
@@ -47,7 +70,7 @@
    
     helpDetailService.listComment($rootScope.curGoal.owner,helpId,curUser,$rootScope.curGoal.privacy,lastCommentId).then(function(resp) {
         if(resp.data) {
-          console.dir(resp.data);
+        //  console.dir(resp.data);
           if(resp.data.comments) {
               $.each(resp.data.comments,function(ind,val) {
                 if(val.id>lastCommentId) {
@@ -104,6 +127,10 @@
       	}
     });
 
+  $scope.toggleSearchBar=function($event) {
+     $scope.searchBar.txt='';
+     $scope.searchBar.show=!$scope.searchBar.show;
+  }
 
 	$scope.sendMessage=function(msgForm) {
       	
@@ -134,8 +161,12 @@
  
     }; //$scope.sendMessage
 
-  
 
+    $scope.voteComment=function(message) {
+      helpDetailService.voteComment($rootScope.currentUser.name,message).then(function SUCCESS(resp){
+          message.voted=resp.data.voted;
+      });
+    }
     $scope.updateProgress = function(incr) {
       if($rootScope.curGoal.completeness>=100) return;
       if($rootScope.curGoal.completeness) {

@@ -4,31 +4,43 @@
     </ion-nav-buttons>
     
     <ion-nav-buttons side="right">
+        <div class="searchTxt" ng-show="searchBar.show">
+            <div class="bgdiv"></div>
+            <div class="bgtxt">
+                <input type="text" placeholder="Search Terms" ng-model="searchBar.txt">
+            </div>
+        </div>
+        <a class="fa fa-search" style="font-size:30px;text-align:center" ng-click="toggleSearchBar($event)"></a>
         <a class="fa fa-pie-chart" ng-click="showGridBottomSheet($event)" style="font-size:30px;width:70px;text-align:center">
         </a>
     </ion-nav-buttons>
-  
+
     <ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  
      <!-- <div ng-repeat="message in messages" ng-class="curUser!==message.owner?'message-others':'message-self'">
         {{message.owner | f_username}}:{{message.content}}
         <div wf-Log-Dom="{{message.content}}"></div>
       </div>
     -->  
-        <div ng-repeat="message in messages" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">      
+        <div ng-repeat="message in messages | filter:searchBar.txt" class="message-wrapper" on-hold="onMessageHold($event, $index, message)">      
             <div ng-if="curUser!== message.owner">   
                 <div class="img_item" style="float:left">       
                     <img ng-click="viewProfile(message)" ng-src="{{message.owner | f_photo}}" onerror="onProfilePicError(this)" />
                     <span class="caption">{{message.owner | f_username}}</span>
-                </div>    
-                <div class="chat-bubble left">      
-                    <div class="message" ng-bind-html="message.content | nl2br" autolinker>
+                </div>
+                <div layout="column">  
+                    <div class="chat-bubble left">      
+                        <div class="message" ng-bind-html="message.content | nl2br" autolinker>
+                        </div>
+          
+                        <div class="message-detail">
+                            <span ng-click="viewProfile(message)" class="bold">{{message.username}}</span>,
+                            <span am-time-ago="message.date"></span>
+                        </div>
                     </div>
-      
-                    <div class="message-detail">
-                        <span ng-click="viewProfile(message)" class="bold">{{message.username}}</span>,
-                        <span am-time-ago="message.date"></span>
+                    <div layout="row">
+                        <i class="fa fa-thumbs-up md-raised md-button md-default-theme" style="min-width:40px;font-size:20px;color:green;margin:0px 10px 0px 10px" ng-click="voteComment(message)"></i>
+                        <span style="line-height:20px" >{{message.voted | voterListFilter}}</span>
                     </div>
-      
                 </div>
             </div>
       
@@ -37,18 +49,21 @@
                     <img ng-click="viewProfile(message)" ng-src="{{message.owner | f_photo}}" onerror="onProfilePicError(this)" />
                     <span class="caption">{{message.owner | f_username}}</span>
             
-                </div>    
-                <div class="chat-bubble right">
-      
-                    <div class="message" ng-bind-html="message.content | nl2br" autolinker>
+                </div>  
+                <div layout="column" style="float:right">    
+                    <div class="chat-bubble right" style="max-width:100%">
+                        <div class="message" ng-bind-html="message.content | nl2br" autolinker>
+                        </div>
+                        <div class="message-detail">
+                            <span ng-click="viewProfile(message)" class="bold">{{curUser}}</span>, 
+                            <span am-time-ago="message.date"></span>
+                        </div>
                     </div>
-      
-                    <div class="message-detail">
-                        <span ng-click="viewProfile(message)" class="bold">{{curUser}}</span>, 
-                        <span am-time-ago="message.date"></span>
+                    <div layout="row">
+                        <i class="fa fa-thumbs-o-up" style="font-size:20px;color:green;margin:0px 10px 0px 10px"></i>
+                        <span style="line-height:20px">{{message.voted | voterListFilter}}</span>
                     </div>
-      
-              </div>
+                </div>
                     
             </div>
       

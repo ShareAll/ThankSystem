@@ -7,7 +7,8 @@ function HelpDetailService($http,$interval,$timeout,$q,$location,apiBase,$ionicP
 	
 	return {
 		listComment:listComment,
-		sendComment:sendComment
+		sendComment:sendComment,
+		voteComment:voteComment
 	};
 	function listComment(owner,helpId,user,privacy,lastCommentId) {
 		
@@ -23,6 +24,7 @@ function HelpDetailService($http,$interval,$timeout,$q,$location,apiBase,$ionicP
 		
 	}//end of listComment
 
+
 	function sendComment(helpId,content,user,userName) {
 		//console.info("add "+newId);
 		var payload={
@@ -35,6 +37,12 @@ function HelpDetailService($http,$interval,$timeout,$q,$location,apiBase,$ionicP
 		return $http.post(apiBase+"/help/createComment?user="+user,payload);
 	} //end of sendComment
 
+	function voteComment(user,comment) {
+		var payload={
+			id:comment.id
+		}
+		return $http.post(apiBase+"/help/voteComment?user="+user,payload);
+	}
 
 
 } //End of GoalService

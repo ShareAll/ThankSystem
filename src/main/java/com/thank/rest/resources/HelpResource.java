@@ -236,6 +236,26 @@ public class HelpResource {
 		}
 	}
 	
+	@POST
+	@Path("voteComment" )
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "vote comment",
+    	notes = "vote comment"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Service exception") })
+	public HelpComment voteComment(@QueryParam("user")String user,HelpComment comment) {
+		try {
+			//UserInfo curUser=UserContextUtil.getCurUser(request);
+			//if(curUser==null) throw new RuntimeException("Please login first");
+			if(comment==null || comment.id==null) return comment;
+			commentDao.voteComment(comment.id,user);
+			return commentDao.getById(comment.id);
+		} catch(Exception e) {
+			throw new WFRestException(500,e.getMessage());
+		}
+	}
+	
 
 	
 	
