@@ -7,10 +7,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
 import com.mongodb.DB;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 
 public class ImageDaoTest {
 	@Test
@@ -43,8 +44,8 @@ public class ImageDaoTest {
 		}
 		f.close();
 		FileWriter fw=new FileWriter("/Users/fenwang/Documents/base.txt");
-		fw.write(Base64.encode(bos.toByteArray()));
+		fw.write(Base64.encodeBase64String(bos.toByteArray()));
 		fw.close();
-		System.out.println(Base64.encode(bos.toByteArray()));
+		System.out.println(Base64.encodeBase64String(bos.toByteArray()));
 	}
 }
