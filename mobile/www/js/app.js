@@ -97,6 +97,15 @@ angular.module('jikarma', [
         abstract: true,
         templateUrl: "templates/tabs.html"
     })
+        .state('tab.blog',{
+            url: '/blog',
+            views: {
+                'tab_blog':{
+                    templateUrl:'templates/tab_blog.html',
+                    controller:'blogCtrl'
+                }
+            }
+        })
         .state('tab.helpMe', {
             url: '/helpMe',
             views: {

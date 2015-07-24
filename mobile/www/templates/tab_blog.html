@@ -1,0 +1,16 @@
+<ion-view view-title="Blog">
+    <ion-nav-buttons side="right">
+        <a class="ion-plus" ng-click="openGoalModal()" style="font-size:30px;margin-right:20px"></a>
+    </ion-nav-buttons>
+    <ion-content>
+      <ion-list>
+
+        <ion-item class="item-avatar" ng-repeat="article in articles" type="item-text-wrap">
+           
+            <h2 style="font-weight:900">{{article.title}}</h2>
+           
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+</ion-view>

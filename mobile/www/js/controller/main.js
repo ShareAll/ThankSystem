@@ -7,7 +7,8 @@
 		'thank.controllers.helpListCtrl',
 		'thank.controllers.helpDetailCtrl',
         'thank.controllers.friendCtrl',
-		'thank.controllers.settingCtrl'
+		'thank.controllers.settingCtrl',
+		'thank.controllers.blogCtrl'
 	]);
 
 })();

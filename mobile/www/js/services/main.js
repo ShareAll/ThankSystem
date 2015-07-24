@@ -10,7 +10,8 @@
 		'thank.services.friendRequestService',
 		'thank.services.facebookService',
 		'thank.services.profileService',
-		'thank.services.photoService'
+		'thank.services.photoService',
+		'thank.services.blogService'
 	]);
 
 })();
