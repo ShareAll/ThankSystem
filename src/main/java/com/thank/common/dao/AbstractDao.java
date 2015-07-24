@@ -260,7 +260,7 @@ public abstract class AbstractDao<T> {
 	    }
 
 	    public WriteResult deleteByQuery(final Query<T> q) {
-	        return dao.delete(q);
+	        return dao.deleteByQuery(q);
 	    }
 
 	    public Datastore getDatastore() {
