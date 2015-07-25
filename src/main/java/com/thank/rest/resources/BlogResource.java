@@ -1,7 +1,5 @@
 package com.thank.rest.resources;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,25 +13,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.spi.resource.Singleton;
-import com.thank.common.dao.MongoCounter;
-import com.thank.common.dao.UserDao;
 import com.thank.common.model.BlogSummary;
-import com.thank.common.model.Counter;
-import com.thank.common.model.HelpComment;
-import com.thank.common.model.HelpSummary;
-import com.thank.common.model.UserInfo;
-import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
-import com.thank.topic.dao.HelpCommentDao;
-import com.thank.topic.dao.HelpSummaryDao;
-import com.thank.utils.CategoryUtil;
+import com.thank.topic.dao.BlogSummaryDao;
 import com.thank.utils.IDGenerator;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 /***
- * Services for goal CRUD
+ * Services for Blog CRUD
  * @author fenwang
  *
  */
@@ -44,7 +33,7 @@ public class BlogResource {
 	
 	@Context private HttpServletRequest request;
 	@Context private HttpServletResponse response;
-	
+	BlogSummaryDao dao=new BlogSummaryDao(null,null,BlogSummary.class);
 	@GET
 	@Path("list" )
 	@Produces(MediaType.APPLICATION_JSON)
@@ -55,17 +44,31 @@ public class BlogResource {
 		    @ApiResponse(code = 500, message = "Service exception") })
 	public List<BlogSummary> listBlogs() {
 		try {
-			//TODO add real support for blog query
-			List<BlogSummary> ret=new ArrayList<BlogSummary>();
-			ret.add(new BlogSummary("jikarma","Topic 1"));
-			ret.add(new BlogSummary("jikarma","Topic 2"));
-			ret.add(new BlogSummary("jikarma","Topic 3"));
-			return ret;
+			return dao.listBlogs();
 		} catch(Exception e) {
 			throw new WFRestException(500,e.getMessage());
 		}
 	}
 	
+	
+	@POST
+	@Path("create" )
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "create Blog",
+    	notes = "create blog"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Service exception") })
+	public List<BlogSummary> createBlog(@QueryParam("user")String user,BlogSummary blog) {
+		try {
+			blog.id=IDGenerator.genId();
+			blog.owner=user;
+			dao.save(blog);
+			return dao.listBlogs();
+		} catch(Exception e) {
+			throw new WFRestException(500,e.getMessage());
+		}
+	}
 	
 
 	

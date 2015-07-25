@@ -27,4 +27,61 @@
   </ion-modal-view>
 </script>
 
-<!--2. -->
+<!--2. It is dlg to close help-->
+<script id="close_help.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Complete Help</h1>
+      <div class="buttons">
+        <button class="button button-clear" ng-click="close()">Cancel</button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <form name="close_help_Form" novalidate ng-submit="completeHelp()">
+        <label class="item">
+          <button class="button button-block button-positive" ng-disabled="!close_help_Form.$valid"  type="submit">Complete Help</button>
+        </label>
+        <md-list>
+          <md-subheader class="md-no-sticky">Existing Comments</md-subheader>
+          <md-list-item ng-repeat="message in messages">
+            <p> {{ message.content }} </p>
+            <md-checkbox class="md-secondary" ng-model="message.selected" ng-change="toggle_msg(message)"></md-checkbox>
+          </md-list-item>
+        </md-list>  
+        <md-input-container flex>
+          <label>Editable</label>
+          <textarea ng-model="data.conclusion" columns="1" required></textarea>
+        </md-input-container>
+        
+      </form>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+
+<!--3. Dialog to create blog -->
+<script id="create_blog.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">New Blog</h1>
+      <div class="buttons">
+        <button class="button button-clear" ng-click="close()">Cancel</button>
+      </div>
+    </ion-header-bar>
+    <ion-content>
+      <form name="create_blog_Form" novalidate ng-submit="submit()">
+        <md-input-container>
+          <label>Title</label>
+            <input required name="title" ng-model="data.title">
+        </md-input-container>
+
+        <label class="item">
+          <button class="button button-block button-positive" ng-disabled="!create_blog_Form.$valid"  type="submit">Create Blog</button>
+        </label>
+       
+        
+      </form>
+    </ion-content>
+  </ion-modal-view>
+</script>
+

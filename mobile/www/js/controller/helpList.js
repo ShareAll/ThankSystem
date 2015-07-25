@@ -110,7 +110,7 @@
             $scope.categoryModal.hide();
           }
 
-  		  $scope.openGoalModal = function(help) {
+  		  $scope.openCreateModal = function(help) {
             $scope.modal_newGoal.scope.init(help);
   		  	$scope.modal_newGoal.show();
     		//$scope.goalModal.show();

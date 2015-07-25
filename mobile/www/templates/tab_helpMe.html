@@ -1,6 +1,6 @@
 <ion-view view-title="Help Me">
     <ion-nav-buttons side="right">
-        <a class="ion-plus" ng-click="openGoalModal()" style="font-size:30px;margin-right:20px"></a>
+        <a class="ion-plus" ng-click="openCreateModal()" style="font-size:30px;margin-right:20px"></a>
     </ion-nav-buttons>
     <ion-content>
       <ion-list can-swipe='true'>
@@ -10,12 +10,12 @@
                 <!--Donut chart
                 <div data-dimension="50" data-text="{{help.completeness}}%" data-info="" data-width="10" data-fontsize="11" data-percent="{{help.completeness}}" data-fgcolor="#61a9dc" data-bgcolor="#eee" class="circliful" style="width: 30px;"></div>
             -->
+            
                 <img style="width:50px;height:50px" ng-src="{{help.lastCommenter | f_photo}}"  alt="" >
             </div>
             
             <h2 style="font-weight:900">{{help.title}}</h2>
             <h4>{{help.lastComment}}</h4>
-            <span class="badge badge-positive" ng-if="help.unread>0">{{help.unread}}</span>
             <!--
             <div class="row" style="width:100%">
                 <div class="item col-50" style="font-size:16px;border:none;height:30px;padding:5px 5px 0px 5px;">
