@@ -38,9 +38,6 @@
     </ion-header-bar>
     <ion-content>
       <form name="close_help_Form" novalidate ng-submit="completeHelp()">
-        <label class="item">
-          <button class="button button-block button-positive" ng-disabled="!close_help_Form.$valid"  type="submit">Complete Help</button>
-        </label>
         <md-list>
           <md-subheader class="md-no-sticky">Existing Comments</md-subheader>
           <md-list-item ng-repeat="message in messages">
@@ -52,7 +49,9 @@
           <label>Editable</label>
           <textarea ng-model="data.conclusion" columns="1" required></textarea>
         </md-input-container>
-        
+        <label class="item">
+          <button class="button button-block button-positive" ng-disabled="!close_help_Form.$valid"  type="submit">Complete Help</button>
+        </label>
       </form>
     </ion-content>
   </ion-modal-view>

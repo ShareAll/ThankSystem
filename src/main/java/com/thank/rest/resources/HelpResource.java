@@ -18,11 +18,13 @@ import com.sun.jersey.spi.resource.Singleton;
 import com.thank.common.dao.MongoCounter;
 import com.thank.common.dao.UserDao;
 import com.thank.common.model.Counter;
+import com.thank.common.model.HelpArchive;
 import com.thank.common.model.HelpComment;
 import com.thank.common.model.HelpSummary;
 import com.thank.common.model.UserInfo;
 import com.thank.common.model.UserSummaryVo;
 import com.thank.rest.shared.model.WFRestException;
+import com.thank.topic.dao.HelpArchiveDao;
 import com.thank.topic.dao.HelpCommentDao;
 import com.thank.topic.dao.HelpSummaryDao;
 import com.thank.utils.CategoryUtil;
@@ -45,6 +47,7 @@ public class HelpResource {
 	@Context private HttpServletResponse response;
 	HelpSummaryDao summaryDao=new HelpSummaryDao(null,null,HelpSummary.class);
 	HelpCommentDao commentDao=new HelpCommentDao(null,null,HelpComment.class);
+	HelpArchiveDao archiveDao=new HelpArchiveDao(null,null,HelpArchive.class);
 	MongoCounter counterDao=new MongoCounter(null,null,Counter.class);
 	UserDao userDao=new UserDao(null,null,UserInfo.class);
 	@GET
@@ -256,7 +259,21 @@ public class HelpResource {
 		}
 	}
 	
-
+	@POST
+	@Path("completeHelp" )
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Complete Help",
+    	notes = "Complete Help"
+    	)
+	@ApiResponses(value = { 
+		    @ApiResponse(code = 500, message = "Service exception") })
+	public void completeHelp(@QueryParam("user")String user,HelpArchive archive) {
+		try {
+			archiveDao.completeHelp(archive.id,archive.conclusion);
+		} catch(Exception e) {
+			throw new WFRestException(500,e.getMessage());
+		}
+	}	
 	
 	
 

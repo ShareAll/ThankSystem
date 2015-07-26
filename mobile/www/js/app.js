@@ -3,8 +3,8 @@ angular.module('jikarma', [
     'thank.common',
     'thank.controllers','thank.services'
 ])
-//.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
-.constant('apiBase',"http://127.0.0.1:8080/ThankWeb/rest")
+.constant('apiBase',"http://52.11.234.40:8080/ThankWeb/rest")
+//.constant('apiBase',"http://127.0.0.1:8080/ThankWeb/rest")
 .run(function($ionicPlatform,$ionicNavBarDelegate,$timeout,$interval,$rootScope,$ionicHistory,$state,loginService,profileService) {
     $rootScope.default_page="tab.helpMe";
     $rootScope.cacheId=new Date().getTime();

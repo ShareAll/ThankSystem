@@ -3,16 +3,31 @@
         <button class="button back-button buttons button-icon ion-arrow-left-c header-item" ng-click="$ionicGoBack()"></button>
     </ion-nav-buttons>
     
+    
+    <ion-nav-title>
+        <div class="title title-center header-item">
+            <div style="position:absolute">{{curGoal.title | limitTo:15}}...</div>
+            <div style="position:absolute" ng-show="searchBar.show">
+                <input type="search" placeholder="Search" ng-model="searchBar.txt">
+            </div>
+        </div>
+       
+    </ion-nav-title>
+    
     <ion-nav-buttons side="right">
+        <!--
         <div class="searchTxt" ng-show="searchBar.show">
             <div class="bgdiv"></div>
             <div class="bgtxt">
                 <input type="text" placeholder="Search Terms" ng-model="searchBar.txt">
             </div>
         </div>
-        <a class="fa fa-search" style="font-size:30px;text-align:center" ng-click="toggleSearchBar($event)"></a>
+    -->
+        <a class="fa fa-search" style="font-size:30px;width:70px;text-align:center" ng-click="toggleSearchBar($event)"></a>
+        <!--
         <a class="fa fa-pie-chart" ng-click="showGridBottomSheet($event)" style="font-size:30px;width:70px;text-align:center">
         </a>
+        -->
     </ion-nav-buttons>
 
     <ion-content has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">  

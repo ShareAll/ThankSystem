@@ -37,6 +37,8 @@ public class HelpSummaryDao extends AbstractDao<HelpSummary> {
 		
 		dao.updateFirst(query, op);
 	}
+	
+	
 	public HelpSummary getSummaryById(String helpId) {	
 		return (HelpSummary) dao.get(helpId);
 	}

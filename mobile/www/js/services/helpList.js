@@ -13,7 +13,8 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 		listBySubscriber:listBySubscriber,
 		list:list,
 		updateProgress:updateProgress,
-		updateInvitation:updateInvitation
+		updateInvitation:updateInvitation,
+		completeHelp:completeHelp
 
 	};
 	function listAllCategories() {
@@ -74,7 +75,14 @@ function HelpListService($http,$timeout,$q,$location,$rootScope,apiBase,$ionicPl
 
 	}
 
-
+	function completeHelp(helpId,conclusion) {
+		var curUser=$rootScope.currentUser;
+		var payload={
+			id:helpId,
+			conclusion:conclusion
+		};
+		return $http.post(apiBase+"/help/completeHelp?user="+curUser.emailAddress,payload);
+	}
 
 } //End of GoalService
 

@@ -3,7 +3,7 @@
 	angular.module('thank.controllers.helpDetailCtrl', [])
     .filter('voterListFilter',[voterListFilter])
 		.controller('helpDetailCtrl', ['$rootScope','$scope','$stateParams','$interval','helpListService','helpDetailService','$ionicScrollDelegate','$timeout','$mdBottomSheet',
-      '$ionicLoading','$ionicModal','$mdDialog',HelpDetailCtrl]);
+      '$ionicLoading','$ionicModal','$mdDialog','$ionicHistory','$state',HelpDetailCtrl]);
 
 
   function voterListFilter() { 
@@ -24,7 +24,7 @@
       }
   }
 
-	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading,$ionicModal,$mdDialog) {
+	function HelpDetailCtrl($rootScope,$scope,$stateParams,$interval,helpListService,helpDetailService,$ionicScrollDelegate,$timeout,$mdBottomSheet,$ionicLoading,$ionicModal,$mdDialog,$ionicHistory,$state) {
 	/*	var curId=0;
 		var contentElm=angular.element(document.getElementById('updates'));
 		$interval(function(){
@@ -57,7 +57,7 @@
     var txtInput; // ^^^
     var lastCommentId="";
     $scope.messages=[];
-
+    
     // init edit invitation dialog
    
       
@@ -78,7 +78,7 @@
                   lastCommentId=val.id;
                   $rootScope.helpTrack[val.helpId]=val.pos;
                 }
-              });          
+              });   
           }
           if(resp.data.users) {
             //rebuild friend map
@@ -185,6 +185,9 @@
     $scope.closeHelp=function() {
       console.info("close help");
       $mdBottomSheet.hide();
+      modelScope=$scope.modal_close_help.scope;
+      modelScope.init();
+      $scope.modal_close_help.show();
     };
     $scope.editInvitation=function(ev) {
       console.info("Edit Invitation");
@@ -198,9 +201,11 @@
     $scope.showListBottomSheet=function($event) {
         $mdBottomSheet.show({
           templateUrl: 'templates/helpDetail_top_action.html',
-          controller: 'helpDetailCtrl',
-          targetEvent: $event
+          //controller: 'helpDetailCtrl',
+          scope:$scope,
+          preserveScope:true,
         }).then(function() {
+          console.dir($scope.messages);
           //console.info(clickedItem.name + ' clicked!');
         });
 
@@ -209,9 +214,12 @@
         $scope.alert = '';
         $mdBottomSheet.show({
           templateUrl: 'templates/helpDetail_action.html',
-          controller: 'helpDetailCtrl',
+          scope:$scope,
+          preserveScope:true,
+          //controller: 'helpDetailCtrl',
           targetEvent: $event
         }).then(function() {
+          
           //console.info(clickedItem.name + ' clicked!');
         });
       };
@@ -227,7 +235,7 @@
     } //keepKeyboardOpen
 	
 
-    //init dialogs
+    //init dialogs for invite more 
     $ionicModal.fromTemplateUrl('invite_more_to_help.html', {
         scope:null,
         animation: 'slide-in-up'
@@ -250,7 +258,9 @@
                   selected:invites[val.emailAddress]!=undefined
                 })
             });
+            
           };
+          
           modal.scope.submit=function() {
               console.info("click submit");
               var subscribers=[];
@@ -265,13 +275,99 @@
               });
               //console.dir(modal.scope.data)
               modal.hide(); 
+          };
+          modal.scope.close=function() {
+              console.info("close dlg");
+              modal.hide(); 
+          }
+          //console.dir(modal);     
+    }); //modal for invite more
+
+  //modal for close help
+   $ionicModal.fromTemplateUrl('close_help.html', {
+        scope:null,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+          // invite more friend to help
+          $scope.modal_close_help = modal;
+          modal.scope.init=function(){
+            var modalScope=modal.scope;
+            modalScope.messages=[];
+            modalScope.data={
+              conclusion:""
+            };
+            $.each($scope.messages,function(ind,val){
+                var new_msg=angular.copy(val);
+                new_msg.selected=false;
+                new_msg.origin_index=ind;
+                modalScope.messages.push(new_msg);
+                modalScope.selectedCount=0;
+            });
+            
+          };
+         
+          modal.scope.toggle_msg=function(msg) {
+              var modalScope=modal.scope;
+              var targetChecked=msg.selected;
+              
+              var index=-1;
+              var msg_val=null;
+              $.each(modalScope.messages,function(ind,val){
+                  if(index==-1 && val.id==msg.id) {
+                      index=ind;
+                      msg_val=val;
+                  }
+              });
+              if(index==-1) return;
+              if(targetChecked) {
+                  modalScope.messages.splice(index, 1);
+                  modalScope.messages.splice(modalScope.selectedCount, 0,msg_val);
+                  modalScope.selectedCount++;
+              } else {
+                  var newPos=modalScope.messages.length-1;
+                  modalScope.messages.splice(index, 1);
+                  for(var i=msg.origin_index;i<modalScope.messages.length;i++) {
+                      var msgItem=modalScope.messages[i];
+                      if(!msgItem.selected && msgItem.origin_index>msg.origin_index) {
+                        newPos=i;
+                        break;
+                      }
+                  }
+                 
+                  modalScope.messages.splice(newPos, 0,msg_val);
+                  modalScope.selectedCount--;
+              }
+
+              var contents=[];
+              $.each(modalScope.messages,function(ind,val){
+                  if(val.selected) {
+                      contents.push(val.content);
+                  }
+              });
+              modalScope.data.conclusion=contents.join("\r\n");
+
+          };
+          modal.scope.completeHelp=function() {
+              console.info("click completeHelp");
+              $ionicLoading.show({template: 'Loading...'});
+              helpListService.completeHelp(helpId,modal.scope.data.conclusion).then(function SUCCESS(resp) {
+                  modal.hide(); 
+                  $ionicHistory.nextViewOptions({
+                      disableBack: true
+                  });
+                  $state.go('tab.helpMe', {}, {location:'replace'});
+              }).finally(function() {
+                  $ionicLoading.hide();
+              });
+              
+
           }   
           modal.scope.close=function() {
               console.info("close dlg");
               modal.hide(); 
           }
           //console.dir(modal);     
-    });
+    }); //modal for close help
 
 
 		
